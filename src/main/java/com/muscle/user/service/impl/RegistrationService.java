@@ -1,12 +1,9 @@
-package com.muscle.registration.service.impl;
+package com.muscle.user.service.impl;
 
-import com.muscle.email.EmailSender;
-import com.muscle.registration.dto.RegistrationRequest;
-import com.muscle.registration.service.RegistrationService;
-import com.muscle.registration.token.ConfirmationToken;
-import com.muscle.registration.token.ConfirmationTokenService;
-import com.muscle.user.repository.IronUser;
-import com.muscle.user.service.impl.UserServiceImpl;
+import com.muscle.email.service.EmailSender;
+import com.muscle.user.dto.RegistrationRequestDto;
+import com.muscle.user.entity.ConfirmationToken;
+import com.muscle.user.entity.IronUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,15 +12,14 @@ import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
-public class RegistrationServiceImpl implements RegistrationService {
+public class RegistrationService {
 
     private final UserServiceImpl userService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    @Override
-    public String register(RegistrationRequest request) {
+    public String register(RegistrationRequestDto request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
 
         if(!isValidEmail){

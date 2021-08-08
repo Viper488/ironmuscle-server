@@ -1,5 +1,7 @@
-package com.muscle.registration.token;
+package com.muscle.user.service.impl;
 
+import com.muscle.user.entity.ConfirmationToken;
+import com.muscle.user.repository.ConfirmationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

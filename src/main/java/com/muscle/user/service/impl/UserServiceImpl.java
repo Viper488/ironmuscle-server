@@ -1,12 +1,10 @@
 package com.muscle.user.service.impl;
 
-import com.muscle.registration.token.ConfirmationToken;
-import com.muscle.registration.token.ConfirmationTokenRepository;
-import com.muscle.registration.token.ConfirmationTokenService;
+import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.dto.RoleDto;
-import com.muscle.user.repository.IronUser;
-import com.muscle.user.repository.Role;
+import com.muscle.user.entity.IronUser;
+import com.muscle.user.entity.Role;
 import com.muscle.user.repository.RoleRepository;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.service.ConverterService;
@@ -18,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -104,8 +101,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .build();
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-        // TODO: SEND EMAIL
 
         return token;
     }

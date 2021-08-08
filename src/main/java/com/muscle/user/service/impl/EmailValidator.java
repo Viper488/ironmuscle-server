@@ -1,4 +1,4 @@
-package com.muscle.registration.service.impl;
+package com.muscle.user.service.impl;
 
 import org.springframework.stereotype.Service;
 

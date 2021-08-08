@@ -1,6 +1,6 @@
-package com.muscle.registration.token;
+package com.muscle.user.entity;
 
-import com.muscle.user.repository.IronUser;
+import com.muscle.user.entity.IronUser;
 import lombok.*;
 
 import javax.persistence.*;

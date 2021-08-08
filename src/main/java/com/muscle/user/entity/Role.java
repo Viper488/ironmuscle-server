@@ -1,4 +1,4 @@
-package com.muscle.user.repository;
+package com.muscle.user.entity;
 
 import com.muscle.user.dto.RoleDto;
 import lombok.AllArgsConstructor;

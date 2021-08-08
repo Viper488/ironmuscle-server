@@ -2,8 +2,8 @@ package com.muscle.user.service.impl;
 
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.dto.RoleDto;
-import com.muscle.user.repository.IronUser;
-import com.muscle.user.repository.Role;
+import com.muscle.user.entity.IronUser;
+import com.muscle.user.entity.Role;
 import com.muscle.user.service.ConverterService;
 import org.springframework.stereotype.Service;
 

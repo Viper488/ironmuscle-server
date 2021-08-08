@@ -1,5 +1,6 @@
-package com.muscle.email;
+package com.muscle.email.service.impl;
 
+import com.muscle.email.service.EmailSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,7 +14,7 @@ import javax.mail.internet.MimeMessage;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailService implements EmailSender{
+public class EmailService implements EmailSender {
     private final static String FAILED_TO_SEND_EMAIL = "Failed to send an email";
     private final static String EMAIL_TITLE = "Confirm your email";
     private final static String EMAIL_FROM = "noreply@iron.muscles.com";

@@ -1,4 +1,4 @@
-package com.muscle.registration.dto;
+package com.muscle.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class RegistrationRequest {
+public class RegistrationRequestDto {
     private final String firstName;
     private final String lastName;
     private final String username;
