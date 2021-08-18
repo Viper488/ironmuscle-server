@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Builder(toBuilder = true)
 @Getter
@@ -20,5 +21,5 @@ public class IronUserDto {
     private String password;
     private Boolean locked;
     private Boolean enabled;
-    private Collection<RoleDto> roles = new ArrayList<>();
+    private List<RoleDto> roles;
 }

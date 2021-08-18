@@ -2,13 +2,10 @@ package com.muscle.user.entity;
 
 import com.muscle.user.dto.IronUserDto;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Builder(toBuilder = true)
@@ -20,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Data
-public class IronUser implements UserDetails {
+public class IronUser {
 
     @Id
     @SequenceGenerator(
@@ -38,48 +35,15 @@ public class IronUser implements UserDetails {
 
     @Column(unique = true)
     private String username;
+
+    @Column(unique = true)
     private String email;
     private String password;
     private Boolean locked = false;
     private Boolean enabled = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles = new ArrayList<>();
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role:roles
-             ) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
-        return authorities;
-    }
-
-    @Override
-    public String getUsername(){
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
+    private List<Role> roles = new ArrayList<>();
 
     public IronUserDto dto() {
         return IronUserDto.builder()

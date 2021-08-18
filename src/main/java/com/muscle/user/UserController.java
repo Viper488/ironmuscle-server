@@ -1,43 +1,48 @@
 package com.muscle.user;
 
-import com.muscle.user.dto.IronUserDto;
-import com.muscle.user.dto.RoleDto;
-import com.muscle.user.service.UserService;
-import com.muscle.user.service.impl.UserServiceImpl;
+import com.muscle.user.dto.*;
+import com.muscle.user.service.impl.UserService;
+import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class UserController {
-    private final UserServiceImpl userService;
 
-    @GetMapping("/user")
-    public UserDetails getUser(@RequestParam("email") String email){
-        return userService.loadUserByUsername(email);
-    }
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtTokenUtil;
 
-    @PostMapping("/user/save")
-    public IronUserDto saveUser(@RequestBody IronUserDto ironUserDto){
-        return userService.saveUser(ironUserDto);
-    }
+    @PostMapping("/authenticate")
+    ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
 
-    @PostMapping("/user/add-role")
-    public void addRoleToUser(@RequestParam("username") String username, @RequestParam("roleName") String roleName){
-        userService.addRoleToUser(username, roleName);
-    }
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            );
+        }
+        catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
+        }
+        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-    @GetMapping("/users")
-    public List<IronUserDto> getUsers(){
-        return userService.getUsers();
-    }
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    };
 
-    @PostMapping("/role/save")
-    public RoleDto saveRole(@RequestBody RoleDto roleDto){
-        return userService.saveRole(roleDto);
+
+    @GetMapping("/myself")
+    public IronUserDto getMyself(@RequestHeader("Authorization") String header){
+        return userService.getMyself(header);
     }
 }

@@ -1,5 +1,6 @@
 package com.muscle.user.service.impl;
 
+import com.muscle.user.dto.IronUserDetails;
 import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.dto.RoleDto;
@@ -8,9 +9,10 @@ import com.muscle.user.entity.Role;
 import com.muscle.user.repository.RoleRepository;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.service.ConverterService;
-import com.muscle.user.service.UserService;
+import com.muscle.user.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,48 +21,50 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserService implements UserDetailsService {
     private final static String  USER_NOT_FOUND_MSG = "User %s not found in database";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ConverterService converterService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final JwtUtil jwtUtil;
 
-    @Override
-    public IronUserDto saveUser(IronUserDto ironUserDto) {
-        log.info("Saving new user {} to the database", ironUserDto.getUsername());
-        return userRepository.save(converterService.convertDtoToUser(ironUserDto)).dto();
-    }
-
-    @Override
     public RoleDto saveRole(RoleDto roleDto) {
         log.info("Saving new role {} to the database", roleDto.getName());
         return roleRepository.save(converterService.convertDtoToRole(roleDto)).dto();
     }
 
-    @Override
     public void addRoleToUser(String username, String roleName) {
         log.info("Adding role {} to user {}", roleName, username);
-        IronUser ironUser = userRepository.findByUsername(username);
+        IronUser ironUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+
         Role role = roleRepository.findByName(roleName);
 
         ironUser.getRoles().add(role);
     }
 
-    @Override
-    public IronUserDto getUser(String username) {
-        log.info("Fetching user {}", username);
-        return userRepository.findByUsername(username).dto();
+    public IronUserDto getMyself(String header) {
+        String jwt = null;
+        String username = null;
+
+        if(header != null && header.startsWith("Bearer ")) {
+            jwt = header.substring(7);
+            username = jwtUtil.extractUsername(jwt);
+        }
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("User not found")).dto();
     }
 
-    @Override
     public List<IronUserDto> getUsers() {
         log.info("Fetching all users");
         return userRepository.findAll()
@@ -70,12 +74,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<IronUser> user = userRepository.findByUsername(username);
+
+        if(user.isEmpty()) {
+            user = userRepository.findByEmail(username);
+        }
+
+        return user.map(IronUser::dto).map(IronUserDetails::new).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username)));
     }
 
-    @Override
     public String signUpUser(IronUser ironUser){
         boolean userExists = userRepository
                 .findByEmail(ironUser.getEmail())

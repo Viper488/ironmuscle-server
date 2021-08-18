@@ -13,6 +13,7 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
+    @CrossOrigin
     @PostMapping()
     ResponseEntity<String> register(@RequestBody RegistrationRequestDto request){
         try {
@@ -22,6 +23,7 @@ public class RegistrationController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("/confirm")
     ResponseEntity<String> confirm(@RequestParam("token") String token){
         try {
