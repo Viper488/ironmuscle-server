@@ -45,4 +45,9 @@ public class UserController {
     public IronUserDto getMyself(@RequestHeader("Authorization") String header){
         return userService.getMyself(header);
     }
+
+    @GetMapping("/welcome")
+    public String getWelcome(@RequestHeader("Authorization") String header){
+        return userService.getWelcomeMsg(header);
+    }
 }

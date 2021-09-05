@@ -4,16 +4,21 @@ import com.muscle.email.service.EmailSender;
 import com.muscle.user.dto.RegistrationRequestDto;
 import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.entity.IronUser;
+import com.muscle.user.entity.Role;
+import com.muscle.user.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class RegistrationService {
 
+    private final RoleRepository roleRepository;
     private final UserService userService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
@@ -26,20 +31,27 @@ public class RegistrationService {
             throw new IllegalStateException("Email is not valid");
         }
 
+        List<Role> roles = new ArrayList<>();
+        if(!request.getEmail().equals("admin@admin.com")) {
+            roles.add(roleRepository.findByName("USER"));
+        } else {
+            roles.add(roleRepository.findByName("ADMIN"));
+        }
         String token = userService.signUpUser(
                 IronUser.builder()
-                        .firstName(request.getFirstName())
-                        .lastName(request.getLastName())
                         .username(request.getUsername())
                         .email(request.getEmail())
                         .password(request.getPassword())
                         .locked(false)
                         .enabled(false)
+                        .roles(roles)
                         .build()
 
         );
         String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-        emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
+        if(!request.getEmail().equals("admin@admin.com")) {
+            emailSender.send(request.getEmail(), buildEmail(request.getUsername(), link));
+        }
         return token;
     }
 

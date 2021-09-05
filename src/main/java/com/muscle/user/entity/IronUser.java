@@ -30,8 +30,6 @@ public class IronUser {
             generator = "user_sequence"
     )
     private Long id;
-    private String firstName;
-    private String lastName;
 
     @Column(unique = true)
     private String username;
@@ -48,8 +46,6 @@ public class IronUser {
     public IronUserDto dto() {
         return IronUserDto.builder()
                 .id(this.id)
-                .firstName(this.firstName)
-                .lastName(this.lastName)
                 .username(this.username)
                 .email(this.email)
                 .password(this.password)

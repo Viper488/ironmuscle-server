@@ -2,8 +2,6 @@ package com.muscle.user.dto;
 
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Builder(toBuilder = true)
@@ -14,8 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class IronUserDto {
     private Long id;
-    private String firstName;
-    private String lastName;
     private String username;
     private String email;
     private String password;

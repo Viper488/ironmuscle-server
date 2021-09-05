@@ -16,19 +16,15 @@ import java.util.stream.Collectors;
 public class IronUserDetails implements UserDetails {
 
     private Long id;
-    private String firstName;
-    private String lastName;
     private String username;
     private String email;
     private String password;
     private Boolean locked;
     private Boolean enabled;
     private List<GrantedAuthority> authorities;
-    
+
     public IronUserDetails(IronUserDto ironUserDto) {
         this.id = ironUserDto.getId();
-        this.firstName = ironUserDto.getFirstName();
-        this.lastName = ironUserDto.getLastName();
         this.username = ironUserDto.getUsername();
         this.email = ironUserDto.getEmail();
         this.password = ironUserDto.getPassword();

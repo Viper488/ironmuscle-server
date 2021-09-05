@@ -1,9 +1,9 @@
 package com.muscle.user.service.impl;
 
 import com.muscle.user.dto.IronUserDetails;
+import com.muscle.user.dto.RoleDto;
 import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.dto.IronUserDto;
-import com.muscle.user.dto.RoleDto;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.Role;
 import com.muscle.user.repository.RoleRepository;
@@ -12,7 +12,6 @@ import com.muscle.user.service.ConverterService;
 import com.muscle.user.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,16 +52,26 @@ public class UserService implements UserDetailsService {
     }
 
     public IronUserDto getMyself(String header) {
-        String jwt = null;
-        String username = null;
-
-        if(header != null && header.startsWith("Bearer ")) {
-            jwt = header.substring(7);
-            username = jwtUtil.extractUsername(jwt);
-        }
+        String username = getUsernameFromHeader(header);
 
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("User not found")).dto();
+    }
+
+    public String getWelcomeMsg(String header) {
+        String username = getUsernameFromHeader(header);
+
+        return "Welcome " + userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("User not found")).dto().getUsername();
+    }
+
+    private String getUsernameFromHeader(String header) {
+        if(header != null && header.startsWith("Bearer ")) {
+            String jwt = header.substring(7);
+
+            return jwtUtil.extractUsername(jwt);
+        }
+        return null;
     }
 
     public List<IronUserDto> getUsers() {
