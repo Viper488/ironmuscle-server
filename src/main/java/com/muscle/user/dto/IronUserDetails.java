@@ -1,9 +1,6 @@
 package com.muscle.user.dto;
 
-import com.muscle.user.entity.Role;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

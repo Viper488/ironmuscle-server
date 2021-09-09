@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new IllegalStateException("User not found")).dto().getUsername();
     }
 
-    private String getUsernameFromHeader(String header) {
+    public String getUsernameFromHeader(String header) {
         if(header != null && header.startsWith("Bearer ")) {
             String jwt = header.substring(7);
 

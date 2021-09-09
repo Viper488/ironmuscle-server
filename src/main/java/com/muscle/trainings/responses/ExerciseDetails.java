@@ -1,4 +1,4 @@
-package com.muscle.trainings.dto;
+package com.muscle.trainings.responses;
 
 import lombok.*;
 

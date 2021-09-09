@@ -1,8 +1,7 @@
 package com.muscle.trainings.dto;
 
+import com.muscle.user.dto.IronUserDto;
 import lombok.*;
-
-import java.util.List;
 
 @Builder(toBuilder = true)
 @Getter
@@ -10,7 +9,8 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainingDetails {
-    private TrainingDto training;
-    private List<ExerciseDetails> exercises;
+public class UserTrainingDto {
+    Long id;
+    IronUserDto user;
+    TrainingDto training;
 }

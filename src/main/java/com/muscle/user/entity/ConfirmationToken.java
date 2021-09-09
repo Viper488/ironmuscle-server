@@ -1,6 +1,5 @@
 package com.muscle.user.entity;
 
-import com.muscle.user.entity.IronUser;
 import lombok.*;
 
 import javax.persistence.*;

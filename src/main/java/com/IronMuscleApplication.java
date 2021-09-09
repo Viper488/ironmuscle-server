@@ -6,9 +6,11 @@ import com.muscle.trainings.dto.TrainingDto;
 import com.muscle.trainings.repository.ExerciseRepository;
 import com.muscle.trainings.repository.TrainingExerciseRepository;
 import com.muscle.trainings.repository.TrainingsRepository;
+import com.muscle.trainings.repository.UserTrainingsRepository;
 import com.muscle.trainings.service.ExerciseService;
 import com.muscle.trainings.service.TrainingExerciseService;
 import com.muscle.trainings.service.TrainingsService;
+import com.muscle.trainings.service.UserTrainingsService;
 import com.muscle.user.dto.RegistrationRequestDto;
 import com.muscle.user.dto.RoleDto;
 import com.muscle.user.repository.ConfirmationTokenRepository;
@@ -29,7 +31,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		ConfirmationTokenRepository.class,
 		ExerciseRepository.class,
 		TrainingsRepository.class,
-		TrainingExerciseRepository.class
+		TrainingExerciseRepository.class,
+		UserTrainingsRepository.class
 })
 public class IronMuscleApplication {
 
@@ -38,8 +41,15 @@ public class IronMuscleApplication {
 	}
 
 	@Bean
-	CommandLineRunner run(TrainingExerciseService trainingExerciseService, TrainingsService trainingsService, ExerciseService exerciseService, UserService userService, RegistrationService registrationService) {
+	CommandLineRunner run(UserTrainingsService userTrainingsService, TrainingExerciseService trainingExerciseService, TrainingsService trainingsService, ExerciseService exerciseService, UserService userService, RegistrationService registrationService) {
 		return args -> {
+			userService.saveRole(new RoleDto(null, "USER"));
+			userService.saveRole(new RoleDto(null, "EMPLOYEE"));
+			userService.saveRole(new RoleDto(null, "ADMIN"));
+
+			String token = registrationService.register(new RegistrationRequestDto("admin",  "admin@admin.com", "admin"));
+			registrationService.confirmToken(token);
+
 			exerciseService.saveExercise(new ExerciseDto(null, "Jumping jacks", "https://thumbs.gfycat.com/BlaringTornBelugawhale-small.gif", "1b98WrRrmUs"));
 			exerciseService.saveExercise(new ExerciseDto(null, "Abdominal crunches", "https://i.imgur.com/UJAnRhJ.gif", "_YVhhXc2pSY"));
 			exerciseService.saveExercise(new ExerciseDto(null, "Russian twist", "https://thumbs.gfycat.com/BlaringTornBelugawhale-small.gif", "l4kQd9eWclE"));
@@ -65,12 +75,8 @@ public class IronMuscleApplication {
 			trainingExerciseService.save( new AddExerciseRequest(2L, 9L, 30, 0));
 			trainingExerciseService.save( new AddExerciseRequest(2L, 10L, 30, 0));
 
-			userService.saveRole(new RoleDto(null, "USER"));
-			userService.saveRole(new RoleDto(null, "EMPLOYEE"));
-			userService.saveRole(new RoleDto(null, "ADMIN"));
-
-			String token = registrationService.register(new RegistrationRequestDto("admin",  "admin@admin.com", "admin"));
-			registrationService.confirmToken(token);
+			userTrainingsService.addTrainingToUser("Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTYzMTA2ODUwOCwiaWF0IjoxNjMxMDMyNTA4fQ.wJPRfIBiTNLpCYyjqqf9fiXdUjVg6WzkjztkR2nWmNE", 1L);
+			userTrainingsService.addTrainingToUser("Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTYzMTA2ODUwOCwiaWF0IjoxNjMxMDMyNTA4fQ.wJPRfIBiTNLpCYyjqqf9fiXdUjVg6WzkjztkR2nWmNE", 2L);
 			/*userService.saveUser(new IronUserDto(null, "Matt", "Jackson", "YoungBuck" , "matt@gmail.com", "1234", false, true , new ArrayList<>()));
 			userService.saveUser(new IronUserDto(null, "Adam", "Page" ,"Hangman" , "adam@gmail.com", "1234", false, true , new ArrayList<>()));
 			userService.saveUser(new IronUserDto(null, "Ricky", "Starks", "Absolute" , "ricky@gmail.com", "1234", false, true , new ArrayList<>()));

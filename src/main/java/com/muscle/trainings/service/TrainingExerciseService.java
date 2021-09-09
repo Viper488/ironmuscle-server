@@ -1,9 +1,9 @@
 package com.muscle.trainings.service;
 
 import com.muscle.trainings.dto.AddExerciseRequest;
-import com.muscle.trainings.dto.ExerciseDetails;
+import com.muscle.trainings.responses.ExerciseDetails;
 import com.muscle.trainings.dto.TrainingExerciseDto;
-import com.muscle.trainings.dto.TrainingDetails;
+import com.muscle.trainings.responses.TrainingDetails;
 import com.muscle.trainings.entity.Exercise;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.TrainingExercise;
@@ -46,7 +46,7 @@ public class TrainingExerciseService {
         List<TrainingExercise> trainingExerciseList = trainingExerciseRepository.findAllByTrainingId(trainingId);
 
         if(trainingExerciseList.isEmpty()) {
-            return null;
+            return TrainingDetails.builder().build();
         }
 
         return TrainingDetails.builder()
