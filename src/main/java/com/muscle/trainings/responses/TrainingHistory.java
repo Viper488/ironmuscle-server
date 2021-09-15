@@ -1,7 +1,7 @@
-package com.muscle.trainings.dto;
+package com.muscle.trainings.responses;
 
-import com.muscle.user.dto.IronUserDto;
 import lombok.*;
+import java.util.Date;
 
 @Builder(toBuilder = true)
 @Getter
@@ -9,11 +9,11 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainingDto {
+public class TrainingHistory {
     private Long id;
     private String name;
     private String image;
     private String difficulty;
-    private IronUserDto creator;
     private Integer points;
+    private Date date;
 }

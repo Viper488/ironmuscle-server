@@ -27,10 +27,15 @@ public class TrainingExerciseService {
     TrainingsRepository trainingsRepository;
     ExerciseRepository exerciseRepository;
 
-    public TrainingExerciseDto save(AddExerciseRequest addExerciseRequest) {
+
+    public void addExercises(Long trainingId, List<AddExerciseRequest> exercises) {
+        exercises.forEach(exercise -> save(trainingId, exercise));
+    }
+
+    public TrainingExerciseDto save(Long trainingId, AddExerciseRequest addExerciseRequest) {
         log.info("Saving new training exercise {} to the database", addExerciseRequest.getExerciseId());
 
-        Training training = trainingsRepository.findTrainingById(addExerciseRequest.getTrainingId()).orElseThrow(() -> new IllegalStateException("Training not found!"));
+        Training training = trainingsRepository.findTrainingById(trainingId).orElseThrow(() -> new IllegalStateException("Training not found!"));
         Exercise exercise = exerciseRepository.findExerciseById(addExerciseRequest.getExerciseId()).orElseThrow(() -> new IllegalStateException("Exercise not found!"));
 
         return trainingExerciseRepository.save(TrainingExercise.builder()
@@ -43,7 +48,7 @@ public class TrainingExerciseService {
     }
 
     public TrainingDetails getTrainingDetails(Long trainingId) {
-        List<TrainingExercise> trainingExerciseList = trainingExerciseRepository.findAllByTrainingId(trainingId);
+        List<TrainingExercise> trainingExerciseList = trainingExerciseRepository.findByTrainingId(trainingId);
 
         if(trainingExerciseList.isEmpty()) {
             return TrainingDetails.builder().build();
@@ -60,5 +65,11 @@ public class TrainingExerciseService {
                         .repetitions(trainingExercise.getRepetitions())
                         .build()).collect(Collectors.toList()))
                 .build();
+    }
+
+    public void editExercises(Long trainingId, List<AddExerciseRequest> exercises) {
+
+        trainingExerciseRepository.deleteByTrainingId(trainingId);
+        addExercises(trainingId, exercises);
     }
 }

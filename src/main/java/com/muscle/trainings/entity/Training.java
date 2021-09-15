@@ -1,6 +1,7 @@
 package com.muscle.trainings.entity;
 
 import com.muscle.trainings.dto.TrainingDto;
+import com.muscle.user.entity.IronUser;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,12 +32,22 @@ public class Training {
     private String image;
     private String difficulty;
 
+    @ManyToOne
+    @JoinColumn(
+            nullable = false,
+            name = "creator_id"
+    )
+    private IronUser creator;
+    private Integer points;
+
     public TrainingDto dto() {
         return TrainingDto.builder()
                 .id(this.id)
                 .name(this.name)
                 .image(this.image)
                 .difficulty(this.difficulty)
+                .creator(this.creator.dto())
+                .points(this.points)
                 .build();
     }
 }

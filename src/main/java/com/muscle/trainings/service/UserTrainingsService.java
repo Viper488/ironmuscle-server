@@ -1,6 +1,7 @@
 package com.muscle.trainings.service;
 
 import com.muscle.trainings.dto.TrainingDto;
+import com.muscle.trainings.dto.UserTrainingDto;
 import com.muscle.trainings.entity.UserTrainings;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingsRepository;
@@ -24,20 +25,20 @@ public class UserTrainingsService {
     private final TrainingsRepository trainingsRepository;
     private final JwtUtil jwtUtil;
 
-    public UserTrainings addTrainingToUser(String header, Long trainingId) {
+    public UserTrainingDto addTrainingToUser(String header, Long trainingId) {
 
-        String username = getUsernameFromHeader(header);
+        String username = jwtUtil.extractUsernameFromHeader(header);
         return userTrainingsRepository.save(UserTrainings.builder()
                 .ironUser(userRepository.findByUsername(username)
                         .orElseThrow(() -> new IllegalStateException("User not found")))
                 .training(trainingsRepository.findTrainingById(trainingId)
                         .orElseThrow(() -> new IllegalStateException("Training not found")))
-                .build());
+                .build()).dto();
     }
 
     public List<TrainingDto> getUserTrainings(String header) {
 
-        String username = getUsernameFromHeader(header);
+        String username = jwtUtil.extractUsernameFromHeader(header);
         List<UserTrainings> userTrainingsList = userTrainingsRepository
                 .findAllByUserId(userRepository.findByUsername(username)
                         .orElseThrow(() -> new IllegalStateException("User not found"))
@@ -49,15 +50,4 @@ public class UserTrainingsService {
 
         return userTrainingsList.stream().map(userTrainings -> userTrainings.getTraining().dto()).collect(Collectors.toList());
     }
-
-    private String getUsernameFromHeader(String header) {
-
-        if(header != null && header.startsWith("Bearer ")) {
-            String jwt = header.substring(7);
-
-            return jwtUtil.extractUsername(jwt);
-        }
-        return null;
-    }
-
 }

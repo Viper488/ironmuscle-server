@@ -2,14 +2,15 @@ package com.muscle.trainings.dto;
 
 import lombok.*;
 
+import java.util.Date;
+
 @Builder(toBuilder = true)
 @Getter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddExerciseRequest {
-    private Long exerciseId;
-    private Integer time;
-    private Integer repetitions;
+public class UserActivityRequest {
+    Long trainingId;
+    Date date;
 }

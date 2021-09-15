@@ -11,5 +11,7 @@ import java.util.List;
 public interface TrainingExerciseRepository extends JpaRepository<TrainingExercise, Long> {
 
     @Query(value = "SELECT * FROM Training_Exercise te WHERE te.training_id = ?1", nativeQuery = true)
-    List<TrainingExercise> findAllByTrainingId(Long id);
+    List<TrainingExercise> findByTrainingId(Long id);
+
+    void deleteByTrainingId(Long id);
 }

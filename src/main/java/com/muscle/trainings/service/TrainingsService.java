@@ -4,26 +4,50 @@ import com.muscle.trainings.dto.ExerciseDto;
 import com.muscle.trainings.dto.TrainingDto;
 import com.muscle.trainings.entity.Exercise;
 import com.muscle.trainings.entity.Training;
+import com.muscle.trainings.mapper.TrainingMapper;
 import com.muscle.trainings.repository.TrainingsRepository;
+import com.muscle.user.repository.UserRepository;
+import com.muscle.user.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class TrainingsService {
 
-
+    TrainingMapper mapper;
+    JwtUtil jwtUtil;
     TrainingsRepository trainingsRepository;
-    public TrainingDto saveTraining(TrainingDto trainingDto) {
+    UserRepository userRepository;
+
+    public List<TrainingDto> getTrainings() {
+        return trainingsRepository.findAll().stream().map(Training::dto).collect(Collectors.toList());
+    }
+
+    public TrainingDto saveTraining(String header, TrainingDto trainingDto) {
         log.info("Saving new training {} to the database", trainingDto.getName());
 
         return trainingsRepository.save(Training.builder()
                 .name(trainingDto.getName())
                 .image(trainingDto.getImage())
                 .difficulty(trainingDto.getDifficulty())
+                .creator(userRepository.findByUsername(jwtUtil.extractUsernameFromHeader(header)).orElseThrow(() -> new IllegalStateException("User not found!")))
+                .points(trainingDto.getPoints())
                 .build())
                 .dto();
+    }
+
+    public TrainingDto editTraining(TrainingDto trainingDto) {
+        log.info("Editing training {} in the database", trainingDto.getName());
+
+        Training trainingEntity = trainingsRepository.findTrainingById(trainingDto.getId()).orElseThrow(() -> new IllegalStateException("Training not found!"));
+        mapper.updateTrainingFromDto(trainingDto, trainingEntity);
+
+        return trainingsRepository.save(trainingEntity).dto();
     }
 }
