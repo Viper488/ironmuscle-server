@@ -34,14 +34,14 @@ public class UserTrainings {
             nullable = false,
             name = "user_id"
     )
-    IronUser ironUser;
+    private IronUser ironUser;
 
     @ManyToOne
     @JoinColumn(
             nullable = false,
             name = "training_id"
     )
-    Training training;
+    private Training training;
 
     public UserTrainingDto dto() {
         return UserTrainingDto.builder()

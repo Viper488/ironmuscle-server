@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +23,12 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtTokenUtil;
 
+    /**
+     * Login to the system
+     * @param authenticationRequest
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/authenticate")
     ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
 
@@ -38,14 +46,50 @@ public class UserController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     };
 
-
+    /**
+     * Show info about currently logged user
+     * @param header
+     * @return
+     */
     @GetMapping("/myself")
     public IronUserDto getMyself(@RequestHeader("Authorization") String header){
         return userService.getMyself(header);
     }
 
+    /** Welcome message for logged user
+     *
+     * @param header
+     * @return
+     */
     @GetMapping("/welcome")
     public String getWelcome(@RequestHeader("Authorization") String header){
         return userService.getWelcomeMsg(header);
+    }
+
+    /**
+     * Send reset password email
+     * @param header
+     */
+    @PostMapping("/password/change")
+    public void requestPasswordChange(@RequestHeader("Authorization") String header) {
+        userService.requestPasswordChange(header);
+    }
+
+    /**
+     * Change password
+     * @param header
+     * @param password
+     */
+    @PutMapping("/password/reset")
+    public void requestPasswordChange(@RequestHeader("Authorization") String header, @RequestParam("password") String password) {
+        userService.resetPassword(header, password);
+    }
+
+    /**
+     * Show all users by role
+     */
+    @GetMapping("/users")
+    public List<IronUserDto> getUsers(@RequestParam("role") String roleName) {
+        return userService.getUsersByRole(roleName);
     }
 }

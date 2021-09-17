@@ -12,6 +12,5 @@ public interface TrainingExerciseRepository extends JpaRepository<TrainingExerci
 
     @Query(value = "SELECT * FROM Training_Exercise te WHERE te.training_id = ?1", nativeQuery = true)
     List<TrainingExercise> findByTrainingId(Long id);
-
     void deleteByTrainingId(Long id);
 }

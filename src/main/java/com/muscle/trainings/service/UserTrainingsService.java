@@ -8,6 +8,7 @@ import com.muscle.trainings.repository.UserTrainingsRepository;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.util.JwtUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
-@AllArgsConstructor
 public class UserTrainingsService {
 
     private final UserTrainingsRepository userTrainingsRepository;

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/registration")
@@ -13,7 +14,12 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    @CrossOrigin
+    /**
+     * Register user and employees
+     * @param request
+     * @return
+     */
+
     @PostMapping()
     ResponseEntity<String> register(@RequestBody RegistrationRequestDto request){
         try {
@@ -23,7 +29,12 @@ public class RegistrationController {
         }
     }
 
-    @CrossOrigin
+    /**
+     * For users
+     * Confirm registration
+     * @param token
+     * @return
+     */
     @GetMapping("/confirm")
     ResponseEntity<String> confirm(@RequestParam("token") String token){
         try {

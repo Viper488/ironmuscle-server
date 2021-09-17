@@ -11,6 +11,7 @@ import com.muscle.trainings.repository.ExerciseRepository;
 import com.muscle.trainings.repository.TrainingExerciseRepository;
 import com.muscle.trainings.repository.TrainingsRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,12 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TrainingExerciseService {
 
-    TrainingExerciseRepository trainingExerciseRepository;
-    TrainingsRepository trainingsRepository;
-    ExerciseRepository exerciseRepository;
+    private final TrainingExerciseRepository trainingExerciseRepository;
+    private final TrainingsRepository trainingsRepository;
+    private final ExerciseRepository exerciseRepository;
 
 
     public void addExercises(Long trainingId, List<AddExerciseRequest> exercises) {

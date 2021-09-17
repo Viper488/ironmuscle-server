@@ -5,6 +5,7 @@ import com.muscle.trainings.entity.Exercise;
 import com.muscle.trainings.mapper.ExerciseMapper;
 import com.muscle.trainings.repository.ExerciseRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ExerciseService {
 
-    ExerciseMapper mapper;
-    ExerciseRepository exerciseRepository;
+    private final ExerciseMapper mapper;
+    private final ExerciseRepository exerciseRepository;
 
     public List<ExerciseDto> getExercises() {
         return exerciseRepository.findAll().stream().map(Exercise::dto).collect(Collectors.toList());

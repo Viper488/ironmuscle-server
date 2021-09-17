@@ -33,16 +33,16 @@ public class TrainingExercise {
             nullable = false,
             name = "training_id"
     )
-    Training training;
+    private Training training;
 
     @ManyToOne
     @JoinColumn(
             nullable = false,
             name = "exercise_id"
     )
-    Exercise exercise;
-    Integer time;
-    Integer repetitions;
+    private Exercise exercise;
+    private Integer time;
+    private Integer repetitions;
 
     public TrainingExerciseDto dto() {
         return TrainingExerciseDto.builder()

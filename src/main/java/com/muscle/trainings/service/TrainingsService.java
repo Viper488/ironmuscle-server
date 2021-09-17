@@ -8,7 +8,7 @@ import com.muscle.trainings.mapper.TrainingMapper;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.util.JwtUtil;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TrainingsService {
 
-    TrainingMapper mapper;
-    JwtUtil jwtUtil;
-    TrainingsRepository trainingsRepository;
-    UserRepository userRepository;
+    private final TrainingMapper mapper;
+    private final JwtUtil jwtUtil;
+    private final TrainingsRepository trainingsRepository;
+    private final UserRepository userRepository;
 
     public List<TrainingDto> getTrainings() {
         return trainingsRepository.findAll().stream().map(Training::dto).collect(Collectors.toList());
