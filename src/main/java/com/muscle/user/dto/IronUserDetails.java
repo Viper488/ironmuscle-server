@@ -1,18 +1,25 @@
 package com.muscle.user.dto;
 
-import lombok.Getter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 @Getter
 public class IronUserDetails implements UserDetails {
 
     private Long id;
+    private String name;
+    private String lastName;
     private String username;
     private String email;
     private String password;
@@ -22,6 +29,8 @@ public class IronUserDetails implements UserDetails {
 
     public IronUserDetails(IronUserDto ironUserDto) {
         this.id = ironUserDto.getId();
+        this.name = ironUserDto.getName();
+        this.lastName = ironUserDto.getLastName();
         this.username = ironUserDto.getUsername();
         this.email = ironUserDto.getEmail();
         this.password = ironUserDto.getPassword();

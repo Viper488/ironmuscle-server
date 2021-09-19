@@ -1,4 +1,4 @@
-package com.muscle.user.service.impl;
+package com.muscle.user.service;
 
 import org.springframework.stereotype.Service;
 

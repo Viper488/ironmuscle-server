@@ -5,18 +5,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.List;
-import java.util.Optional;
-
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class RegistrationRequestDto {
-    private final Optional<String> name;
-    private final Optional<String> lastName;
+public class ChangeUserDetailsDto {
+    private final String name;
+    private final String lastName;
     private final String username;
     private final String email;
-    private final String password;
-    private final List<String> roles;
 }

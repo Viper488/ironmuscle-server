@@ -1,19 +1,17 @@
-package com.muscle.user.service.impl;
+package com.muscle.user.service;
 
 import com.muscle.email.service.EmailSender;
+import com.muscle.user.dto.ChangePasswordDto;
+import com.muscle.user.dto.ChangeUserDetailsDto;
 import com.muscle.user.dto.IronUserDetails;
-import com.muscle.user.dto.RoleDto;
 import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.entity.IronUser;
-import com.muscle.user.entity.Role;
-import com.muscle.user.repository.RoleRepository;
 import com.muscle.user.repository.UserRepository;
-import com.muscle.user.service.ConverterService;
 import com.muscle.user.util.JwtUtil;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,51 +30,45 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final static String  USER_NOT_FOUND_MSG = "User %s not found in database";
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final ConverterService converterService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
     private final JwtUtil jwtUtil;
 
-    public RoleDto saveRole(RoleDto roleDto) {
-        log.info("Saving new role {} to the database", roleDto.getName());
-        return roleRepository.save(converterService.convertDtoToRole(roleDto)).dto();
-    }
-
-    public void addRoleToUser(String username, String roleName) {
-        log.info("Adding role {} to user {}", roleName, username);
-        IronUser ironUser = userRepository.findByUsername(username)
+    private IronUser getUserFromHeader(String header) {
+        String username = jwtUtil.extractUsernameFromHeader(header);
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
-
-        Role role = roleRepository.findByName(roleName);
-
-        ironUser.getRoles().add(role);
     }
 
     public IronUserDto getMyself(String header) {
-        String username = jwtUtil.extractUsernameFromHeader(header);
-
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("User not found")).dto();
+        return getUserFromHeader(header).dto();
     }
 
     public String getWelcomeMsg(String header) {
-        String username = jwtUtil.extractUsernameFromHeader(header);
-
-        return "Welcome " + userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("User not found")).dto().getUsername();
+        return "Welcome " + getUserFromHeader(header).getUsername();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<IronUser> user = userRepository.findByUsername(username);
 
+
         if(!user.isPresent()) {
             user = userRepository.findByEmail(username);
         }
-
-        return user.map(IronUser::dto).map(IronUserDetails::new).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username)));
+        IronUserDto ironUserDto = user.orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username))).dto();
+        return IronUserDetails.builder()
+                .id(ironUserDto.getId())
+                .name(ironUserDto.getName())
+                .lastName(ironUserDto.getLastName())
+                .username(ironUserDto.getUsername())
+                .email(ironUserDto.getEmail())
+                .password(ironUserDto.getPassword())
+                .locked(ironUserDto.getLocked())
+                .enabled(ironUserDto.getEnabled())
+                .authorities(ironUserDto.getRoles().stream().map(roleDto -> new SimpleGrantedAuthority(roleDto.getName())).collect(Collectors.toList()))
+                .build();
     }
 
     public String signUpUser(IronUser ironUser){
@@ -122,9 +114,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void requestPasswordChange(String header) {
-        String username = jwtUtil.extractUsernameFromHeader(header);
-        IronUserDto user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("User not found")).dto();
+        IronUserDto user = getUserFromHeader(header).dto();
 
         String link = "http://localhost:4200/reset/password";
         emailSender.send(user.getEmail(), buildPasswordEmail(user.getUsername(), link));
@@ -166,13 +156,61 @@ public class UserService implements UserDetailsService {
     }
 
     public void resetPassword(String header, String password) {
-        String username = jwtUtil.extractUsernameFromHeader(header);
-        IronUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+        IronUser user = getUserFromHeader(header);
+
+        validatePassword(password);
 
         String encodedPassword = passwordEncoder.encode(password);
-        user.setPassword(encodedPassword);
+        if(encodedPassword.equals(user.getPassword())) {
+            throw new IllegalStateException("Your new password can not be the same as your old password");
+        }
+            user.setPassword(encodedPassword);
 
         userRepository.save(user);
+    }
+
+    public void changePassword(String header, ChangePasswordDto changePasswordDto) {
+        IronUser user = getUserFromHeader(header);
+
+        String oldPassword = passwordEncoder.encode(changePasswordDto.getOldPassword());
+
+        if(!oldPassword.equals(user.getPassword())) {
+            throw new IllegalStateException("This is not current password");
+        }
+
+        String newPassword = passwordEncoder.encode(changePasswordDto.getNewPassword());
+
+        if(newPassword.equals(user.getPassword())) {
+            throw new IllegalStateException("Your new password can not be the same as your old password");
+        }
+
+        validatePassword(changePasswordDto.getNewPassword());
+        user.setPassword(newPassword);
+
+        userRepository.save(user);
+    }
+
+    public void changeUserDetails(String header, ChangeUserDetailsDto changed) {
+        IronUser user = getUserFromHeader(header);
+
+        user.setName(changed.getName());
+        user.setLastName(changed.getLastName());
+        if(!userRepository.findByUsername(changed.getUsername()).isPresent())
+            user.setUsername(changed.getUsername());
+        else
+            throw new IllegalStateException("Username already taken");
+
+        if(!userRepository.findByEmail(changed.getEmail()).isPresent())
+            user.setEmail(changed.getLastName());
+        else
+            throw new IllegalStateException("Email already taken");
+
+        userRepository.save(user);
+    }
+
+    public void validatePassword(String password) {
+        if(!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")){
+            throw new IllegalStateException("Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character");
+        }
     }
 }

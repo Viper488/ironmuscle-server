@@ -1,4 +1,4 @@
-package com.muscle.user.service.impl;
+package com.muscle.user.service;
 
 import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.repository.ConfirmationTokenRepository;

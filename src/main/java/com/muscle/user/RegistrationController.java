@@ -1,7 +1,7 @@
 package com.muscle.user;
 
 import com.muscle.user.dto.RegistrationRequestDto;
-import com.muscle.user.service.impl.RegistrationService;
+import com.muscle.user.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class RegistrationController {
     private final RegistrationService registrationService;
 
     /**
-     * Register user and employees
+     * Register for users
      * @param request
      * @return
      */
@@ -30,8 +30,7 @@ public class RegistrationController {
     }
 
     /**
-     * For users
-     * Confirm registration
+     * Confirm registration for users
      * @param token
      * @return
      */

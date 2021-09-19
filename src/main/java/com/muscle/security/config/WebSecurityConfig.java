@@ -1,9 +1,8 @@
 package com.muscle.security.config;
 
 import com.muscle.user.filters.JwtRequestFilter;
-import com.muscle.user.service.impl.UserService;
+import com.muscle.user.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,16 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeRequests()
-                .antMatchers("/api/v*/registration*", "/api/v*/registration/confirm*", "/api/v*/authenticate")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf().disable();
+        http.authorizeRequests().antMatchers("/api/v*/registration*", "/api/v*/registration/confirm*", "/api/v*/authenticate", "/api/v*/system/authenticate").permitAll();
+        //http.authorizeRequests().antMatchers("/api/v*/myself").hasAnyAuthority("EMPLOYEE");
+        http.authorizeRequests().anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

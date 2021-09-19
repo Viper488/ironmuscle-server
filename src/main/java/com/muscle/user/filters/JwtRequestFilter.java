@@ -1,9 +1,13 @@
 package com.muscle.user.filters;
 
-import com.muscle.user.service.impl.UserService;
+import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,7 +19,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -39,7 +47,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userService.loadUserByUsername(username);
             if(jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities().stream().map(grantedAuthority -> new SimpleGrantedAuthority(grantedAuthority.getAuthority())).collect(Collectors.toList()));
 
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
