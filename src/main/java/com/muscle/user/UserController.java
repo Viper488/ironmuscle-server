@@ -126,13 +126,6 @@ public class UserController {
         userService.requestPasswordChange(header);
     }
 
-    //TODO: Bezpieczne przesylanie nowego hasła - od strony klienta
-    //TODO: Role dla pracowników(trener itd) - done
-    //TODO: Request o nowy trening
-    //TODO: Wysylanie requestow do trenera z najmniejszym oblozeniem??? innym kryterium???
-    //TODO: Template treningi dla wszystkich
-    //TODO: ???
-
     /**
      * Change password
      * @param header
@@ -160,4 +153,9 @@ public class UserController {
     public List<IronUserDto> getUsers(@RequestParam("role") String roleName) {
         return userService.getUsersByRole(roleName);
     }
+
+    //TODO: Bezpieczne przesylanie nowego hasła - od strony klienta
+    //TODO: Role dla pracowników(trener itd) - done
+    //TODO: Template treningi dla wszystkich - done
+    //TODO: ???
 }

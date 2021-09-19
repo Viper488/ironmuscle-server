@@ -1,7 +1,5 @@
 package com.muscle.trainings.service;
 
-import com.muscle.trainings.dto.TrainingDto;
-import com.muscle.trainings.dto.UserActivityRequest;
 import com.muscle.trainings.dto.UserTrainingHistoryDto;
 import com.muscle.trainings.entity.UserTrainingHistory;
 import com.muscle.trainings.repository.TrainingsRepository;
@@ -11,11 +9,11 @@ import com.muscle.trainings.responses.UserTrainingHistoryResponse;
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.util.JwtUtil;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,14 +27,14 @@ public class UserTrainingHistoryService {
     private final TrainingsRepository trainingsRepository;
     private final UserTrainingHistoryRepository userTrainingHistoryRepository;
 
-    public UserTrainingHistoryDto saveUserActivity(String header, UserActivityRequest userActivityRequest) {
+    public UserTrainingHistoryDto saveUserActivity(String header, Long trainingId) {
         return userTrainingHistoryRepository
                 .save(UserTrainingHistory.builder()
                         .user(userRepository.findByUsername(jwtUtil.extractUsernameFromHeader(header))
                                 .orElseThrow(() -> new IllegalStateException("User not found")))
-                        .training(trainingsRepository.findTrainingById(userActivityRequest.getTrainingId())
+                        .training(trainingsRepository.findTrainingById(trainingId)
                                 .orElseThrow(() -> new IllegalStateException("Training not found")))
-                        .date(userActivityRequest.getDate())
+                        .date(LocalDateTime.now())
                         .build())
                 .dto();
     }

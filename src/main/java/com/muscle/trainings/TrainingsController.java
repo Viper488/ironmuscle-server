@@ -20,7 +20,16 @@ public class TrainingsController {
     private final TrainingExerciseService trainingExerciseService;
     private final UserTrainingsService userTrainingsService;
     private final UserTrainingHistoryService userTrainingHistoryService;
+    private final TrainingRequestService trainingRequestService;
 
+    /**
+     * Get template trainings
+     * @return
+     */
+    @GetMapping("/training/template")
+    List<TrainingDto> getTemplateTrainings() {
+        return trainingsService.getTemplateTrainings();
+    }
 
     /**
      * Show all trainings
@@ -136,12 +145,12 @@ public class TrainingsController {
     /**
      * Save user activity
      * @param header
-     * @param userActivityRequest
+     * @param trainingId
      * @return
      */
     @PostMapping("/user/history")
-    UserTrainingHistoryDto saveUserActivity(@RequestHeader("Authorization") String header, @RequestBody UserActivityRequest userActivityRequest){
-        return userTrainingHistoryService.saveUserActivity(header, userActivityRequest);
+    UserTrainingHistoryDto saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId){
+        return userTrainingHistoryService.saveUserActivity(header, trainingId);
     }
 
 
@@ -154,4 +163,72 @@ public class TrainingsController {
     UserTrainingHistoryResponse getUserHistory(@RequestHeader("Authorization") String header){
         return userTrainingHistoryService.getUserTrainingHistory(header);
     }
+
+    /**
+     * Create request for training by user
+     * @param header
+     * @param trainingRequestDto
+     * @return
+     */
+    @PostMapping("/user/request")
+    TrainingRequestDto createRequest(@RequestHeader("Authorization") String header, @RequestBody TrainingRequestDto trainingRequestDto) {
+        return trainingRequestService.createRequest(header, trainingRequestDto);
+    }
+
+    /**
+     * Get request by id
+     * @param id
+     * @return
+     */
+    @GetMapping("/user/request/{id}")
+    TrainingRequestDto getRequest(@PathVariable Long id) {
+        return trainingRequestService.getRequest(id);
+    }
+
+    /**
+     * Edit request
+     * @param id
+     * @param trainingRequestDto
+     * @return
+     */
+    @PutMapping("/user/request/{id}")
+    TrainingRequestDto updateRequest(@PathVariable Long id, @RequestBody TrainingRequestDto trainingRequestDto) {
+        return trainingRequestService.updateRequest(id, trainingRequestDto);
+    }
+
+    /**
+     * Get requests made by user
+     * @param header
+     * @return
+     */
+    @GetMapping("/user/requests")
+    List<TrainingRequestDto> getUserRequests(@RequestHeader("Authorization") String header) {
+        return trainingRequestService.getUserRequests(header);
+    }
+
+    /**
+     * Get requests assigned to employee
+     * @param header
+     * @return
+     */
+    @GetMapping("/employee/requests")
+    List<TrainingRequestDto> getEmployeeRequests(@RequestHeader("Authorization") String header) {
+        return trainingRequestService.getEmployeeRequests(header);
+    }
+
+    /**
+     * Comment on request
+     * @param header
+     * @param requestId
+     * @param commentDto
+     */
+    @PutMapping("/user/request/comment")
+    void addCommentToRequest(@RequestHeader("Authorization") String header, @RequestParam("request") Long requestId, @RequestBody CommentDto commentDto) {
+        trainingRequestService.addCommentToRequest(header, requestId, commentDto);
+    }
+
+    //TODO: Request o nowy trening - done
+    //TODO: Wysylanie requestow do trenera z najmniejszym oblozeniem??? innym kryterium??? - done
+    //TODO: GET pojedynczego requesta - done
+    //TODO: Zastanowic sie nad iloscia zwracanych danych z endpointow
 }

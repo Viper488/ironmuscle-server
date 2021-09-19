@@ -1,10 +1,10 @@
 package com.muscle.trainings.dto;
 
-import com.muscle.user.dto.IronUserDto;
+import com.muscle.user.entity.IronUser;
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Builder(toBuilder = true)
 @Getter
@@ -12,9 +12,9 @@ import java.util.Date;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTrainingHistoryDto {
+public class CommentDto {
     private Long id;
-    private IronUserDto user;
-    private TrainingDto training;
-    private LocalDateTime date;
+    private IronUser creator;
+    private String value;
+    private LocalDateTime created_at;
 }

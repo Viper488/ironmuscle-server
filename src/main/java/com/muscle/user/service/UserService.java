@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
     private final EmailSender emailSender;
     private final JwtUtil jwtUtil;
 
-    private IronUser getUserFromHeader(String header) {
+    public IronUser getUserFromHeader(String header) {
         String username = jwtUtil.extractUsernameFromHeader(header);
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("User not found"));

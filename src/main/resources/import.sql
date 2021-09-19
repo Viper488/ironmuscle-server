@@ -1,8 +1,7 @@
 INSERT INTO role VALUES(nextval('role_sequence'), 'ADMIN');
 INSERT INTO role VALUES(nextval('role_sequence'), 'EMPLOYEE');
+INSERT INTO role VALUES(nextval('role_sequence'), 'TRAINER');
 INSERT INTO role VALUES(nextval('role_sequence'), 'USER');
-INSERT INTO role VALUES(nextval('role_sequence'), 'CARDIO_TRAINER');
-INSERT INTO role VALUES(nextval('role_sequence'), 'WEIGHT_LIFTING_TRAINER');
 
 INSERT INTO iron_user VALUES (nextval('user_sequence'), 'admin@admin.com',       true, '',      false, '',      '$2a$10$tpA0.LhVCAzZzN9jP90AAuokZOghqi3Pd3.hzTec8mCZKC8MdCaBy', 'admin');
 INSERT INTO iron_user VALUES (nextval('user_sequence'), 'employee@employee.com', true, '',      false, '',      '$2a$10$uFsgfCqAfzywMaq1poI2MOe4VTbTsKVEleYp8qRoHv7xwzfbv5ZtG', 'employee');
@@ -11,7 +10,8 @@ INSERT INTO iron_user VALUES (nextval('user_sequence'), 'user@user.com',        
 INSERT INTO iron_user_roles VALUES (1, 1);
 INSERT INTO iron_user_roles VALUES (1, 2);
 INSERT INTO iron_user_roles VALUES (2, 2);
-INSERT INTO iron_user_roles VALUES (3, 3);
+INSERT INTO iron_user_roles VALUES (2, 3);
+INSERT INTO iron_user_roles VALUES (3, 4);
 
 INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://thumbs.gfycat.com/BlaringTornBelugawhale-small.gif',                   'Jumping jacks',                    '1b98WrRrmUs');
 INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://i.imgur.com/UJAnRhJ.gif',                                              'Abdominal crunches',               '_YVhhXc2pSY');
@@ -32,8 +32,8 @@ INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://i.imgur.com/J
 INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://i.pinimg.com/originals/cf/b5/67/cfb5677a755fe7288b608a4fec6f09a0.gif', 'Hindu push-ups',                   'y1hXARQhHZM');
 INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://thumbs.gfycat.com/BlaringTornBelugawhale-small.gif',                   'Chest stretch',                    '1b98WrRrmUs');
 
-INSERT INTO training VALUES (nextval('training_sequence'), 'Abdominal',     '', 'Beginner',     10, 1);
-INSERT INTO training VALUES (nextval('training_sequence'), 'Chest',     '', 'Beginner',     10, 1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Template Abdominal', '', 'Beginner',     10, 1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Template Chest',     '', 'Beginner',     10, 1);
 
 INSERT INTO training_exercise VALUES(nextval('training_exercise_sequence'),  0, 20,  1, 1);
 INSERT INTO training_exercise VALUES(nextval('training_exercise_sequence'), 20,  0,  2, 1);

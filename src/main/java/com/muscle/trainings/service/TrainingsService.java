@@ -25,6 +25,17 @@ public class TrainingsService {
     private final TrainingsRepository trainingsRepository;
     private final UserRepository userRepository;
 
+    public List<TrainingDto> getTemplateTrainings() {
+        return trainingsRepository.findByNameStartsWith("Template").stream().map(training -> TrainingDto.builder()
+                .id(training.getId())
+                .name(training.getName().substring(8))
+                .difficulty(training.getDifficulty())
+                .image(training.getImage())
+                .points(training.getPoints())
+                .creator(training.getCreator().dto())
+                .build()).collect(Collectors.toList());
+    }
+
     public List<TrainingDto> getTrainings() {
         return trainingsRepository.findAll().stream().map(Training::dto).collect(Collectors.toList());
     }

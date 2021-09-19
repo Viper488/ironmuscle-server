@@ -1,6 +1,8 @@
 package com.muscle.trainings.responses;
 
 import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder(toBuilder = true)
@@ -15,5 +17,5 @@ public class TrainingHistory {
     private String image;
     private String difficulty;
     private Integer points;
-    private Date date;
+    private LocalDateTime date;
 }

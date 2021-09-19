@@ -5,6 +5,7 @@ import com.muscle.user.entity.IronUser;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder(toBuilder = true)
@@ -43,7 +44,7 @@ public class UserTrainingHistory {
             name = "training_id"
     )
     private Training training;
-    private Date date;
+    private LocalDateTime date;
 
     public UserTrainingHistoryDto dto(){
         return UserTrainingHistoryDto.builder()
