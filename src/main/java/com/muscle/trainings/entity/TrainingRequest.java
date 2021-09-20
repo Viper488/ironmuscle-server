@@ -1,6 +1,7 @@
 package com.muscle.trainings.entity;
 
 import com.muscle.trainings.dto.TrainingRequestDto;
+import com.muscle.trainings.responses.TrainingRequestResponse;
 import com.muscle.user.entity.IronUser;
 import lombok.*;
 
@@ -68,6 +69,32 @@ public class TrainingRequest {
                 .user(this.user.dto())
                 .employee(this.employee.dto())
                 .comments(this.comments.stream().map(Comment::dto).collect(Collectors.toList()))
+                .build();
+
+    }
+
+    public TrainingRequestResponse detailedResponse(){
+        return TrainingRequestResponse.builder()
+                .id(this.id)
+                .title(this.title)
+                .description(this.description)
+                .status(this.status)
+                .created_at(this.created_at)
+                .resolved_at(this.resolved_at)
+                .user(this.user.response())
+                .employee(this.employee.response())
+                .build();
+
+    }
+
+    public TrainingRequestResponse response(){
+        return TrainingRequestResponse.builder()
+                .id(this.id)
+                .title(this.title)
+                .description(this.description)
+                .status(this.status)
+                .created_at(this.created_at)
+                .resolved_at(this.resolved_at)
                 .build();
 
     }

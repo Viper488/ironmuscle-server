@@ -1,11 +1,10 @@
-package com.muscle.trainings.dto;
+package com.muscle.trainings.responses;
 
 import com.muscle.user.dto.IronUserDto;
+import com.muscle.user.response.IronUserResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Builder(toBuilder = true)
@@ -15,14 +14,13 @@ import java.util.Optional;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainingRequestDto {
+public class TrainingRequestResponse {
     private Long id;
     private String title;
     private String description;
     private String status;
     private LocalDateTime created_at;
     private LocalDateTime resolved_at;
-    private IronUserDto user;
-    private IronUserDto employee;
-    private List<CommentDto> comments;
+    private IronUserResponse user;
+    private IronUserResponse employee;
 }

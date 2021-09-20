@@ -1,6 +1,7 @@
 package com.muscle.trainings.entity;
 
 import com.muscle.trainings.dto.CommentDto;
+import com.muscle.trainings.responses.CommentResponse;
 import com.muscle.user.entity.IronUser;
 import lombok.*;
 
@@ -42,7 +43,16 @@ public class Comment {
     public CommentDto dto(){
         return CommentDto.builder()
                 .id(this.id)
-                .creator(this.creator)
+                .creator(this.creator.dto())
+                .value(this.value)
+                .created_at(this.created_at)
+                .build();
+    }
+
+    public CommentResponse response(){
+        return CommentResponse.builder()
+                .id(this.id)
+                .creator(this.creator.response())
                 .value(this.value)
                 .created_at(this.created_at)
                 .build();

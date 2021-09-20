@@ -1,6 +1,7 @@
-package com.muscle.trainings.dto;
+package com.muscle.trainings.responses;
 
 import com.muscle.user.dto.IronUserDto;
+import com.muscle.user.response.IronUserResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,9 +13,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto {
+public class CommentResponse {
     private Long id;
-    private IronUserDto creator;
+    private IronUserResponse creator;
     private String value;
     private LocalDateTime created_at;
 }

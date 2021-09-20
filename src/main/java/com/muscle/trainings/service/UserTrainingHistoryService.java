@@ -4,7 +4,7 @@ import com.muscle.trainings.dto.UserTrainingHistoryDto;
 import com.muscle.trainings.entity.UserTrainingHistory;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingHistoryRepository;
-import com.muscle.trainings.responses.TrainingHistory;
+import com.muscle.trainings.other.TrainingHistory;
 import com.muscle.trainings.responses.UserTrainingHistoryResponse;
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.repository.UserRepository;

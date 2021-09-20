@@ -1,6 +1,7 @@
 package com.muscle.user.entity;
 
 import com.muscle.user.dto.IronUserDto;
+import com.muscle.user.response.IronUserResponse;
 import lombok.*;
 
 import javax.persistence.*;
@@ -57,6 +58,16 @@ public class IronUser {
                 .locked(this.locked)
                 .enabled(this.enabled)
                 .roles(this.roles.stream().map(Role::dto).collect(Collectors.toList()))
+                .build();
+    }
+
+    public IronUserResponse response() {
+        return IronUserResponse.builder()
+                .id(this.id)
+                .name(this.name)
+                .lastName(this.lastName)
+                .username(this.username)
+                .email(this.email)
                 .build();
     }
 }

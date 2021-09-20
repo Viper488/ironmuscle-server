@@ -4,9 +4,10 @@ import com.muscle.trainings.dto.CommentDto;
 import com.muscle.trainings.dto.TrainingRequestDto;
 import com.muscle.trainings.entity.Comment;
 import com.muscle.trainings.entity.TrainingRequest;
-import com.muscle.trainings.mapper.TrainingRequestMapper;
 import com.muscle.trainings.repository.CommentRepository;
 import com.muscle.trainings.repository.TrainingRequestRepository;
+import com.muscle.trainings.responses.CommentResponse;
+import com.muscle.trainings.responses.TrainingRequestResponse;
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.repository.UserRepository;
@@ -28,24 +29,24 @@ public class TrainingRequestService {
     private final UserService userService;
     private final CommentRepository commentRepository;
     private final TrainingRequestRepository trainingRequestRepository;
-    private final TrainingRequestMapper trainingRequestMapper;
     private final UserRepository userRepository;
 
-    public TrainingRequestDto getRequest(Long id){
-        return trainingRequestRepository.findById(id).orElseThrow(() -> new IllegalStateException("Request not found")).dto();
+    public TrainingRequestResponse getRequest(Long id){
+        return trainingRequestRepository.findById(id).orElseThrow(() -> new IllegalStateException("Request not found")).detailedResponse();
     }
 
-    public List<TrainingRequestDto> getUserRequests(String header){
+    public List<TrainingRequestResponse> getUserRequests(String header){
         IronUserDto user = userService.getUserFromHeader(header).dto();
-        return trainingRequestRepository.findByUserId(user.getId()).stream().map(TrainingRequest::dto).collect(Collectors.toList());
+
+        return trainingRequestRepository.findByUserId(user.getId()).stream().map(TrainingRequest::response).collect(Collectors.toList());
     }
 
-    public List<TrainingRequestDto> getEmployeeRequests(String header){
+    public List<TrainingRequestResponse> getEmployeeRequests(String header){
         IronUserDto employee = userService.getUserFromHeader(header).dto();
-        return trainingRequestRepository.findByEmployeeId(employee.getId()).stream().map(TrainingRequest::dto).collect(Collectors.toList());
+        return trainingRequestRepository.findByEmployeeId(employee.getId()).stream().map(TrainingRequest::response).collect(Collectors.toList());
     }
 
-    public TrainingRequestDto createRequest(String header, TrainingRequestDto trainingRequestDto){
+    public TrainingRequestResponse createRequest(String header, TrainingRequestDto trainingRequestDto){
         IronUser user = userService.getUserFromHeader(header);
         IronUser employee = getFreeEmployee();
         return trainingRequestRepository.save(TrainingRequest.builder()
@@ -56,10 +57,10 @@ public class TrainingRequestService {
                 .status("NEW")
                 .employee(employee)
                 .comments(new ArrayList<>())
-                .build()).dto();
+                .build()).response();
     }
 
-    public TrainingRequestDto updateRequest(Long id, TrainingRequestDto trainingRequestDto){
+    public TrainingRequestResponse updateRequest(Long id, TrainingRequestDto trainingRequestDto){
         TrainingRequest trainingRequest = trainingRequestRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Request not found"));
 
@@ -72,7 +73,7 @@ public class TrainingRequestService {
             if (trainingRequestDto.getStatus().equals("DONE"))
                 trainingRequest.setResolved_at(LocalDateTime.now());
         }
-        return trainingRequestRepository.save(trainingRequest).dto();
+        return trainingRequestRepository.save(trainingRequest).response();
     }
 
     private IronUser getFreeEmployee() {
@@ -91,7 +92,7 @@ public class TrainingRequestService {
         }
     }
 
-    public void addCommentToRequest(String header, Long requestId, CommentDto commentDto) {
+    public CommentResponse addCommentToRequest(String header, Long requestId, CommentDto commentDto) {
         IronUser user = userService.getUserFromHeader(header);
         TrainingRequest trainingRequest = trainingRequestRepository.findById(requestId).orElseThrow(() -> new IllegalStateException("Request not found"));
         Comment comment = commentRepository.save(Comment.builder()
@@ -101,5 +102,13 @@ public class TrainingRequestService {
                             .build());
         trainingRequest.getComments().add(comment);
         trainingRequestRepository.save(trainingRequest);
+
+        return comment.response();
+    }
+
+    public List<CommentResponse> getRequestComments(Long requestId) {
+        TrainingRequest trainingRequest = trainingRequestRepository.findById(requestId).orElseThrow(() -> new IllegalStateException("Request not found"));
+
+        return trainingRequest.getComments().stream().map(Comment::response).collect(Collectors.toList());
     }
 }

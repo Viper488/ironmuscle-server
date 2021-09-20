@@ -1,16 +1,15 @@
 package com.muscle.trainings.service;
 
 import com.muscle.trainings.dto.AddExerciseRequest;
-import com.muscle.trainings.responses.ExerciseDetails;
+import com.muscle.trainings.other.ExerciseDetails;
 import com.muscle.trainings.dto.TrainingExerciseDto;
-import com.muscle.trainings.responses.TrainingDetails;
+import com.muscle.trainings.other.TrainingDetails;
 import com.muscle.trainings.entity.Exercise;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.TrainingExercise;
 import com.muscle.trainings.repository.ExerciseRepository;
 import com.muscle.trainings.repository.TrainingExerciseRepository;
 import com.muscle.trainings.repository.TrainingsRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

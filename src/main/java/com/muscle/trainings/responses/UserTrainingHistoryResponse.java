@@ -1,5 +1,6 @@
 package com.muscle.trainings.responses;
 
+import com.muscle.trainings.other.TrainingHistory;
 import com.muscle.user.dto.IronUserDto;
 import lombok.*;
 
