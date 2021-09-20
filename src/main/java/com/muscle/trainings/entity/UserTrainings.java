@@ -1,6 +1,7 @@
 package com.muscle.trainings.entity;
 
 import com.muscle.trainings.dto.UserTrainingDto;
+import com.muscle.trainings.responses.UserTrainingResponse;
 import com.muscle.user.entity.IronUser;
 import lombok.*;
 
@@ -48,6 +49,14 @@ public class UserTrainings {
                 .id(this.id)
                 .user(this.ironUser.dto())
                 .training(this.training.dto())
+                .build();
+    }
+
+    public UserTrainingResponse response() {
+        return UserTrainingResponse.builder()
+                .id(this.id)
+                .user(this.ironUser.response())
+                .training(this.training.response())
                 .build();
     }
 }

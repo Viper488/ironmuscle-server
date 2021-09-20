@@ -5,6 +5,8 @@ import com.muscle.trainings.dto.UserTrainingDto;
 import com.muscle.trainings.entity.UserTrainings;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingsRepository;
+import com.muscle.trainings.responses.TrainingResponse;
+import com.muscle.trainings.responses.UserTrainingResponse;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.util.JwtUtil;
 import lombok.AllArgsConstructor;
@@ -26,7 +28,7 @@ public class UserTrainingsService {
     private final TrainingsRepository trainingsRepository;
     private final JwtUtil jwtUtil;
 
-    public UserTrainingDto addTrainingToUser(String header, Long trainingId) {
+    public UserTrainingResponse addTrainingToUser(String header, Long trainingId) {
 
         String username = jwtUtil.extractUsernameFromHeader(header);
         return userTrainingsRepository.save(UserTrainings.builder()
@@ -34,10 +36,10 @@ public class UserTrainingsService {
                         .orElseThrow(() -> new IllegalStateException("User not found")))
                 .training(trainingsRepository.findTrainingById(trainingId)
                         .orElseThrow(() -> new IllegalStateException("Training not found")))
-                .build()).dto();
+                .build()).response();
     }
 
-    public List<TrainingDto> getUserTrainings(String header) {
+    public List<TrainingResponse> getUserTrainings(String header) {
 
         String username = jwtUtil.extractUsernameFromHeader(header);
         List<UserTrainings> userTrainingsList = userTrainingsRepository
@@ -49,6 +51,6 @@ public class UserTrainingsService {
             return new ArrayList<>();
         }
 
-        return userTrainingsList.stream().map(userTrainings -> userTrainings.getTraining().dto()).collect(Collectors.toList());
+        return userTrainingsList.stream().map(userTrainings -> userTrainings.getTraining().response()).collect(Collectors.toList());
     }
 }

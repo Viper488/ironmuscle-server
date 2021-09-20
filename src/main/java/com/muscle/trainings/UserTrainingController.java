@@ -1,9 +1,9 @@
 package com.muscle.trainings;
 
-import com.muscle.trainings.dto.TrainingDto;
-import com.muscle.trainings.dto.UserTrainingDto;
-import com.muscle.trainings.dto.UserTrainingHistoryDto;
+import com.muscle.trainings.responses.TrainingResponse;
+import com.muscle.trainings.other.UserTrainingHistoryDetails;
 import com.muscle.trainings.responses.UserTrainingHistoryResponse;
+import com.muscle.trainings.responses.UserTrainingResponse;
 import com.muscle.trainings.service.UserTrainingHistoryService;
 import com.muscle.trainings.service.UserTrainingsService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class UserTrainingController {
      * @return
      */
     @PostMapping("/trainings/{id}")
-    UserTrainingDto addTrainingToUser(@RequestHeader("Authorization") String header, @PathVariable Long id) {
+    UserTrainingResponse addTrainingToUser(@RequestHeader("Authorization") String header, @PathVariable Long id) {
         return userTrainingsService.addTrainingToUser(header, id);
     }
 
@@ -37,7 +37,7 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/trainings")
-    List<TrainingDto> getUserTrainings(@RequestHeader("Authorization") String header) {
+    List<TrainingResponse> getUserTrainings(@RequestHeader("Authorization") String header) {
         return userTrainingsService.getUserTrainings(header);
     }
 
@@ -48,7 +48,7 @@ public class UserTrainingController {
      * @return
      */
     @PostMapping("/history")
-    UserTrainingHistoryDto saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId){
+    UserTrainingHistoryResponse saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId){
         return userTrainingHistoryService.saveUserActivity(header, trainingId);
     }
 
@@ -59,7 +59,7 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/history")
-    UserTrainingHistoryResponse getUserHistory(@RequestHeader("Authorization") String header){
+    UserTrainingHistoryDetails getUserHistory(@RequestHeader("Authorization") String header){
         return userTrainingHistoryService.getUserTrainingHistory(header);
     }
 }

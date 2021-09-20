@@ -1,12 +1,12 @@
 package com.muscle.trainings.entity;
 
 import com.muscle.trainings.dto.UserTrainingHistoryDto;
+import com.muscle.trainings.responses.UserTrainingHistoryResponse;
 import com.muscle.user.entity.IronUser;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -51,6 +51,16 @@ public class UserTrainingHistory {
                 .id(this.id)
                 .user(this.user.dto())
                 .training(this.training.dto())
+                .date(this.date)
+                .build();
+
+    }
+
+    public UserTrainingHistoryResponse response(){
+        return UserTrainingHistoryResponse.builder()
+                .id(this.id)
+                .user(this.user.response())
+                .training(this.training.response())
                 .date(this.date)
                 .build();
 

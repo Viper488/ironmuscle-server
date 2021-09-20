@@ -1,13 +1,13 @@
 package com.muscle.trainings.service;
 
-import com.muscle.trainings.dto.UserTrainingHistoryDto;
 import com.muscle.trainings.entity.UserTrainingHistory;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingHistoryRepository;
 import com.muscle.trainings.other.TrainingHistory;
+import com.muscle.trainings.other.UserTrainingHistoryDetails;
 import com.muscle.trainings.responses.UserTrainingHistoryResponse;
-import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.repository.UserRepository;
+import com.muscle.user.response.IronUserResponse;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class UserTrainingHistoryService {
     private final TrainingsRepository trainingsRepository;
     private final UserTrainingHistoryRepository userTrainingHistoryRepository;
 
-    public UserTrainingHistoryDto saveUserActivity(String header, Long trainingId) {
+    public UserTrainingHistoryResponse saveUserActivity(String header, Long trainingId) {
         return userTrainingHistoryRepository
                 .save(UserTrainingHistory.builder()
                         .user(userRepository.findByUsername(jwtUtil.extractUsernameFromHeader(header))
@@ -36,14 +36,14 @@ public class UserTrainingHistoryService {
                                 .orElseThrow(() -> new IllegalStateException("Training not found")))
                         .date(LocalDateTime.now())
                         .build())
-                .dto();
+                .response();
     }
 
-    public UserTrainingHistoryResponse getUserTrainingHistory(String header) {
-        IronUserDto user = userRepository.findByUsername(jwtUtil.extractUsernameFromHeader(header)).orElseThrow(() -> new IllegalStateException("User not found")).dto();
+    public UserTrainingHistoryDetails getUserTrainingHistory(String header) {
+        IronUserResponse user = userRepository.findByUsername(jwtUtil.extractUsernameFromHeader(header)).orElseThrow(() -> new IllegalStateException("User not found")).response();
         List<UserTrainingHistory> userTrainingHistory = userTrainingHistoryRepository.findByUserId(user.getId());
 
-        return UserTrainingHistoryResponse.builder()
+        return UserTrainingHistoryDetails.builder()
                 .user(user)
                 .trainingHistory(userTrainingHistory.stream()
                         .map(userTrainingHistoryItem -> TrainingHistory.builder()
