@@ -1,6 +1,7 @@
 package com.muscle.trainings.entity;
 
 import com.muscle.trainings.dto.TrainingDto;
+import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.user.entity.IronUser;
 import lombok.*;
 
@@ -47,6 +48,26 @@ public class Training {
                 .image(this.image)
                 .difficulty(this.difficulty)
                 .creator(this.creator.dto())
+                .points(this.points)
+                .build();
+    }
+
+    public TrainingResponse response() {
+        return TrainingResponse.builder()
+                .id(this.id)
+                .name(this.name)
+                .image(this.image)
+                .difficulty(this.difficulty)
+                .build();
+    }
+
+    public TrainingResponse detailedResponse() {
+        return TrainingResponse.builder()
+                .id(this.id)
+                .name(this.name)
+                .image(this.image)
+                .difficulty(this.difficulty)
+                .creator(this.creator.response())
                 .points(this.points)
                 .build();
     }

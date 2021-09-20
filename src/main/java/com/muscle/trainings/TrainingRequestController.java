@@ -81,6 +81,11 @@ public class TrainingRequestController {
         return trainingRequestService.addCommentToRequest(header, id, commentDto);
     }
 
+    /**
+     * Get request comments
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}/comments")
     List<CommentResponse> showComments(@PathVariable() Long id) {
         return trainingRequestService.getRequestComments(id);

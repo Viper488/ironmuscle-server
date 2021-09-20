@@ -1,6 +1,6 @@
 package com.muscle.trainings.other;
 
-import com.muscle.trainings.dto.TrainingDto;
+import com.muscle.trainings.responses.TrainingResponse;
 import lombok.*;
 
 import java.util.List;
@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainingDetails {
-    private TrainingDto training;
-    private List<ExerciseDetails> exercises;
+    private TrainingResponse training;
+    private List<ExerciseResponse> exercises;
 }

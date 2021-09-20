@@ -2,6 +2,7 @@ package com.muscle.trainings;
 
 import com.muscle.trainings.dto.*;
 import com.muscle.trainings.other.TrainingDetails;
+import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class TrainingsController {
      * @return
      */
     @GetMapping("/template")
-    List<TrainingDto> getTemplateTrainings() {
+    List<TrainingResponse> getTemplateTrainings() {
         return trainingsService.getTemplateTrainings();
     }
 
@@ -31,7 +32,7 @@ public class TrainingsController {
      * @return
      */
     @GetMapping()
-    List<TrainingDto> getTrainings() {
+    List<TrainingResponse> getTrainings() {
         return trainingsService.getTrainings();
     }
 
@@ -52,7 +53,7 @@ public class TrainingsController {
      * @return
      */
     @PostMapping()
-    TrainingDto createTraining(@RequestHeader("Authorization") String header, @RequestBody TrainingDto trainingDto) {
+    TrainingResponse createTraining(@RequestHeader("Authorization") String header, @RequestBody TrainingDto trainingDto) {
         return trainingsService.saveTraining(header, trainingDto);
     }
 
@@ -62,7 +63,7 @@ public class TrainingsController {
      * @return
      */
     @PutMapping()
-    TrainingDto editTraining(@RequestBody TrainingDto trainingDto) {
+    TrainingResponse editTraining(@RequestBody TrainingDto trainingDto) {
         return trainingsService.editTraining(trainingDto);
     }
 

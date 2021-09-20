@@ -1,7 +1,7 @@
 package com.muscle.trainings.service;
 
 import com.muscle.trainings.dto.AddExerciseRequest;
-import com.muscle.trainings.other.ExerciseDetails;
+import com.muscle.trainings.other.ExerciseResponse;
 import com.muscle.trainings.dto.TrainingExerciseDto;
 import com.muscle.trainings.other.TrainingDetails;
 import com.muscle.trainings.entity.Exercise;
@@ -55,8 +55,8 @@ public class TrainingExerciseService {
         }
 
         return TrainingDetails.builder()
-                .training(trainingExerciseList.get(1).getTraining().dto())
-                .exercises(trainingExerciseList.stream().map(trainingExercise -> ExerciseDetails.builder()
+                .training(trainingExerciseList.get(1).getTraining().detailedResponse())
+                .exercises(trainingExerciseList.stream().map(trainingExercise -> ExerciseResponse.builder()
                         .id(trainingExercise.getExercise().getId())
                         .name(trainingExercise.getExercise().getName())
                         .gif(trainingExercise.getExercise().getGif())

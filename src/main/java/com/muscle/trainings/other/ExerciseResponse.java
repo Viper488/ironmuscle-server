@@ -8,7 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExerciseDetails {
+public class ExerciseResponse {
     private Long id;
     private String name;
     private String gif;
