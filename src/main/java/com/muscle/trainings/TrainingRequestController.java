@@ -90,5 +90,6 @@ public class TrainingRequestController {
     List<CommentResponse> showComments(@PathVariable() Long id) {
         return trainingRequestService.getRequestComments(id);
     }
-    //TODO: GET Comments as another endpoint
+    //TODO: Komantarze sie duplikuja po dodaniu i tylko jak employee dodaje - done
+    //TODO: GET Comments as another endpoint - done
 }

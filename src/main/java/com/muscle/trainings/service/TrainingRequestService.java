@@ -57,7 +57,7 @@ public class TrainingRequestService {
                 .status("NEW")
                 .employee(employee)
                 .comments(new ArrayList<>())
-                .build()).response();
+                .build()).detailedResponse();
     }
 
     public TrainingRequestResponse updateRequest(Long id, TrainingRequestDto trainingRequestDto){
@@ -73,7 +73,7 @@ public class TrainingRequestService {
             if (trainingRequestDto.getStatus().equals("DONE"))
                 trainingRequest.setResolved_at(LocalDateTime.now());
         }
-        return trainingRequestRepository.save(trainingRequest).response();
+        return trainingRequestRepository.save(trainingRequest).detailedResponse();
     }
 
     private IronUser getFreeEmployee() {
@@ -95,11 +95,13 @@ public class TrainingRequestService {
     public CommentResponse addCommentToRequest(String header, Long requestId, CommentDto commentDto) {
         IronUser user = userService.getUserFromHeader(header);
         TrainingRequest trainingRequest = trainingRequestRepository.findById(requestId).orElseThrow(() -> new IllegalStateException("Request not found"));
+
         Comment comment = commentRepository.save(Comment.builder()
                             .creator(user)
                             .value(commentDto.getValue())
                             .created_at(LocalDateTime.now())
                             .build());
+
         trainingRequest.getComments().add(comment);
         trainingRequestRepository.save(trainingRequest);
 

@@ -55,7 +55,7 @@ public class TrainingRequest {
     private IronUser employee;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<Comment> comments = new ArrayList<>();
 
     public TrainingRequestDto dto(){

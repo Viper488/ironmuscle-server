@@ -91,6 +91,7 @@ public class TrainingsController {
     //TODO: Request o nowy trening - done
     //TODO: Wysylanie requestow do trenera z najmniejszym oblozeniem??? innym kryterium??? - done
     //TODO: GET pojedynczego requesta - done
-    //TODO: Zastanowic sie nad iloscia zwracanych danych z endpointow
+    //TODO: Zastanowic sie nad iloscia zwracanych danych z endpointow - done
     //TODO: Zabezpieczenie endpointów - done
+    //TODO: Jak zbierac punkty uzytkownikow???
 }
