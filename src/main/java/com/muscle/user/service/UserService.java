@@ -1,12 +1,10 @@
 package com.muscle.user.service;
 
 import com.muscle.email.service.EmailSender;
-import com.muscle.user.dto.ChangePasswordDto;
-import com.muscle.user.dto.ChangeUserDetailsDto;
-import com.muscle.user.dto.IronUserDetails;
+import com.muscle.user.dto.*;
 import com.muscle.user.entity.ConfirmationToken;
-import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.entity.IronUser;
+import com.muscle.user.entity.PasswordToken;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,6 +31,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final PasswordTokenService passwordTokenService;
     private final EmailSender emailSender;
     private final JwtUtil jwtUtil;
 
@@ -91,7 +91,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = ConfirmationToken.builder()
                 .token(token)
                 .createdAt(LocalDateTime.now())
-                .expiresAt(LocalDateTime.now().plusMinutes(15))
+                .expiresAt(LocalDateTime.now().plusHours(24))
                 .ironUser(ironUser)
                 .build();
 
@@ -113,10 +113,22 @@ public class UserService implements UserDetailsService {
         return userRepository.findByRole(roleName).stream().map(IronUser::dto).collect(Collectors.toList());
     }
 
-    public void requestPasswordChange(String header) {
-        IronUserDto user = getUserFromHeader(header).dto();
+    public void requestPasswordChange(String email) {
+        IronUser user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException("User with this email doesn't exist. Try different email"));
 
-        String link = "http://localhost:4200/reset/password";
+
+        String token = UUID.randomUUID().toString();
+
+        PasswordToken passwordToken = PasswordToken.builder()
+                .token(token)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusHours(24))
+                .ironUser(user)
+                .build();
+
+        passwordTokenService.savePasswordToken(passwordToken);
+
+        String link = "http://localhost:3000/IronMuscle/frontend/index.html/"+token;
         emailSender.send(user.getEmail(), buildPasswordEmail(user.getUsername(), link));
     }
 
@@ -131,7 +143,7 @@ public class UserService implements UserDetailsService {
                 "<td style=\"font-size:13px;color:#282828;font-weight:normal;text-align:left;font-family:'Open Sans',sans-serif;line-height:24px;vertical-align:top;padding:15px 8px 10px 8px\" bgcolor=\"#ffffff\">\n"+
                 "<h1 style=\"text-align:center;font-weight:600;margin:30px 0 50px 0\"><span class=\"il\">PASSWORD</span> RESET REQUEST</h1>\n"+
                 "<p>Dear "+ name +",</p>\n"+
-                "<p>We have received your request to reset your <span class=\"il\">password</span>. Please click the link below to complete the reset:</p>\n"+
+                "<p>We have received your request to reset your <span class=\"il\">password</span>. Please click the link below to complete the reset. <b>This password reset is only valid for the next 24 hours.</b></p>\n"+
                 "</td>\n"+
                 "</tr>\n"+
                 "<tr>\n"+
@@ -155,16 +167,32 @@ public class UserService implements UserDetailsService {
                 "</table>";
     }
 
-    public void resetPassword(String header, String password) {
-        IronUser user = getUserFromHeader(header);
+    @Transactional
+    public void resetPassword(ResetPasswordDto resetPasswordDto) {
+        PasswordToken passwordToken = passwordTokenService.getToken(resetPasswordDto.getToken())
+                .orElseThrow(() -> new IllegalStateException("Token not found"));
 
-        validatePassword(password);
+        IronUser user = userRepository.findByUsername(passwordToken.getIronUser().getUsername())
+                .orElseThrow(() -> new IllegalStateException("User not found"));
 
-        String encodedPassword = passwordEncoder.encode(password);
+        if (passwordToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("Link expired");
+        }
+
+        LocalDateTime expiredAt = passwordToken.getExpiresAt();
+
+        if(expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Link expired");
+        }
+
+        validatePassword(resetPasswordDto.getPassword());
+
+        String encodedPassword = passwordEncoder.encode(resetPasswordDto.getPassword());
         if(encodedPassword.equals(user.getPassword())) {
             throw new IllegalStateException("Your new password can not be the same as your old password");
         }
-            user.setPassword(encodedPassword);
+        user.setPassword(encodedPassword);
+        passwordTokenService.setConfirmedAt(resetPasswordDto.getToken());
 
         userRepository.save(user);
     }
@@ -175,7 +203,7 @@ public class UserService implements UserDetailsService {
         String oldPassword = passwordEncoder.encode(changePasswordDto.getOldPassword());
 
         if(!oldPassword.equals(user.getPassword())) {
-            throw new IllegalStateException("This is not current password");
+            throw new IllegalStateException("Old password you provided is incorrect");
         }
 
         String newPassword = passwordEncoder.encode(changePasswordDto.getNewPassword());

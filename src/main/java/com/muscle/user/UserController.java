@@ -30,6 +30,7 @@ public class UserController {
      * @return
      * @throws Exception
      */
+    @CrossOrigin
     @PostMapping("/authenticate")
     ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
 
@@ -113,27 +114,26 @@ public class UserController {
      * @param changeUserDetailsDto
      */
     @PutMapping("/myself")
-    public void changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
+    public void changeUserDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
         userService.changeUserDetails(header, changeUserDetailsDto);
     }
 
     /**
      * Send reset password email
-     * @param header
+     * @param email
      */
     @PostMapping("/password/reset")
-    public void requestPasswordReset(@RequestHeader("Authorization") String header) {
-        userService.requestPasswordChange(header);
+    public void requestPasswordReset(@RequestParam("email") String email) {
+        userService.requestPasswordChange(email);
     }
-
+    //TODO: ResetPassCode do bazy powiazany z userem przy reset pass podac go i nowe haslo jesli jest aktywny zmiehnic haslo i ustawic na nieaktywny wzorowac sie na ConfirmToken
     /**
      * Change password
-     * @param header
-     * @param password
+     * @param resetPasswordDto
      */
     @PutMapping("/password/reset")
-    public void resetPassword(@RequestHeader("Authorization") String header, @RequestParam("password") String password) {
-        userService.resetPassword(header, password);
+    public void resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+        userService.resetPassword(resetPasswordDto);
     }
 
     /**
