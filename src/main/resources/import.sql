@@ -3,9 +3,17 @@ INSERT INTO role VALUES(nextval('role_sequence'), 'EMPLOYEE');
 INSERT INTO role VALUES(nextval('role_sequence'), 'TRAINER');
 INSERT INTO role VALUES(nextval('role_sequence'), 'USER');
 
-INSERT INTO iron_user VALUES (nextval('user_sequence'), 'admin@admin.com',       true, 'admin',     false, 'admin',     '$2a$10$tpA0.LhVCAzZzN9jP90AAuokZOghqi3Pd3.hzTec8mCZKC8MdCaBy', 'admin');
-INSERT INTO iron_user VALUES (nextval('user_sequence'), 'employee@employee.com', true, 'employee',  false, 'employee',  '$2a$10$uFsgfCqAfzywMaq1poI2MOe4VTbTsKVEleYp8qRoHv7xwzfbv5ZtG', 'employee');
-INSERT INTO iron_user VALUES (nextval('user_sequence'), 'user@user.com',         true, 'user',      false, 'user',      '$2a$10$xcIdSU3V0eKuqdyJsvZxL.q6h6lYjgNAqzscqKbZUurZQ3iRzqrDy', 'user');
+INSERT INTO badge VALUES (nextval('badge_sequence'),  50, '', 'Silver');
+INSERT INTO badge VALUES (nextval('badge_sequence'), 100, '', 'Gold');
+INSERT INTO badge VALUES (nextval('badge_sequence'), 150, '', 'Platinum');
+INSERT INTO badge VALUES (nextval('badge_sequence'), 200, '', 'Diamond');
+INSERT INTO badge VALUES (nextval('badge_sequence'), 250, '', 'Master');
+INSERT INTO badge VALUES (nextval('badge_sequence'), 300, '', 'Champion');
+INSERT INTO badge VALUES (nextval('badge_sequence'), 350, '', 'IFBB PRO');
+
+INSERT INTO iron_user VALUES (nextval('user_sequence'), 'admin@admin.com',       true, 'admin',     false, 'admin',     '$2a$10$tpA0.LhVCAzZzN9jP90AAuokZOghqi3Pd3.hzTec8mCZKC8MdCaBy', 0, 'admin');
+INSERT INTO iron_user VALUES (nextval('user_sequence'), 'employee@employee.com', true, 'employee',  false, 'employee',  '$2a$10$uFsgfCqAfzywMaq1poI2MOe4VTbTsKVEleYp8qRoHv7xwzfbv5ZtG', 0, 'employee');
+INSERT INTO iron_user VALUES (nextval('user_sequence'), 'user@user.com',         true, 'user',      false, 'user',      '$2a$10$xcIdSU3V0eKuqdyJsvZxL.q6h6lYjgNAqzscqKbZUurZQ3iRzqrDy', 0, 'user');
 
 INSERT INTO iron_user_roles VALUES (1, 1);
 INSERT INTO iron_user_roles VALUES (1, 2);

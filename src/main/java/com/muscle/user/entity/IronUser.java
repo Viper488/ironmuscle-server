@@ -44,8 +44,13 @@ public class IronUser {
     private Boolean locked = false;
     private Boolean enabled = false;
 
+    private Integer points = 0;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
+
+    @OneToMany
+    private List<Badge> badges = new ArrayList<>();
 
     public IronUserDto dto() {
         return IronUserDto.builder()
