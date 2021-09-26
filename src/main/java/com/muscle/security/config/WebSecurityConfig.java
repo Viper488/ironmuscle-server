@@ -31,16 +31,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/api/v*/registration", "/api/v*/registration/confirm*", "/api/v*/authenticate", "/api/v*/system/authenticate").permitAll();
+        http.authorizeRequests().antMatchers("/api/v*/registration",
+                "/api/v*/registration/confirm*",
+                "/api/v*/authenticate",
+                "/api/v*/system/authenticate",
+                "/api/v*/password/reset*"
+        ).permitAll();
 
-        http.authorizeRequests().antMatchers("/api/v1/welcome").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v1/myself").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v1/password/reset*", "/api/v1/password/change").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v1/users*").hasAnyAuthority(EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/password/reset?token=*&password=*").permitAll();
+        http.authorizeRequests().antMatchers("/api/v*/welcome").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/myself").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/password/change").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/users*").hasAnyAuthority(EMPLOYEE, ADMIN);
 
 
-        http.authorizeRequests().antMatchers("/api/v1/training/template", "/api/v1/training/*").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v1/training", "/api/v1/training/*/exercises").hasAnyAuthority(EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/training/template", "/api/v*/training/*").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/training", "/api/v*/training/*/exercises").hasAnyAuthority(EMPLOYEE, ADMIN);
 
         http.authorizeRequests().antMatchers("/api/v*/exercise").hasAnyAuthority(EMPLOYEE, ADMIN);
 
@@ -48,9 +54,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/v*/request/*", "/api/v*/request/*/comment", "/api/v*/request/*/comments").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/request/employee").hasAnyAuthority( EMPLOYEE);
 
-        http.authorizeRequests().antMatchers("/api/v1/user/trainings").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v1/user/trainings/*").hasAnyAuthority(EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v1/user/trainings/history*").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/trainings").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/trainings/*").hasAnyAuthority(EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/trainings/history*").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
 
         http.authorizeRequests().anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
