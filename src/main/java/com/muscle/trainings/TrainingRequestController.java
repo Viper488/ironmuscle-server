@@ -25,7 +25,7 @@ public class TrainingRequestController {
      * @return
      */
     @PostMapping()
-    TrainingRequestResponse createRequest(@RequestHeader("Authorization") String header, @RequestBody TrainingRequestDto trainingRequestDto) {
+    TrainingRequestResponse createRequest(@RequestHeader("Authorization") String header, @RequestBody TrainingRequestDto trainingRequestDto) throws Exception {
         return trainingRequestService.createRequest(header, trainingRequestDto);
     }
 
@@ -56,7 +56,7 @@ public class TrainingRequestController {
      * @return
      */
     @GetMapping("/user")
-    List<TrainingRequestResponse> getUserRequests(@RequestHeader("Authorization") String header) {
+    List<TrainingRequestResponse> getUserRequests(@RequestHeader("Authorization") String header) throws Exception {
         return trainingRequestService.getUserRequests(header);
     }
 
@@ -66,7 +66,7 @@ public class TrainingRequestController {
      * @return
      */
     @GetMapping("/employee")
-    List<TrainingRequestResponse> getEmployeeRequests(@RequestHeader("Authorization") String header) {
+    List<TrainingRequestResponse> getEmployeeRequests(@RequestHeader("Authorization") String header) throws Exception {
         return trainingRequestService.getEmployeeRequests(header);
     }
 
@@ -77,7 +77,7 @@ public class TrainingRequestController {
      * @param commentDto
      */
     @PutMapping("/{id}/comment")
-    CommentResponse addCommentToRequest(@RequestHeader("Authorization") String header, @PathVariable() Long id, @RequestBody CommentDto commentDto) {
+    CommentResponse addCommentToRequest(@RequestHeader("Authorization") String header, @PathVariable() Long id, @RequestBody CommentDto commentDto) throws Exception {
         return trainingRequestService.addCommentToRequest(header, id, commentDto);
     }
 

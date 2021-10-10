@@ -19,12 +19,12 @@ public class TrainingsController {
     private final TrainingExerciseService trainingExerciseService;
 
     /**
-     * Get template trainings
+     * Get trainings by type
      * @return
      */
-    @GetMapping("/template")
-    List<TrainingResponse> getTemplateTrainings() {
-        return trainingsService.getTemplateTrainings();
+    @GetMapping("/type/{type}")
+    List<TrainingResponse> getTrainingsByType(@PathVariable String type) {
+        return trainingsService.getTrainingsByType(type);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TrainingsController {
      * @return
      */
     @PostMapping()
-    TrainingResponse createTraining(@RequestHeader("Authorization") String header, @RequestBody TrainingDto trainingDto) {
+    TrainingResponse createTraining(@RequestHeader("Authorization") String header, @RequestBody TrainingDto trainingDto) throws Exception {
         return trainingsService.saveTraining(header, trainingDto);
     }
 

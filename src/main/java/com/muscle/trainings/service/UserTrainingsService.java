@@ -30,7 +30,7 @@ public class UserTrainingsService {
 
     public UserTrainingResponse addTrainingToUser(String header, Long trainingId) {
 
-        String username = jwtUtil.extractUsernameFromHeader(header);
+        String username = jwtUtil.extractUsername(header);
         return userTrainingsRepository.save(UserTrainings.builder()
                 .ironUser(userRepository.findByUsername(username)
                         .orElseThrow(() -> new IllegalStateException("User not found")))
@@ -41,7 +41,7 @@ public class UserTrainingsService {
 
     public List<TrainingResponse> getUserTrainings(String header) {
 
-        String username = jwtUtil.extractUsernameFromHeader(header);
+        String username = jwtUtil.extractUsername(header);
         List<UserTrainings> userTrainingsList = userTrainingsRepository
                 .findAllByUserId(userRepository.findByUsername(username)
                         .orElseThrow(() -> new IllegalStateException("User not found"))

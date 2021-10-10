@@ -37,7 +37,7 @@ public class UserTrainingHistoryService {
     private final BadgeRepository badgeRepository;
 
     public UserTrainingHistoryResponse saveUserActivity(String header, Long trainingId) {
-        IronUser user = userRepository.findByUsername(jwtUtil.extractUsernameFromHeader(header))
+        IronUser user = userRepository.findByUsername(jwtUtil.extractUsername(header))
                 .orElseThrow(() -> new IllegalStateException("User not found"));
         Training training = trainingsRepository.findTrainingById(trainingId)
                 .orElseThrow(() -> new IllegalStateException("Training not found"));
@@ -74,7 +74,7 @@ public class UserTrainingHistoryService {
     }
 
     public UserTrainingHistoryDetails getUserTrainingHistory(String header) {
-        IronUserResponse user = userRepository.findByUsername(jwtUtil.extractUsernameFromHeader(header)).orElseThrow(() -> new IllegalStateException("User not found")).response();
+        IronUserResponse user = userRepository.findByUsername(jwtUtil.extractUsername(header)).orElseThrow(() -> new IllegalStateException("User not found")).response();
         List<UserTrainingHistory> userTrainingHistory = userTrainingHistoryRepository.findByUserId(user.getId());
 
         return UserTrainingHistoryDetails.builder()

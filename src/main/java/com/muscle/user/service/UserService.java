@@ -6,9 +6,11 @@ import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.PasswordToken;
 import com.muscle.user.repository.UserRepository;
+import com.muscle.user.response.IronUserResponse;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
+    @Value("${password.reset.link}")
+    private String resetPasswordBaseLink;
     private final static String  USER_NOT_FOUND_MSG = "User %s not found in database";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -36,13 +40,13 @@ public class UserService implements UserDetailsService {
     private final JwtUtil jwtUtil;
 
     public IronUser getUserFromHeader(String header) {
-        String username = jwtUtil.extractUsernameFromHeader(header);
+        String username = jwtUtil.extractUsername(header);
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
     }
 
-    public IronUserDto getMyself(String header) {
-        return getUserFromHeader(header).dto();
+    public IronUserResponse getMyself(String header) {
+        return getUserFromHeader(header).response();
     }
 
     public String getWelcomeMsg(String header) {
@@ -128,7 +132,7 @@ public class UserService implements UserDetailsService {
 
         passwordTokenService.savePasswordToken(passwordToken);
 
-        String link = "http://localhost:3000/IronMuscle/frontend/index.html/"+token;
+        String link = resetPasswordBaseLink + token;
         emailSender.send(user.getEmail(), buildPasswordEmail(user.getUsername(), link));
     }
 
@@ -200,9 +204,7 @@ public class UserService implements UserDetailsService {
     public void changePassword(String header, ChangePasswordDto changePasswordDto) {
         IronUser user = getUserFromHeader(header);
 
-        String oldPassword = passwordEncoder.encode(changePasswordDto.getOldPassword());
-
-        if(!oldPassword.equals(user.getPassword())) {
+        if(!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
             throw new IllegalStateException("Old password you provided is incorrect");
         }
 
@@ -223,13 +225,9 @@ public class UserService implements UserDetailsService {
 
         user.setName(changed.getName());
         user.setLastName(changed.getLastName());
-        if(!userRepository.findByUsername(changed.getUsername()).isPresent())
-            user.setUsername(changed.getUsername());
-        else
-            throw new IllegalStateException("Username already taken");
 
         if(!userRepository.findByEmail(changed.getEmail()).isPresent())
-            user.setEmail(changed.getLastName());
+            user.setEmail(changed.getEmail());
         else
             throw new IllegalStateException("Email already taken");
 

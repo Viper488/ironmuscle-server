@@ -1,38 +1,54 @@
 package com.muscle.user;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muscle.user.dto.*;
+import com.muscle.user.response.IronUserResponse;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+@Slf4j
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class UserController {
-
+    private final JwtUtil jwtUtil;
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtTokenUtil;
-
-    /**
+/*    *//**//**
      * Login for users
      * @param authenticationRequest
      * @return
-     * @throws Exception
-     */
+     *//*
+*//*
     @CrossOrigin
     @PostMapping("/authenticate")
-    ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
+    ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         try {
             authenticationManager.authenticate(
@@ -40,7 +56,7 @@ public class UserController {
             );
         }
         catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password", e);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect username or password", e);
         }
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
         boolean higherAuthority = false;
@@ -49,21 +65,19 @@ public class UserController {
                 higherAuthority = true;
         }
         if(higherAuthority)
-            throw new Exception("Incorrect username or password");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect username or password");
 
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        return ResponseEntity.ok(jwtTokenUtil.generateTokens(userDetails));
     }
 
-    /**
+    *//*
+    *//**
      * Login for employees
-     * @param authenticationRequest
      * @return
-     * @throws Exception
-     */
+     *//*
+    *//*
     @PostMapping("/system/authenticate")
-    ResponseEntity<?> createAuthenticationTokenEmployee(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
+    ResponseEntity<?> createAuthenticationTokenEmployee(@RequestBody AuthenticationRequest authenticationRequest) {
 
         try {
             authenticationManager.authenticate(
@@ -71,7 +85,7 @@ public class UserController {
             );
         }
         catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password", e);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect username or password", e);
         }
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
 
@@ -81,11 +95,37 @@ public class UserController {
                 lowerAuthority = true;
         }
         if (lowerAuthority)
-            throw new Exception("Incorrect username or password");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect username or password");
 
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
+        return ResponseEntity.ok(jwtTokenUtil.generateTokens(userDetails));
+    }*/
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    @GetMapping("/token/refresh")
+    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+            if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                try {
+                    String refresh_token = authorizationHeader.substring("Bearer ".length());
+                    String username = jwtUtil.extractUsername(authorizationHeader);
+
+                    UserDetails userDetails = userService.loadUserByUsername(username);
+                    String access_token = jwtUtil.createToken(request, userDetails, 1000 * 60);
+
+                    Map<String, String> tokens = new HashMap<>();
+                    tokens.put("access_token", access_token);
+                    tokens.put("refresh_token", refresh_token);
+                    response.setContentType(APPLICATION_JSON_VALUE);
+                    new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+
+                } catch (Exception e) {
+
+                    response.setStatus(UNAUTHORIZED.value());
+                    response.setContentType(APPLICATION_JSON_VALUE);
+                    new ObjectMapper().writeValue(response.getOutputStream(), jwtUtil.generateErrorResponse(UNAUTHORIZED, request.getServletPath(), e.getMessage()));
+                }
+            } else {
+                throw new RuntimeException("Refresh token is missing");
+            }
     }
 
     /** Welcome message for logged user
@@ -94,7 +134,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/welcome")
-    public String getWelcome(@RequestHeader("Authorization") String header){
+    public String getWelcome(@RequestHeader("Authorization") String header) throws Exception {
         return userService.getWelcomeMsg(header);
     }
 
@@ -104,7 +144,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/myself")
-    public IronUserDto getMyself(@RequestHeader("Authorization") String header){
+    public IronUserResponse getMyself(@RequestHeader("Authorization") String header) throws Exception {
         return userService.getMyself(header);
     }
 
@@ -114,7 +154,7 @@ public class UserController {
      * @param changeUserDetailsDto
      */
     @PutMapping("/myself")
-    public void changeUserDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
+    public void changeUserDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) throws Exception {
         userService.changeUserDetails(header, changeUserDetailsDto);
     }
 
@@ -126,7 +166,6 @@ public class UserController {
     public void requestPasswordReset(@RequestParam("email") String email) {
         userService.requestPasswordChange(email);
     }
-    //TODO: ResetPassCode do bazy powiazany z userem przy reset pass podac go i nowe haslo jesli jest aktywny zmiehnic haslo i ustawic na nieaktywny wzorowac sie na ConfirmToken
     /**
      * Change password
      * @param resetPasswordDto
@@ -142,7 +181,7 @@ public class UserController {
      * @param changePasswordDto
      */
     @PostMapping("/password/change")
-    public void changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangePasswordDto changePasswordDto) {
+    public void changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangePasswordDto changePasswordDto) throws Exception {
         userService.changePassword(header, changePasswordDto);
     }
 

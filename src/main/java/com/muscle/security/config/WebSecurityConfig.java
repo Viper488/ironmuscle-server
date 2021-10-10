@@ -1,11 +1,12 @@
 package com.muscle.security.config;
 
-import com.muscle.user.filters.JwtRequestFilter;
+import com.muscle.user.filters.UserAuthenticationFilter;
+import com.muscle.user.filters.UserAuthorizationFilter;
 import com.muscle.user.service.UserService;
+import com.muscle.user.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,24 +24,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JwtRequestFilter jwtRequestFilter;
+    private final JwtUtil jwtUtil;
     private final String USER = "USER";
     private final String EMPLOYEE = "EMPLOYEE";
     private final String ADMIN = "ADMIN";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        UserAuthenticationFilter userAuthenticationFilter = new UserAuthenticationFilter(authenticationManagerBean(), jwtUtil);
+        userAuthenticationFilter.setFilterProcessesUrl("/api/v*/login");
+
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/api/v*/registration",
                 "/api/v*/registration/confirm*",
                 "/api/v*/authenticate",
                 "/api/v*/system/authenticate",
-                "/api/v*/password/reset*"
+                "/api/v*/password/reset*",
+                "/api/v*/login/**"
         ).permitAll();
 
         http.authorizeRequests().antMatchers("/api/v*/password/reset?token=*&password=*").permitAll();
         http.authorizeRequests().antMatchers("/api/v*/welcome").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/myself").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/token/refresh/**").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/password/change").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/users*").hasAnyAuthority(EMPLOYEE, ADMIN);
 
@@ -59,11 +65,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/v*/user/trainings/history*").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
 
         http.authorizeRequests().anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilter(userAuthenticationFilter);
+        http.addFilterBefore(new UserAuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(provider());
     }
 

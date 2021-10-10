@@ -40,8 +40,16 @@ INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://i.imgur.com/J
 INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://i.pinimg.com/originals/cf/b5/67/cfb5677a755fe7288b608a4fec6f09a0.gif', 'Hindu push-ups',                   'y1hXARQhHZM');
 INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://thumbs.gfycat.com/BlaringTornBelugawhale-small.gif',                   'Chest stretch',                    '1b98WrRrmUs');
 
-INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Template Abdominal',  10, 1);
-INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Template Chest',      10, 1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'User#1',      10, 'custom',    1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'User#2',      10, 'custom',    1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Abdominal',   10, 'crossfit',  1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Arms',        10, 'crossfit',  1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Chest',       10, 'gym',       1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Legs',        10, 'gym',       1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Interval',    10, 'running',   1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Marathon',    10, 'running',   1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Relaxing',    10, 'yoga',      1);
+INSERT INTO training VALUES (nextval('training_sequence'), 'Beginner',  '', 'Stretching',  10, 'yoga',      1);
 
 INSERT INTO training_exercise VALUES(nextval('training_exercise_sequence'),  0, 20,  1, 1);
 INSERT INTO training_exercise VALUES(nextval('training_exercise_sequence'), 20,  0,  2, 1);

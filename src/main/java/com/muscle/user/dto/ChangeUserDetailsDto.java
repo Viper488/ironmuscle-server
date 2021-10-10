@@ -12,6 +12,5 @@ import lombok.ToString;
 public class ChangeUserDetailsDto {
     private final String name;
     private final String lastName;
-    private final String username;
     private final String email;
 }

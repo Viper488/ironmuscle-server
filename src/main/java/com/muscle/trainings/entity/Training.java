@@ -30,6 +30,7 @@ public class Training {
     )
     private Long id;
     private String name;
+    private String type;
     private String image;
     private String difficulty;
 
@@ -45,6 +46,7 @@ public class Training {
         return TrainingDto.builder()
                 .id(this.id)
                 .name(this.name)
+                .type(this.type)
                 .image(this.image)
                 .difficulty(this.difficulty)
                 .creator(this.creator.dto())
@@ -56,8 +58,10 @@ public class Training {
         return TrainingResponse.builder()
                 .id(this.id)
                 .name(this.name)
+                .type(this.type)
                 .image(this.image)
                 .difficulty(this.difficulty)
+                .points(this.points)
                 .build();
     }
 
@@ -65,6 +69,7 @@ public class Training {
         return TrainingResponse.builder()
                 .id(this.id)
                 .name(this.name)
+                .type(this.type)
                 .image(this.image)
                 .difficulty(this.difficulty)
                 .creator(this.creator.response())

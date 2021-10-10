@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface TrainingsRepository extends JpaRepository<Training, Long> {
 
-    List<Training> findByNameStartsWith(String start);
+    List<Training> findByType(String type);
     Optional<Training> findTrainingById(Long id);
 }

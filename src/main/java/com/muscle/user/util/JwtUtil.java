@@ -1,75 +1,80 @@
 package com.muscle.user.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+
+@Slf4j
 @Service
 public class JwtUtil {
+    private final String SECRET_KEY = "DB@YG831GHT@";
+    private final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET_KEY.getBytes());
 
-    @Value("${jwt.secret.key}")
-    private String SECRET_KEY;
+    public String extractUsername(String authorizationHeader) {
+        String token = authorizationHeader.substring("Bearer ".length());
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY.getBytes());
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = verifier.verify(token);
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return decodedJWT.getSubject();
     }
 
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+    public DecodedJWT decodeJWT(String authorizationHeader) {
+        String token = authorizationHeader.substring("Bearer ".length());
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY.getBytes());
+        JWTVerifier verifier = JWT.require(algorithm).build();
+
+        return verifier.verify(token);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    public Map<String, String> generateTokens(HttpServletRequest request, Authentication authResult) {
+        UserDetails userDetails = (UserDetails) authResult.getPrincipal();
+        String access_token = createToken(request, userDetails, 1000 * 60);
+        String refresh_token = createToken(request, userDetails, 1000 * 60 * 2);
+        Map<String, String> tokens = new HashMap<>();
+
+        tokens.put("access_token", access_token);
+        tokens.put("refresh_token", refresh_token);
+
+        return tokens;
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+    public String createToken(HttpServletRequest request, UserDetails userDetails, Integer time) {
+        log.info("EXPIRES AT: " + new Date(System.currentTimeMillis() + time));
+        return JWT.create()
+                .withSubject(userDetails.getUsername())
+                .withIssuedAt(new Date(System.currentTimeMillis()))
+                .withExpiresAt(new Date(System.currentTimeMillis() + time))
+                .withIssuer(request.getRequestURL().toString())
+                .withClaim("authorities", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .sign(ALGORITHM);
     }
 
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
+    public Map<String, Object> generateErrorResponse(HttpStatus status, String path, String message) {
+        Map<String, Object> errors = new HashMap<>();
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("authorities", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-        return createToken(claims, userDetails.getUsername());
-    }
+        errors.put("timestamp", new Date(System.currentTimeMillis()).toString());
+        errors.put("status", status.value());
+        errors.put("error", status.getReasonPhrase());
+        errors.put("message", message);
+        errors.put("path", path);
 
-    private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
-    }
-
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
-    public String extractUsernameFromHeader(String header) {
-
-        if(header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
-
-            return extractUsername(token);
-        }
-        return null;
+        return errors;
     }
 
 }

@@ -26,12 +26,14 @@ public class TrainingsService {
     private final TrainingsRepository trainingsRepository;
     private final UserRepository userRepository;
 
-    public List<TrainingResponse> getTemplateTrainings() {
-        return trainingsRepository.findByNameStartsWith("Template").stream().map(training -> TrainingResponse.builder()
+    public List<TrainingResponse> getTrainingsByType(String type) {
+        return trainingsRepository.findByType(type.toLowerCase()).stream().map(training -> TrainingResponse.builder()
                 .id(training.getId())
-                .name(training.getName().substring(8))
+                .name(training.getName())
+                .type(training.getType())
                 .difficulty(training.getDifficulty())
                 .image(training.getImage())
+                .points(training.getPoints())
                 .build()).collect(Collectors.toList());
     }
 
@@ -44,9 +46,10 @@ public class TrainingsService {
 
         return trainingsRepository.save(Training.builder()
                 .name(trainingDto.getName())
+                .type(trainingDto.getType())
                 .image(trainingDto.getImage())
                 .difficulty(trainingDto.getDifficulty())
-                .creator(userRepository.findByUsername(jwtUtil.extractUsernameFromHeader(header)).orElseThrow(() -> new IllegalStateException("User not found!")))
+                .creator(userRepository.findByUsername(jwtUtil.extractUsername(header)).orElseThrow(() -> new IllegalStateException("User not found!")))
                 .points(trainingDto.getPoints())
                 .build())
                 .detailedResponse();

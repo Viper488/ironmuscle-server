@@ -35,18 +35,18 @@ public class TrainingRequestService {
         return trainingRequestRepository.findById(id).orElseThrow(() -> new IllegalStateException("Request not found")).detailedResponse();
     }
 
-    public List<TrainingRequestResponse> getUserRequests(String header){
+    public List<TrainingRequestResponse> getUserRequests(String header) {
         IronUserDto user = userService.getUserFromHeader(header).dto();
 
         return trainingRequestRepository.findByUserId(user.getId()).stream().map(TrainingRequest::response).collect(Collectors.toList());
     }
 
-    public List<TrainingRequestResponse> getEmployeeRequests(String header){
+    public List<TrainingRequestResponse> getEmployeeRequests(String header) {
         IronUserDto employee = userService.getUserFromHeader(header).dto();
         return trainingRequestRepository.findByEmployeeId(employee.getId()).stream().map(TrainingRequest::response).collect(Collectors.toList());
     }
 
-    public TrainingRequestResponse createRequest(String header, TrainingRequestDto trainingRequestDto){
+    public TrainingRequestResponse createRequest(String header, TrainingRequestDto trainingRequestDto) {
         IronUser user = userService.getUserFromHeader(header);
         IronUser employee = getFreeEmployee();
         return trainingRequestRepository.save(TrainingRequest.builder()

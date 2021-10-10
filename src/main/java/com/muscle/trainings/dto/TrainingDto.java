@@ -13,6 +13,7 @@ import lombok.*;
 public class TrainingDto {
     private Long id;
     private String name;
+    private String type;
     private String image;
     private String difficulty;
     private IronUserDto creator;
