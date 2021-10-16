@@ -27,7 +27,7 @@ public class TrainingsService {
     private final UserRepository userRepository;
 
     public List<TrainingResponse> getTrainingsByType(String type) {
-        return trainingsRepository.findByType(type.toLowerCase()).stream().map(training -> TrainingResponse.builder()
+        return trainingsRepository.findByType(type.toLowerCase().replaceAll(" ", "")).stream().map(training -> TrainingResponse.builder()
                 .id(training.getId())
                 .name(training.getName())
                 .type(training.getType())

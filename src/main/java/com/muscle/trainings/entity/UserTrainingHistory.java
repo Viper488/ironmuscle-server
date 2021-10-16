@@ -44,14 +44,14 @@ public class UserTrainingHistory {
             name = "training_id"
     )
     private Training training;
-    private LocalDateTime date;
+    private LocalDateTime trainingDate;
 
     public UserTrainingHistoryDto dto(){
         return UserTrainingHistoryDto.builder()
                 .id(this.id)
                 .user(this.user.dto())
                 .training(this.training.dto())
-                .date(this.date)
+                .trainingDate(this.trainingDate)
                 .build();
 
     }
@@ -61,7 +61,7 @@ public class UserTrainingHistory {
                 .id(this.id)
                 .user(this.user.response())
                 .training(this.training.response())
-                .date(this.date)
+                .trainingDate(this.trainingDate)
                 .build();
 
     }

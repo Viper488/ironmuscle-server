@@ -59,7 +59,7 @@ public class TrainingExerciseService {
                 .exercises(trainingExerciseList.stream().map(trainingExercise -> ExerciseResponse.builder()
                         .id(trainingExercise.getExercise().getId())
                         .name(trainingExercise.getExercise().getName())
-                        .gif(trainingExercise.getExercise().getGif())
+                        .image(trainingExercise.getExercise().getImage())
                         .video(trainingExercise.getExercise().getVideo())
                         .time(trainingExercise.getTime())
                         .repetitions(trainingExercise.getRepetitions())

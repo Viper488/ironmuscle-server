@@ -11,7 +11,7 @@ import lombok.*;
 public class ExerciseResponse {
     private Long id;
     private String name;
-    private String gif;
+    private String image;
     private String video;
     private Integer time;
     private Integer repetitions;

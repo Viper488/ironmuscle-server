@@ -12,6 +12,6 @@ import lombok.*;
 public class ExerciseDto {
     private Long id;
     private String name;
-    private String gif;
+    private String image;
     private String video;
 }

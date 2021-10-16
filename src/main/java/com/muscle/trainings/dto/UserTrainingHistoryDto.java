@@ -16,5 +16,5 @@ public class UserTrainingHistoryDto {
     private Long id;
     private IronUserDto user;
     private TrainingDto training;
-    private LocalDateTime date;
+    private LocalDateTime trainingDate;
 }

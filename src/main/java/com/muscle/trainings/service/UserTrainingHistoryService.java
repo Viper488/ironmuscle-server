@@ -9,10 +9,7 @@ import com.muscle.trainings.other.UserTrainingHistoryDetails;
 import com.muscle.trainings.responses.UserTrainingHistoryResponse;
 import com.muscle.user.entity.Badge;
 import com.muscle.user.entity.IronUser;
-import com.muscle.user.entity.UserBadges;
-import com.muscle.user.entity.UserBadgesKey;
 import com.muscle.user.repository.BadgeRepository;
-import com.muscle.user.repository.UserBadgesRepository;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.response.IronUserResponse;
 import com.muscle.user.util.JwtUtil;
@@ -68,7 +65,7 @@ public class UserTrainingHistoryService {
                 .save(UserTrainingHistory.builder()
                         .user(user)
                         .training(training)
-                        .date(LocalDateTime.now())
+                        .trainingDate(LocalDateTime.now())
                         .build())
                 .response();
     }
@@ -86,7 +83,7 @@ public class UserTrainingHistoryService {
                                 .image(userTrainingHistoryItem.getTraining().getImage())
                                 .difficulty(userTrainingHistoryItem.getTraining().getDifficulty())
                                 .points(userTrainingHistoryItem.getTraining().getPoints())
-                                .date(userTrainingHistoryItem.getDate())
+                                .date(userTrainingHistoryItem.getTrainingDate())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();

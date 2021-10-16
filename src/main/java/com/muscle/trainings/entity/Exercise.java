@@ -28,14 +28,14 @@ public class Exercise {
     )
     private Long id;
     private String name;
-    private String gif;
+    private String image;
     private String video;
 
     public ExerciseDto dto() {
         return ExerciseDto.builder()
                 .id(this.id)
                 .name(this.name)
-                .gif(this.gif)
+                .image(this.image)
                 .video(this.video)
                 .build();
     }

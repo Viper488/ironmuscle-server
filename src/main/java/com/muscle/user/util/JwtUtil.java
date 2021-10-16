@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-
 @Slf4j
 @Service
 public class JwtUtil {
@@ -44,8 +42,8 @@ public class JwtUtil {
 
     public Map<String, String> generateTokens(HttpServletRequest request, Authentication authResult) {
         UserDetails userDetails = (UserDetails) authResult.getPrincipal();
-        String access_token = createToken(request, userDetails, 1000 * 60);
-        String refresh_token = createToken(request, userDetails, 1000 * 60 * 2);
+        String access_token = createToken(request, userDetails, 1000 * 60 * 60 * 24);
+        String refresh_token = createToken(request, userDetails, 1000 * 60 * 60 * 24 * 7);
         Map<String, String> tokens = new HashMap<>();
 
         tokens.put("access_token", access_token);

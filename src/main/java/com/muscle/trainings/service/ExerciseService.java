@@ -4,7 +4,6 @@ import com.muscle.trainings.dto.ExerciseDto;
 import com.muscle.trainings.entity.Exercise;
 import com.muscle.trainings.mapper.ExerciseMapper;
 import com.muscle.trainings.repository.ExerciseRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class ExerciseService {
 
         return exerciseRepository.save(Exercise.builder()
             .name(exerciseDto.getName())
-            .gif(exerciseDto.getGif())
+            .image(exerciseDto.getImage())
             .video(exerciseDto.getVideo())
             .build())
             .dto();

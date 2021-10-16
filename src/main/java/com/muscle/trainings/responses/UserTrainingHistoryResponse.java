@@ -18,5 +18,5 @@ public class UserTrainingHistoryResponse {
     Long id;
     IronUserResponse user;
     TrainingResponse training;
-    LocalDateTime date;
+    LocalDateTime trainingDate;
 }
