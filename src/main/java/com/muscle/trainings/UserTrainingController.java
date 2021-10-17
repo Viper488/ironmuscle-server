@@ -27,7 +27,7 @@ public class UserTrainingController {
      * @return
      */
     @PostMapping("/trainings/{id}")
-    UserTrainingResponse addTrainingToUser(@RequestHeader("Authorization") String header, @PathVariable Long id) throws Exception {
+    UserTrainingResponse addTrainingToUser(@RequestHeader("Authorization") String header, @PathVariable Long id) {
         return userTrainingsService.addTrainingToUser(header, id);
     }
 
@@ -37,7 +37,7 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/trainings")
-    List<TrainingResponse> getUserTrainings(@RequestHeader("Authorization") String header) throws Exception {
+    List<TrainingResponse> getUserTrainings(@RequestHeader("Authorization") String header) {
         return userTrainingsService.getUserTrainings(header);
     }
 
@@ -48,7 +48,7 @@ public class UserTrainingController {
      * @return
      */
     @PostMapping("/history")
-    UserTrainingHistoryResponse saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId) throws Exception {
+    UserTrainingHistoryResponse saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId) {
         return userTrainingHistoryService.saveUserActivity(header, trainingId);
     }
 
@@ -59,7 +59,7 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/history")
-    UserTrainingHistoryDetails getUserHistory(@RequestHeader("Authorization") String header) throws Exception {
+    UserTrainingHistoryDetails getUserHistory(@RequestHeader("Authorization") String header) {
         return userTrainingHistoryService.getUserTrainingHistory(header);
     }
 }
