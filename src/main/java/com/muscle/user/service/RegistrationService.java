@@ -1,6 +1,7 @@
 package com.muscle.user.service;
 
 import com.muscle.email.service.EmailSender;
+import com.muscle.trainings.service.PointService;
 import com.muscle.user.dto.RegistrationRequestDto;
 import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.entity.IronUser;
@@ -23,6 +24,7 @@ public class RegistrationService {
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
+    private final PointService pointService;
 
     public String register(RegistrationRequestDto request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
@@ -71,6 +73,7 @@ public class RegistrationService {
         confirmationTokenService.setConfirmedAt(token);
 
         userService.enableUser(confirmationToken.getIronUser().getEmail());
+        pointService.initializePoints(confirmationToken.getIronUser());
 
         return "Confirmed";
 

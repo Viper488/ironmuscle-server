@@ -1,7 +1,9 @@
 package com.muscle.trainings.service;
 
+import com.muscle.trainings.entity.Point;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.UserTrainingHistory;
+import com.muscle.trainings.repository.PointRepository;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingHistoryRepository;
 import com.muscle.trainings.other.TrainingHistory;
@@ -35,7 +37,7 @@ public class UserTrainingHistoryService {
     private final UserRepository userRepository;
     private final TrainingsRepository trainingsRepository;
     private final UserTrainingHistoryRepository userTrainingHistoryRepository;
-    private final BadgeRepository badgeRepository;
+    private final PointService pointService;
     private final UserBadgesRepository userBadgesRepository;
 
     public UserTrainingHistoryResponse saveUserActivity(String header, Long trainingId, Integer time) {
@@ -43,9 +45,11 @@ public class UserTrainingHistoryService {
                 .orElseThrow(() -> new IllegalStateException("User not found"));
         Training training = trainingsRepository.findTrainingById(trainingId)
                 .orElseThrow(() -> new IllegalStateException("Training not found"));
+
+        pointService.addPoints(user.getUsername(), training.getPoints());
+
         List<UserBadges> userBadges = userBadgesRepository.findByUserId(user.getId());
         //List<Badge> userBadgesList = userBadges.stream().map(UserBadges::getBadge).collect(Collectors.toList());
-        user.setPoints(user.getPoints() + training.getPoints());
 
 /*        Optional<Badge> lastBadge = Optional.ofNullable(userBadgesList.get(0));
         int biggestGoal = 0;

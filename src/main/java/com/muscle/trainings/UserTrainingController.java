@@ -5,6 +5,7 @@ import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.other.UserTrainingHistoryDetails;
 import com.muscle.trainings.responses.UserTrainingHistoryResponse;
 import com.muscle.trainings.responses.UserTrainingResponse;
+import com.muscle.trainings.service.PointService;
 import com.muscle.trainings.service.UserTrainingHistoryService;
 import com.muscle.trainings.service.UserTrainingsService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class UserTrainingController {
 
     private final UserTrainingsService userTrainingsService;
     private final UserTrainingHistoryService userTrainingHistoryService;
+    private final PointService pointService;
 
     /**
      * Add training to user
@@ -62,5 +64,15 @@ public class UserTrainingController {
     @GetMapping("/history")
     List<TrainingHistory> getUserHistory(@RequestHeader("Authorization") String header, @RequestParam("y") int year, @RequestParam("m") int month) {
         return userTrainingHistoryService.getUserTrainingHistory(header, year, month);
+    }
+
+    /**
+     * Get user points
+     * @param header
+     * @return
+     */
+    @GetMapping("/points")
+    Integer getUserPoints(@RequestHeader("Authorization") String header) {
+        return pointService.getUserPoints(header);
     }
 }
