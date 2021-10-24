@@ -49,9 +49,6 @@ public class IronUser {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany
-    private List<Badge> badges = new ArrayList<>();
-
     public IronUserDto dto() {
         return IronUserDto.builder()
                 .id(this.id)

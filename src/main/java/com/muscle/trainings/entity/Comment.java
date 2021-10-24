@@ -40,12 +40,16 @@ public class Comment {
     private String value;
     private LocalDateTime created_at;
 
+    @ManyToOne
+    private TrainingRequest trainingRequest;
+
     public CommentDto dto(){
         return CommentDto.builder()
                 .id(this.id)
                 .creator(this.creator.dto())
                 .value(this.value)
                 .created_at(this.created_at)
+                .trainingRequest(this.trainingRequest.dto())
                 .build();
     }
 

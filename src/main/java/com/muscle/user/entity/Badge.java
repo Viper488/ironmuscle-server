@@ -31,7 +31,4 @@ public class Badge {
     String name;
     Integer goal;
     String icon;
-
-    @OneToMany
-    private List<IronUser> users = new ArrayList<>();
 }

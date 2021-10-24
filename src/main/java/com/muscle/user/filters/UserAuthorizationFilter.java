@@ -24,8 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -52,7 +51,7 @@ public class UserAuthorizationFilter extends OncePerRequestFilter {
 
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
-                    HttpStatus status = BAD_REQUEST;
+                    HttpStatus status = INTERNAL_SERVER_ERROR;
                     if(e.getMessage().startsWith("The Token has expired")) {
                         status = UNAUTHORIZED;
                     }

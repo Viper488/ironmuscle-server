@@ -17,4 +17,5 @@ public class CommentDto {
     private IronUserDto creator;
     private String value;
     private LocalDateTime created_at;
+    private TrainingRequestDto trainingRequest;
 }

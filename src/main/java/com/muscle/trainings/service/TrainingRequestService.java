@@ -56,7 +56,6 @@ public class TrainingRequestService {
                 .user(user)
                 .status("NEW")
                 .employee(employee)
-                .comments(new ArrayList<>())
                 .build()).detailedResponse();
     }
 
@@ -100,17 +99,17 @@ public class TrainingRequestService {
                             .creator(user)
                             .value(commentDto.getValue())
                             .created_at(LocalDateTime.now())
+                            .trainingRequest(trainingRequest)
                             .build());
 
-        trainingRequest.getComments().add(comment);
-        trainingRequestRepository.save(trainingRequest);
+        commentRepository.save(comment);
 
         return comment.response();
     }
 
     public List<CommentResponse> getRequestComments(Long requestId) {
-        TrainingRequest trainingRequest = trainingRequestRepository.findById(requestId).orElseThrow(() -> new IllegalStateException("Request not found"));
+        List<Comment> comments = commentRepository.findByTrainingRequestId(requestId);
 
-        return trainingRequest.getComments().stream().map(Comment::response).collect(Collectors.toList());
+        return comments.stream().map(Comment::response).collect(Collectors.toList());
     }
 }

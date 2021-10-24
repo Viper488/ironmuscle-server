@@ -54,10 +54,6 @@ public class TrainingRequest {
     )
     private IronUser employee;
 
-
-    @ManyToMany
-    private List<Comment> comments = new ArrayList<>();
-
     public TrainingRequestDto dto(){
         return TrainingRequestDto.builder()
                 .id(this.id)
@@ -68,7 +64,6 @@ public class TrainingRequest {
                 .resolved_at(this.resolved_at)
                 .user(this.user.dto())
                 .employee(this.employee.dto())
-                .comments(this.comments.stream().map(Comment::dto).collect(Collectors.toList()))
                 .build();
 
     }
@@ -82,7 +77,6 @@ public class TrainingRequest {
                 .created_at(this.created_at)
                 .resolved_at(this.resolved_at)
                 .user(this.user.response())
-                .employee(this.employee.response())
                 .build();
 
     }
