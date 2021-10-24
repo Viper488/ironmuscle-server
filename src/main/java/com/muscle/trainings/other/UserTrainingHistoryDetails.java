@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTrainingHistoryDetails {
-    Long id;
     IronUserResponse user;
     List<TrainingHistory> trainingHistory;
 }

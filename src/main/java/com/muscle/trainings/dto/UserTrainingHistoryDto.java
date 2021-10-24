@@ -17,4 +17,5 @@ public class UserTrainingHistoryDto {
     private IronUserDto user;
     private TrainingDto training;
     private LocalDateTime trainingDate;
+    private Integer trainingTime;
 }

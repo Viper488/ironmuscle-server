@@ -1,5 +1,6 @@
 package com.muscle.trainings;
 
+import com.muscle.trainings.other.TrainingHistory;
 import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.other.UserTrainingHistoryDetails;
 import com.muscle.trainings.responses.UserTrainingHistoryResponse;
@@ -48,8 +49,8 @@ public class UserTrainingController {
      * @return
      */
     @PostMapping("/history")
-    UserTrainingHistoryResponse saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId) {
-        return userTrainingHistoryService.saveUserActivity(header, trainingId);
+    UserTrainingHistoryResponse saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId, @RequestParam("time") Integer time) {
+        return userTrainingHistoryService.saveUserActivity(header, trainingId, time);
     }
 
 
@@ -59,7 +60,7 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/history")
-    UserTrainingHistoryDetails getUserHistory(@RequestHeader("Authorization") String header) {
-        return userTrainingHistoryService.getUserTrainingHistory(header);
+    List<TrainingHistory> getUserHistory(@RequestHeader("Authorization") String header, @RequestParam("y") int year, @RequestParam("m") int month) {
+        return userTrainingHistoryService.getUserTrainingHistory(header, year, month);
     }
 }

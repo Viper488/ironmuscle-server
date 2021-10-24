@@ -1,12 +1,9 @@
 package com.muscle.trainings.responses;
 
-import com.muscle.trainings.other.TrainingHistory;
-import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.response.IronUserResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Builder(toBuilder = true)
 @Getter
@@ -15,8 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTrainingHistoryResponse {
-    Long id;
-    IronUserResponse user;
-    TrainingResponse training;
-    LocalDateTime trainingDate;
+    private Long id;
+    private IronUserResponse user;
+    private TrainingResponse training;
+    private LocalDateTime trainingDate;
+    private Integer trainingTime;
 }

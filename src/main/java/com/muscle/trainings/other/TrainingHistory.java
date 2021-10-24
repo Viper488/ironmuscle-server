@@ -18,4 +18,5 @@ public class TrainingHistory {
     private String difficulty;
     private Integer points;
     private LocalDateTime date;
+    private Integer time;
 }
