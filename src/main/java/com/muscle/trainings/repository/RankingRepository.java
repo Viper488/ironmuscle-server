@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PointRepository extends JpaRepository<Point, Long> {
-    Optional<Point> findByUserUsername(String username);
+public interface RankingRepository extends JpaRepository<Ranking, Long> {
 
-    @Query(value = "SELECT * FROM POINT p ORDER BY p.points DESC LIMIT 100;", nativeQuery = true)
-    List<Point> findFirstHundred();
+    @Query(value = "SELECT * FROM RANKING r ORDER BY r.rank ASC LIMIT 100;", nativeQuery = true)
+    List<Ranking> findFirstHundred();
+
+    Optional<Ranking> findByUsername(String username);
 }

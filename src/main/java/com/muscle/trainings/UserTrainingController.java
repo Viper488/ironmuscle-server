@@ -1,11 +1,10 @@
 package com.muscle.trainings;
 
+import com.muscle.trainings.entity.Ranking;
 import com.muscle.trainings.other.TrainingHistory;
-import com.muscle.trainings.responses.TrainingResponse;
-import com.muscle.trainings.other.UserTrainingHistoryDetails;
-import com.muscle.trainings.responses.UserTrainingHistoryResponse;
-import com.muscle.trainings.responses.UserTrainingResponse;
+import com.muscle.trainings.responses.*;
 import com.muscle.trainings.service.PointService;
+import com.muscle.trainings.service.RankingService;
 import com.muscle.trainings.service.UserTrainingHistoryService;
 import com.muscle.trainings.service.UserTrainingsService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,7 @@ public class UserTrainingController {
     private final UserTrainingsService userTrainingsService;
     private final UserTrainingHistoryService userTrainingHistoryService;
     private final PointService pointService;
+    private final RankingService rankingService;
 
     /**
      * Add training to user
@@ -72,7 +72,25 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/points")
-    Integer getUserPoints(@RequestHeader("Authorization") String header) {
+    PointResponse getUserPoints(@RequestHeader("Authorization") String header) {
         return pointService.getUserPoints(header);
+    }
+
+    /**
+     * Get ranked first 100
+     * @return
+     */
+    @GetMapping("/ranking/top")
+    List<RankingResponse> getFirstHundred() {
+        return rankingService.getFirstHundred();
+    }
+
+    /**
+     * Get user ranking
+     * @return
+     */
+    @GetMapping("/ranking")
+    RankingResponse getUserRank(@RequestHeader("Authorization") String header) {
+        return rankingService.getUserRank(header);
     }
 }

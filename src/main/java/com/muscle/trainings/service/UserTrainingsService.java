@@ -1,15 +1,13 @@
 package com.muscle.trainings.service;
 
-import com.muscle.trainings.dto.TrainingDto;
-import com.muscle.trainings.dto.UserTrainingDto;
 import com.muscle.trainings.entity.UserTrainings;
+import com.muscle.trainings.entity.Ranking;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingsRepository;
 import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.responses.UserTrainingResponse;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.util.JwtUtil;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

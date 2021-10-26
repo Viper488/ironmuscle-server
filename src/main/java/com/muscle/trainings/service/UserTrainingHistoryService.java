@@ -48,7 +48,7 @@ public class UserTrainingHistoryService {
 
         pointService.addPoints(user.getUsername(), training.getPoints());
 
-        List<UserBadges> userBadges = userBadgesRepository.findByUserId(user.getId());
+        //List<UserBadges> userBadges = userBadgesRepository.findByUserId(user.getId());
         //List<Badge> userBadgesList = userBadges.stream().map(UserBadges::getBadge).collect(Collectors.toList());
 
 /*        Optional<Badge> lastBadge = Optional.ofNullable(userBadgesList.get(0));
@@ -68,8 +68,6 @@ public class UserTrainingHistoryService {
             ) {
             userBadges.add(UserBadges.builder().id(UserBadgesKey.builder().userId(user.getId()).badgeId(newBadge.getId()).build()).user(user).badge(newBadge).build());
         }*/
-
-        userRepository.save(user);
 
         return userTrainingHistoryRepository
                 .save(UserTrainingHistory.builder()
