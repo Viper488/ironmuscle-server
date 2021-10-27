@@ -1,20 +1,12 @@
 package com.muscle.trainings.service;
 
-import com.muscle.trainings.entity.Point;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.UserTrainingHistory;
-import com.muscle.trainings.repository.PointRepository;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingHistoryRepository;
 import com.muscle.trainings.other.TrainingHistory;
-import com.muscle.trainings.other.UserTrainingHistoryDetails;
 import com.muscle.trainings.responses.UserTrainingHistoryResponse;
-import com.muscle.user.entity.Badge;
 import com.muscle.user.entity.IronUser;
-import com.muscle.user.entity.UserBadges;
-import com.muscle.user.entity.UserBadgesKey;
-import com.muscle.user.repository.BadgeRepository;
-import com.muscle.user.repository.UserBadgesRepository;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.response.IronUserResponse;
 import com.muscle.user.util.JwtUtil;
@@ -25,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,7 +29,6 @@ public class UserTrainingHistoryService {
     private final TrainingsRepository trainingsRepository;
     private final UserTrainingHistoryRepository userTrainingHistoryRepository;
     private final PointService pointService;
-    private final UserBadgesRepository userBadgesRepository;
 
     public UserTrainingHistoryResponse saveUserActivity(String header, Long trainingId, Integer time) {
         IronUser user = userRepository.findByUsername(jwtUtil.extractUsername(header))
@@ -47,27 +37,6 @@ public class UserTrainingHistoryService {
                 .orElseThrow(() -> new IllegalStateException("Training not found"));
 
         pointService.addPoints(user.getUsername(), training.getPoints());
-
-        //List<UserBadges> userBadges = userBadgesRepository.findByUserId(user.getId());
-        //List<Badge> userBadgesList = userBadges.stream().map(UserBadges::getBadge).collect(Collectors.toList());
-
-/*        Optional<Badge> lastBadge = Optional.ofNullable(userBadgesList.get(0));
-        int biggestGoal = 0;
-        if(lastBadge.isPresent()) {
-            for (Badge badge : userBadgesList
-            ) {
-                if (badge.getGoal() > lastBadge.get().getGoal()) {
-                    lastBadge = Optional.of(badge);
-                }
-            }
-            biggestGoal = lastBadge.get().getGoal();
-        }
-        List<Badge> newBadges = badgeRepository.findByGoalBetween(biggestGoal, user.getPoints() + 1);
-
-        for (Badge newBadge:newBadges
-            ) {
-            userBadges.add(UserBadges.builder().id(UserBadgesKey.builder().userId(user.getId()).badgeId(newBadge.getId()).build()).user(user).badge(newBadge).build());
-        }*/
 
         return userTrainingHistoryRepository
                 .save(UserTrainingHistory.builder()

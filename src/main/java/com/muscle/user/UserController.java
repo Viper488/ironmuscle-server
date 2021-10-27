@@ -2,7 +2,9 @@ package com.muscle.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muscle.user.dto.*;
+import com.muscle.user.response.BadgeResponse;
 import com.muscle.user.response.IronUserResponse;
+import com.muscle.user.service.BadgeService;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
+    private final BadgeService badgeService;
 
     /**
      * Refresh token
@@ -66,8 +69,18 @@ public class UserController {
      * @return
      */
     @GetMapping("/welcome")
-    public String getWelcome(@RequestHeader("Authorization") String header) throws Exception {
+    public String getWelcome(@RequestHeader("Authorization") String header) {
         return userService.getWelcomeMsg(header);
+    }
+
+    /**
+     * Show user badges
+     * @param header
+     * @return
+     */
+    @GetMapping("/user/badges")
+    public List<BadgeResponse> getUserBadges(@RequestHeader("Authorization") String header) {
+        return badgeService.getUserBadges(header);
     }
 
     /**
@@ -76,7 +89,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/myself")
-    public IronUserResponse getMyself(@RequestHeader("Authorization") String header) throws Exception {
+    public IronUserResponse getMyself(@RequestHeader("Authorization") String header) {
         return userService.getMyself(header);
     }
 
@@ -86,7 +99,7 @@ public class UserController {
      * @param changeUserDetailsDto
      */
     @PutMapping("/myself")
-    public void changeUserDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) throws Exception {
+    public void changeUserDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
         userService.changeUserDetails(header, changeUserDetailsDto);
     }
 
@@ -113,7 +126,7 @@ public class UserController {
      * @param changePasswordDto
      */
     @PostMapping("/password/change")
-    public void changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangePasswordDto changePasswordDto) throws Exception {
+    public void changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangePasswordDto changePasswordDto) {
         userService.changePassword(header, changePasswordDto);
     }
 
@@ -124,9 +137,4 @@ public class UserController {
     public List<IronUserDto> getUsers(@RequestParam("role") String roleName) {
         return userService.getUsersByRole(roleName);
     }
-
-    //TODO: Bezpieczne przesylanie nowego hasła - od strony klienta
-    //TODO: Role dla pracowników(trener itd) - done
-    //TODO: Template treningi dla wszystkich - done
-    //TODO: ???
 }

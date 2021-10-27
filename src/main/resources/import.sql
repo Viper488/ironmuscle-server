@@ -3,13 +3,13 @@ INSERT INTO role VALUES(nextval('role_sequence'), 'EMPLOYEE');
 INSERT INTO role VALUES(nextval('role_sequence'), 'TRAINER');
 INSERT INTO role VALUES(nextval('role_sequence'), 'USER');
 
-INSERT INTO badge VALUES (nextval('badge_sequence'),  50, '', 'Silver'      );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 100, '', 'Gold'        );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 150, '', 'Platinum'    );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 200, '', 'Diamond'     );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 250, '', 'Master'      );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 300, '', 'Champion'    );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 350, '', 'IFBB PRO'    );
+INSERT INTO badge VALUES (nextval('badge_sequence'),  50, 'https://www.unrankedsmurfs.com/storage/YMoeDoxu3dKunABYwywDC05hf11tbWr6NQScWoWS.png', 'Silver'      );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 100, 'https://static.wikia.nocookie.net/leagueoflegends/images/9/96/Season_2019_-_Gold_1.png/revision/latest/scale-to-width-down/250?cb=20181229234920', 'Gold'        );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 150, 'https://static.wikia.nocookie.net/leagueoflegends/images/7/74/Season_2019_-_Platinum_1.png/revision/latest/scale-to-width-down/250?cb=20181229234932', 'Platinum'    );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 200, 'https://static.wikia.nocookie.net/leagueoflegends/images/9/91/Season_2019_-_Diamond_1.png/revision/latest/scale-to-width-down/250?cb=20181229234917', 'Diamond'     );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 250, 'https://www.unrankedsmurfs.com/storage/89fkTw6o2M5j8KQHL15wj46DGP2lETLKcM1j55Ci.png', 'Master'      );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 300, 'https://www.unrankedsmurfs.com/storage/kt7etpJ3zhnKrZCrhf2DNKvzpbIeiSBSTKSWMhaI.png', 'Grandmaster'    );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 350, 'https://www.unrankedsmurfs.com/storage/EULjmP1Hm1EXNZ6h75jBDcwWiLUXKDirJZS0XXej.png', 'Champion'    );
 
 INSERT INTO iron_user VALUES (nextval('user_sequence'), 'admin@admin.com',       true, 'admin',     false, 'admin',     '$2a$10$tpA0.LhVCAzZzN9jP90AAuokZOghqi3Pd3.hzTec8mCZKC8MdCaBy', 'admin');
 INSERT INTO iron_user VALUES (nextval('user_sequence'), 'employee@employee.com', true, 'employee',  false, 'employee',  '$2a$10$uFsgfCqAfzywMaq1poI2MOe4VTbTsKVEleYp8qRoHv7xwzfbv5ZtG', 'employee');

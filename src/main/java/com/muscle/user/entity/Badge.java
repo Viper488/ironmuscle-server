@@ -1,5 +1,6 @@
 package com.muscle.user.entity;
 
+import com.muscle.user.response.BadgeResponse;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,4 +32,13 @@ public class Badge {
     String name;
     Integer goal;
     String icon;
+
+    public BadgeResponse response() {
+        return BadgeResponse.builder()
+                .id(this.id)
+                .name(this.name)
+                .goal(this.goal)
+                .icon(this.icon)
+                .build();
+    }
 }
