@@ -16,6 +16,5 @@ public class TrainingDto {
     private String type;
     private String image;
     private String difficulty;
-    private IronUserDto creator;
     private Integer points;
 }
