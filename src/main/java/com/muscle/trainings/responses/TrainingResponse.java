@@ -17,6 +17,5 @@ public class TrainingResponse {
     private String type;
     private String image;
     private String difficulty;
-    private IronUserResponse creator;
     private Integer points;
 }

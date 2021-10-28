@@ -49,7 +49,6 @@ public class TrainingsService {
                 .type(trainingDto.getType())
                 .image(trainingDto.getImage())
                 .difficulty(trainingDto.getDifficulty())
-                .creator(userRepository.findByUsername(jwtUtil.extractUsername(header)).orElseThrow(() -> new IllegalStateException("User not found!")))
                 .points(trainingDto.getPoints())
                 .build())
                 .detailedResponse();

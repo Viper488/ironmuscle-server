@@ -33,13 +33,6 @@ public class Training {
     private String type;
     private String image;
     private String difficulty;
-
-    @ManyToOne
-    @JoinColumn(
-            nullable = false,
-            name = "creator_id"
-    )
-    private IronUser creator;
     private Integer points;
 
     public TrainingDto dto() {
@@ -49,7 +42,6 @@ public class Training {
                 .type(this.type)
                 .image(this.image)
                 .difficulty(this.difficulty)
-                .creator(this.creator.dto())
                 .points(this.points)
                 .build();
     }
@@ -72,7 +64,6 @@ public class Training {
                 .type(this.type)
                 .image(this.image)
                 .difficulty(this.difficulty)
-                .creator(this.creator.response())
                 .points(this.points)
                 .build();
     }
