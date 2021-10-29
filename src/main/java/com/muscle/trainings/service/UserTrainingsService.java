@@ -1,7 +1,6 @@
 package com.muscle.trainings.service;
 
 import com.muscle.trainings.entity.UserTrainings;
-import com.muscle.trainings.entity.Ranking;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingsRepository;
 import com.muscle.trainings.responses.TrainingResponse;

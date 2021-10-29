@@ -1,17 +1,28 @@
 package com.muscle.trainings;
 
-import com.muscle.trainings.entity.Ranking;
 import com.muscle.trainings.other.TrainingHistory;
 import com.muscle.trainings.responses.*;
 import com.muscle.trainings.service.PointService;
-import com.muscle.trainings.service.RankingService;
 import com.muscle.trainings.service.UserTrainingHistoryService;
 import com.muscle.trainings.service.UserTrainingsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.persistence.Tuple;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +32,6 @@ public class UserTrainingController {
     private final UserTrainingsService userTrainingsService;
     private final UserTrainingHistoryService userTrainingHistoryService;
     private final PointService pointService;
-    private final RankingService rankingService;
 
     /**
      * Add training to user
@@ -67,22 +77,29 @@ public class UserTrainingController {
     }
 
     /**
-     * Get user points
-     * @param header
+     * Get ranking
      * @return
      */
-    @GetMapping("/points")
-    PointResponse getUserPoints(@RequestHeader("Authorization") String header) {
-        return pointService.getUserPoints(header);
-    }
+    @GetMapping("/ranking/list")
+    Map<String, Object> getRanking(@RequestParam(defaultValue = "0") Integer page,
+                                   @RequestParam(defaultValue = "20") Integer size) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<Tuple> rankingPage = pointService.getPaginatedRanking(paging);
 
-    /**
-     * Get ranked first 100
-     * @return
-     */
-    @GetMapping("/ranking/top")
-    List<RankingResponse> getFirstHundred() {
-        return rankingService.getFirstHundred();
+        List<RankingResponse> rankingList = rankingPage.getContent().stream()
+                .map(tuple -> RankingResponse.builder()
+                        .rank(tuple.get(0, BigInteger.class).longValue())
+                        .username(tuple.get(1, String.class))
+                        .points(tuple.get(2, Integer.class))
+                        .build()).collect(Collectors.toList());;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("ranking", rankingList);
+        response.put("currentPage", rankingPage.getNumber());
+        response.put("totalItems", rankingPage.getTotalElements());
+        response.put("totalPages", rankingPage.getTotalPages());
+
+        return response;
     }
 
     /**
@@ -91,6 +108,6 @@ public class UserTrainingController {
      */
     @GetMapping("/ranking")
     RankingResponse getUserRank(@RequestHeader("Authorization") String header) {
-        return rankingService.getUserRank(header);
+        return pointService.getUserRank(header);
     }
 }
