@@ -223,9 +223,6 @@ public class UserService implements UserDetailsService {
     public void changeUserDetails(String header, ChangeUserDetailsDto changed) {
         IronUser user = getUserFromHeader(header);
 
-        user.setName(changed.getName());
-        user.setLastName(changed.getLastName());
-
         if(!userRepository.findByEmail(changed.getEmail()).isPresent())
             user.setEmail(changed.getEmail());
         else

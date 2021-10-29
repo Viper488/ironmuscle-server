@@ -32,9 +32,6 @@ public class IronUser {
     )
     private Long id;
 
-    private String name;
-    private String lastName;
-
     @Column(unique = true)
     private String username;
 
@@ -50,8 +47,6 @@ public class IronUser {
     public IronUserDto dto() {
         return IronUserDto.builder()
                 .id(this.id)
-                .name(this.name)
-                .lastName(this.lastName)
                 .username(this.username)
                 .email(this.email)
                 .password(this.password)
@@ -64,8 +59,6 @@ public class IronUser {
     public IronUserResponse response() {
         return IronUserResponse.builder()
                 .id(this.id)
-                .name(this.name)
-                .lastName(this.lastName)
                 .username(this.username)
                 .email(this.email)
                 .build();

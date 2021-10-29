@@ -33,14 +33,14 @@ public class RegistrationService {
             throw new IllegalStateException("Email is not valid");
         }
         userService.validatePassword(request.getPassword());
+
         List<Role> roles = new ArrayList<>();
         for(String role:request.getRoles()) {
             roles.add(roleRepository.findByName(role));
         }
+
         String token = userService.signUpUser(
                 IronUser.builder()
-                        .name(request.getName().orElse(""))
-                        .lastName(request.getLastName().orElse(""))
                         .username(request.getUsername())
                         .email(request.getEmail())
                         .password(request.getPassword())
