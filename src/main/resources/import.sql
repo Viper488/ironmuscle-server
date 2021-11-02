@@ -489,7 +489,3 @@ INSERT INTO training_exercise VALUES(nextval('training_exercise_sequence'), 14, 
 INSERT INTO training_exercise VALUES(nextval('training_exercise_sequence'), 12, 0, 111, 15);
 INSERT INTO training_exercise VALUES(nextval('training_exercise_sequence'), 12, 0, 113, 15);
 INSERT INTO training_exercise VALUES(nextval('training_exercise_sequence'), 0, 30, 103, 15);
-
---INSERT INTO user_trainings VALUES (nextval('user_trainings_sequence'), 3, 10);
---INSERT INTO user_trainings VALUES (nextval('user_trainings_sequence'), 3, 2);
-

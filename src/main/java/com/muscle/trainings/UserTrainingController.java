@@ -35,13 +35,13 @@ public class UserTrainingController {
 
     /**
      * Add training to user
-     * @param header
-     * @param id
+     * @param user
+     * @param training
      * @return
      */
-    @PostMapping("/trainings/{id}")
-    UserTrainingResponse addTrainingToUser(@RequestHeader("Authorization") String header, @PathVariable Long id) {
-        return userTrainingsService.addTrainingToUser(header, id);
+    @PostMapping("/trainings/add")
+    UserTrainingResponse addTrainingToUser(@RequestParam Long user, @RequestParam Long training) {
+        return userTrainingsService.addTrainingToUser(user, training);
     }
 
     /**

@@ -19,6 +19,8 @@ public class TrainingRequestResponse {
     private String title;
     private String description;
     private String status;
+    private String difficulty;
+    private String bodyPart;
     private LocalDateTime created_at;
     private LocalDateTime resolved_at;
     private IronUserResponse user;

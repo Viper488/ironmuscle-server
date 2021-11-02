@@ -25,13 +25,11 @@ public class UserTrainingsService {
     private final TrainingsRepository trainingsRepository;
     private final JwtUtil jwtUtil;
 
-    public UserTrainingResponse addTrainingToUser(String header, Long trainingId) {
-
-        String username = jwtUtil.extractUsername(header);
+    public UserTrainingResponse addTrainingToUser(Long user, Long training) {
         return userTrainingsRepository.save(UserTrainings.builder()
-                .ironUser(userRepository.findByUsername(username)
+                .ironUser(userRepository.findById(user)
                         .orElseThrow(() -> new IllegalStateException("User not found")))
-                .training(trainingsRepository.findTrainingById(trainingId)
+                .training(trainingsRepository.findTrainingById(training)
                         .orElseThrow(() -> new IllegalStateException("Training not found")))
                 .build()).response();
     }

@@ -7,9 +7,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -36,6 +33,8 @@ public class TrainingRequest {
 
     private String title;
     private String description;
+    private String difficulty;
+    private String bodyPart;
     private String status;
     private LocalDateTime created_at;
     private LocalDateTime resolved_at;
@@ -49,7 +48,6 @@ public class TrainingRequest {
 
     @ManyToOne
     @JoinColumn(
-            nullable = false,
             name = "employee_id"
     )
     private IronUser employee;
@@ -74,6 +72,8 @@ public class TrainingRequest {
                 .title(this.title)
                 .description(this.description)
                 .status(this.status)
+                .difficulty(this.difficulty)
+                .bodyPart(this.bodyPart)
                 .created_at(this.created_at)
                 .resolved_at(this.resolved_at)
                 .user(this.user.response())
@@ -87,6 +87,8 @@ public class TrainingRequest {
                 .title(this.title)
                 .description(this.description)
                 .status(this.status)
+                .difficulty(this.difficulty)
+                .bodyPart(this.bodyPart)
                 .created_at(this.created_at)
                 .resolved_at(this.resolved_at)
                 .build();
