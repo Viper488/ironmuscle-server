@@ -49,6 +49,27 @@ public class TrainingRequestController {
         return trainingRequestService.getRequest(id);
     }
 
+    /**
+     * Get request by id
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    void deleteRequest(@PathVariable Long id) {
+        trainingRequestService.deleteRequest(id);
+    }
+
+    /**
+     * Get request by id
+     * @param header
+     * @return
+     */
+    @DeleteMapping()
+    void deleteDoneRequests(@RequestHeader("Authorization") String header) {
+        trainingRequestService.deleteUserDoneRequests(header);
+    }
+
+
 //    /**
 //     * Edit request
 //     * @param id

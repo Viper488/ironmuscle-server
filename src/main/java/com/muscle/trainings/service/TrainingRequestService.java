@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -82,6 +83,16 @@ public class TrainingRequestService {
 
     public Page<TrainingRequest> getPaginatedRequests(Pageable paging) {
         return trainingRequestRepository.findByStatus("NEW", paging);
+    }
+
+    @Transactional
+    public void deleteRequest(Long requestId) {
+        trainingRequestRepository.deleteById(requestId);
+    }
+
+    @Transactional
+    public void deleteUserDoneRequests(String header) {
+        trainingRequestRepository.deleteByUserUsernameAndStatus(jwtUtil.extractUsername(header), "DONE");
     }
 
 /*    public CommentResponse addCommentToRequest(String header, Long requestId, CommentDto commentDto) {
