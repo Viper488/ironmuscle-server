@@ -55,6 +55,16 @@ public class UserTrainingController {
     }
 
     /**
+     * Delete user training
+     * @param header
+     * @return
+     */
+    @DeleteMapping("/training/{id}")
+    void deleteUserTraining(@RequestHeader("Authorization") String header, @PathVariable Long id) {
+        userTrainingsService.deleteUserTraining(header, id);
+    }
+
+    /**
      * Save user activity
      * @param header
      * @param trainingId

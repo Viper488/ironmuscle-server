@@ -12,4 +12,8 @@ public interface UserTrainingsRepository extends JpaRepository<UserTrainings, Lo
 
     @Query(value = "SELECT * FROM User_Trainings ut WHERE ut.user_id = ?1", nativeQuery = true)
     List<UserTrainings> findAllByUserId(Long id);
+
+    void deleteByIronUserIdAndTrainingId(Long userId, Long trainingId);
+
+    //TODO: Delete user training
 }
