@@ -1,3 +1,4 @@
+/*
 package com.muscle.trainings.repository;
 
 import com.muscle.trainings.entity.Comment;
@@ -10,3 +11,4 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByTrainingRequestId(Long id);
 }
+*/

@@ -25,6 +25,6 @@ public class TrainingRequestDto {
     private LocalDateTime created_at;
     private LocalDateTime resolved_at;
     private IronUserDto user;
-    private IronUserDto employee;
+    private IronUserDto trainer;
     private List<CommentDto> comments;
 }

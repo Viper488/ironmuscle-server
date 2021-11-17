@@ -1,3 +1,4 @@
+/*
 package com.muscle.trainings.entity;
 
 import com.muscle.trainings.dto.CommentDto;
@@ -62,3 +63,4 @@ public class Comment {
                 .build();
     }
 }
+*/

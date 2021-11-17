@@ -36,8 +36,8 @@ public class PointService {
         pointRepository.save(userPoints);
     }
 
-    public Page<Tuple> getPaginatedRanking(Pageable paging) {
-        return pointRepository.getRanking(paging);
+    public Page<Tuple> getPaginatedRanking(Pageable pageable) {
+        return pointRepository.getRanking(pageable);
     }
 
     public RankingResponse getUserRank(String header) {

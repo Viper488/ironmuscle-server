@@ -42,8 +42,8 @@ public class TrainingRequestService {
                 .collect(Collectors.toList());
     }
 
-    public List<TrainingRequestResponse> getEmployeeRequests(String header, String status) {
-        return trainingRequestRepository.findByEmployeeUsernameAndStatus(jwtUtil.extractUsername(header), status)
+    public List<TrainingRequestResponse> getTrainerRequests(String header, String status) {
+        return trainingRequestRepository.findByTrainerUsernameAndStatus(jwtUtil.extractUsername(header), status)
                 .stream()
                 .map(TrainingRequest::response)
                 .sorted(Comparator.comparing(TrainingRequestResponse::getCreated_at).reversed())
@@ -55,6 +55,8 @@ public class TrainingRequestService {
         return trainingRequestRepository.save(TrainingRequest.builder()
                 .title(trainingRequestDto.getTitle())
                 .description(trainingRequestDto.getDescription())
+                .bodyPart(trainingRequestDto.getBodyPart())
+                .difficulty(trainingRequestDto.getDifficulty())
                 .created_at(LocalDateTime.now())
                 .user(user)
                 .status("NEW")
@@ -72,8 +74,8 @@ public class TrainingRequestService {
         if(trainingRequestDto.getStatus() != null) {
             trainingRequest.setStatus(trainingRequestDto.getStatus());
             if(trainingRequestDto.getStatus().equals("IN PROGRESS")) {
-                IronUser employee = userService.getUserFromHeader(header);
-                trainingRequest.setEmployee(employee);
+                IronUser trainer = userService.getUserFromHeader(header);
+                trainingRequest.setTrainer(trainer);
             } else if (trainingRequestDto.getStatus().equals("DONE")) {
                 trainingRequest.setResolved_at(LocalDateTime.now());
             }
@@ -81,8 +83,8 @@ public class TrainingRequestService {
         return trainingRequestRepository.save(trainingRequest).detailedResponse();
     }
 
-    public Page<TrainingRequest> getPaginatedRequests(Pageable paging) {
-        return trainingRequestRepository.findByStatus("NEW", paging);
+    public Page<TrainingRequest> getPaginatedRequests(Pageable pageable) {
+        return trainingRequestRepository.findByStatus("NEW", pageable);
     }
 
     @Transactional

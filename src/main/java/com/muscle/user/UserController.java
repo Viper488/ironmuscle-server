@@ -1,7 +1,10 @@
 package com.muscle.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.muscle.trainings.entity.Training;
+import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.user.dto.*;
+import com.muscle.user.entity.IronUser;
 import com.muscle.user.response.BadgeResponse;
 import com.muscle.user.response.IronUserResponse;
 import com.muscle.user.service.BadgeService;
@@ -9,12 +12,16 @@ import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -131,10 +138,26 @@ public class UserController {
     }
 
     /**
-     * Show all users by role
+     * Get all users
+     * @param page
+     * @param size
+     * @return
      */
     @GetMapping("/users")
-    public List<IronUserDto> getUsers(@RequestParam("role") String roleName) {
-        return userService.getUsersByRole(roleName);
+    Map<String, Object> getTrainings(@RequestParam(defaultValue = "0") Integer page,
+                                     @RequestParam(defaultValue = "100") Integer size) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<IronUser> userPage = userService.getPaginatedUsers(paging);
+
+        List<IronUserDto> usersList = userPage.getContent()
+                .stream().map(IronUser::dtoResponse).collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("users", usersList);
+        response.put("currentPage", userPage.getNumber());
+        response.put("totalItems", userPage.getTotalElements());
+        response.put("totalPages", userPage.getTotalPages());
+
+        return response;
     }
 }

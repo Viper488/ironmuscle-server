@@ -6,6 +6,8 @@ import com.muscle.trainings.mapper.ExerciseMapper;
 import com.muscle.trainings.repository.ExerciseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,10 @@ public class ExerciseService {
 
     public List<ExerciseDto> getExercises() {
         return exerciseRepository.findAll().stream().map(Exercise::dto).collect(Collectors.toList());
+    }
+
+    public Page<Exercise> getPaginatedExercises(Pageable pageable) {
+        return exerciseRepository.findAll(pageable);
     }
 
     public ExerciseDto saveExercise(ExerciseDto exerciseDto) {

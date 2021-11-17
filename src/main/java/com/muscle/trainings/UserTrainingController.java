@@ -92,7 +92,7 @@ public class UserTrainingController {
      */
     @GetMapping("/ranking/list")
     Map<String, Object> getRanking(@RequestParam(defaultValue = "0") Integer page,
-                                   @RequestParam(defaultValue = "20") Integer size) {
+                                   @RequestParam(defaultValue = "100") Integer size) {
         Pageable paging = PageRequest.of(page, size);
         Page<Tuple> rankingPage = pointService.getPaginatedRanking(paging);
 

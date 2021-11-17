@@ -56,6 +56,17 @@ public class IronUser {
                 .build();
     }
 
+    public IronUserDto dtoResponse() {
+        return IronUserDto.builder()
+                .id(this.id)
+                .username(this.username)
+                .email(this.email)
+                .locked(this.locked)
+                .enabled(this.enabled)
+                .roles(this.roles.stream().map(Role::dto).collect(Collectors.toList()))
+                .build();
+    }
+
     public IronUserResponse response() {
         return IronUserResponse.builder()
                 .id(this.id)

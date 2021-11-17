@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION initialize_user() RETURNS trigger AS '
     BEGIN
-        INSERT INTO iron_user_roles VALUES(NEW.id, 4);
+        INSERT INTO iron_user_roles VALUES(NEW.id, 3);
         INSERT INTO point VALUES (nextval(''point_sequence''), 0, NEW.id);
         RETURN NULL;
     END;
@@ -35,7 +35,6 @@ CREATE TRIGGER add_badge_trigger
     EXECUTE PROCEDURE add_badge();
 
 INSERT INTO role VALUES(nextval('role_sequence'), 'ADMIN');
-INSERT INTO role VALUES(nextval('role_sequence'), 'EMPLOYEE');
 INSERT INTO role VALUES(nextval('role_sequence'), 'TRAINER');
 INSERT INTO role VALUES(nextval('role_sequence'), 'USER');
 
@@ -48,7 +47,7 @@ INSERT INTO badge VALUES (nextval('badge_sequence'), 300, 'https://www.unrankeds
 INSERT INTO badge VALUES (nextval('badge_sequence'), 350, 'https://www.unrankedsmurfs.com/storage/EULjmP1Hm1EXNZ6h75jBDcwWiLUXKDirJZS0XXej.png', 'Champion'    );
 
 INSERT INTO iron_user VALUES(nextval('user_sequence'), 'admin@admin.com',       true, false, '$2a$10$tpA0.LhVCAzZzN9jP90AAuokZOghqi3Pd3.hzTec8mCZKC8MdCaBy', 'admin');
-INSERT INTO iron_user VALUES(nextval('user_sequence'), 'employee@employee.com', true, false, '$2a$10$uFsgfCqAfzywMaq1poI2MOe4VTbTsKVEleYp8qRoHv7xwzfbv5ZtG', 'employee');
+INSERT INTO iron_user VALUES(nextval('user_sequence'), 'trainer@trainer.com', true, false, '$2a$12$NHsUnreBsx3/XUEK/sV0L.F8j8ojfWPVF7aJbFeUPwQUFjyGTjB7i', 'trainer');
 INSERT INTO iron_user VALUES(nextval('user_sequence'), 'user@user.com',         true, false, '$2a$10$xcIdSU3V0eKuqdyJsvZxL.q6h6lYjgNAqzscqKbZUurZQ3iRzqrDy', 'user');
 INSERT INTO iron_user VALUES(nextval('user_sequence'),'Chris_Page 7101@gompie.com',true,false,'$2a$10$xcIdSU3V0eKuqdyJsvZxL.q6h6lYjgNAqzscqKbZUurZQ3iRzqrDy','Page ');
 INSERT INTO iron_user VALUES(nextval('user_sequence'),'Evie_Coates3745@irrepsy.com',true,false,'$2a$10$xcIdSU3V0eKuqdyJsvZxL.q6h6lYjgNAqzscqKbZUurZQ3iRzqrDy','Coates');
@@ -149,9 +148,8 @@ INSERT INTO iron_user VALUES(nextval('user_sequence'),'Wendy_Payne5977@guentu.bi
 INSERT INTO iron_user VALUES(nextval('user_sequence'),'Mayleen_Gavin5973@elnee.tech',true,false,'$2a$10$xcIdSU3V0eKuqdyJsvZxL.q6h6lYjgNAqzscqKbZUurZQ3iRzqrDy','Gavin');
 
 INSERT INTO iron_user_roles VALUES (1, 1);
-INSERT INTO iron_user_roles VALUES (1, 2);
 INSERT INTO iron_user_roles VALUES (2, 2);
-INSERT INTO iron_user_roles VALUES (2, 3);
+INSERT INTO iron_user_roles VALUES (3, 3);
 
 
 --TRAINING REQUESTS
@@ -243,35 +241,3 @@ INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms'
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 90);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 90);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 90);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

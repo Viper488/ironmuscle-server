@@ -11,6 +11,8 @@ import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -114,6 +116,10 @@ public class UserService implements UserDetailsService {
 
     public List<IronUserDto> getUsersByRole(String roleName) {
         return userRepository.findByRole(roleName).stream().map(IronUser::dto).collect(Collectors.toList());
+    }
+
+    public Page<IronUser> getPaginatedUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public void requestPasswordChange(String email) {

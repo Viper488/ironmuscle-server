@@ -4,6 +4,7 @@ import com.muscle.trainings.dto.ExerciseDto;
 import com.muscle.trainings.dto.TrainingDto;
 import com.muscle.trainings.entity.Exercise;
 import com.muscle.trainings.entity.Training;
+import com.muscle.trainings.entity.TrainingRequest;
 import com.muscle.trainings.mapper.TrainingMapper;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.responses.TrainingResponse;
@@ -11,6 +12,8 @@ import com.muscle.user.repository.UserRepository;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +44,11 @@ public class TrainingsService {
         return trainingsRepository.findAll().stream().map(Training::response).collect(Collectors.toList());
     }
 
-    public TrainingResponse saveTraining(String header, TrainingDto trainingDto) {
+    public Page<Training> getPaginatedTrainings(Pageable pageable) {
+        return trainingsRepository.findAll(pageable);
+    }
+
+    public TrainingResponse saveTraining(TrainingDto trainingDto) {
         log.info("Saving new training {} to the database", trainingDto.getName());
 
         return trainingsRepository.save(Training.builder()

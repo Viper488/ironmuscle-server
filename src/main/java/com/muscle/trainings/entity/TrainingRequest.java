@@ -48,9 +48,9 @@ public class TrainingRequest {
 
     @ManyToOne
     @JoinColumn(
-            name = "employee_id"
+            name = "trainer_id"
     )
-    private IronUser employee;
+    private IronUser trainer;
 
     public TrainingRequestDto dto(){
         return TrainingRequestDto.builder()
@@ -61,7 +61,7 @@ public class TrainingRequest {
                 .created_at(this.created_at)
                 .resolved_at(this.resolved_at)
                 .user(this.user.dto())
-                .employee(this.employee.dto())
+                .trainer(this.trainer.dto())
                 .build();
 
     }

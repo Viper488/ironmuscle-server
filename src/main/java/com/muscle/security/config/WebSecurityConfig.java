@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
     private final String USER = "USER";
-    private final String EMPLOYEE = "EMPLOYEE";
+    private final String TRAINER = "TRAINER";
     private final String ADMIN = "ADMIN";
 
     @Override
@@ -42,30 +42,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ).permitAll();
 
         http.authorizeRequests().antMatchers("/api/v*/password/reset?token=*&password=*").permitAll();
-        http.authorizeRequests().antMatchers("/api/v*/welcome").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/myself").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/token/refresh/**").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/password/change").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/users*").hasAnyAuthority(EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/welcome").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/myself").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/token/refresh/**").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/password/change").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/users*").hasAnyAuthority(TRAINER, ADMIN);
 
 
-        http.authorizeRequests().antMatchers("/api/v*/training/template", "/api/v*/training/*").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/training", "/api/v*/training/*/exercises").hasAnyAuthority(EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/training/template", "/api/v*/training/*").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/training", "/api/v*/training/all/**", "/api/v*/training/*/exercises").hasAnyAuthority(TRAINER, ADMIN);
 
-        http.authorizeRequests().antMatchers("/api/v*/exercise").hasAnyAuthority(EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/exercise", "/api/v*/exercise/all/**").hasAnyAuthority(TRAINER, ADMIN);
 
         http.authorizeRequests().antMatchers("/api/v*/request", "/api/v*/request/user").hasAnyAuthority(USER);
-        http.authorizeRequests().antMatchers("/api/v*/request/*", "/api/v*/request/*/comment", "/api/v*/request/*/comments").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/request/employee", "/api/v*/request/all").hasAnyAuthority( EMPLOYEE);
+        http.authorizeRequests().antMatchers("/api/v*/request/*", "/api/v*/request/*/comment", "/api/v*/request/*/comments").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/request/trainer", "/api/v*/request/all").hasAnyAuthority(TRAINER);
 
-        http.authorizeRequests().antMatchers("/api/v*/user/training/*").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/user/trainings").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/user/trainings/**").hasAnyAuthority(EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/user/history/**").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/user/points/**").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/user/ranking/**").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/user/ranking/list/**").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/user/badges/**").hasAnyAuthority(USER, EMPLOYEE, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/training/*").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/trainings").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/trainings/**").hasAnyAuthority(TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/history/**").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/points/**").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/ranking/**").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/ranking/list/**").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/badges/**").hasAnyAuthority(USER, TRAINER, ADMIN);
 
         http.authorizeRequests().anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface TrainingRequestRepository extends JpaRepository<TrainingRequest, Long> {
     List<TrainingRequest> findByUserId(Long id);
-    List<TrainingRequest> findByEmployeeUsernameAndStatus(String username, String status);
+    List<TrainingRequest> findByTrainerUsernameAndStatus(String username, String status);
     Page<TrainingRequest> findByStatus(String status, Pageable pageable);
 
 
