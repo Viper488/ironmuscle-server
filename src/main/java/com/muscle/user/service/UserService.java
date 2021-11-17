@@ -225,15 +225,31 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void changeUserDetails(String header, ChangeUserDetailsDto changed) {
+    public void changeMyDetails(String header, ChangeUserDetailsDto changed) {
         IronUser user = getUserFromHeader(header);
 
-        if(!userRepository.findByEmail(changed.getEmail()).isPresent())
+        if(!userRepository.findByEmail(changed.getEmail()).isPresent()) {
             user.setEmail(changed.getEmail());
+            userRepository.save(user);
+        }
         else
             throw new IllegalStateException("Email already taken");
+    }
 
-        userRepository.save(user);
+    public void changeUserDetails(Long id, ChangeUserDetailsDto changed) {
+        IronUser user = userRepository.findById(id)
+                .orElseThrow(()-> new IllegalStateException("User not found"));
+
+        if(user.getLocked() == changed.isLock()) {
+            if(user.getLocked()){
+                throw new IllegalStateException("User is already locked");
+            } else {
+                throw new IllegalStateException("User is already unlocked");
+            }
+        } else {
+            user.setLocked(changed.isLock());
+            userRepository.save(user);
+        }
     }
 
     public void validatePassword(String password) {

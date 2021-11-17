@@ -1,8 +1,6 @@
 package com.muscle.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.muscle.trainings.entity.Training;
-import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.user.dto.*;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.response.BadgeResponse;
@@ -101,13 +99,23 @@ public class UserController {
     }
 
     /**
-     * Change user details
+     * Change my details
      * @param header
      * @param changeUserDetailsDto
      */
     @PutMapping("/myself")
-    public void changeUserDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
-        userService.changeUserDetails(header, changeUserDetailsDto);
+    public void changeMyDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
+        userService.changeMyDetails(header, changeUserDetailsDto);
+    }
+
+    /**
+     * Change user details
+     * @param id
+     * @param changeUserDetailsDto
+     */
+    @PutMapping("/user/lock")
+    public void changeUserDetails(@RequestParam Long id, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
+        userService.changeUserDetails(id, changeUserDetailsDto);
     }
 
     /**

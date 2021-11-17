@@ -1,6 +1,5 @@
-CREATE OR REPLACE FUNCTION initialize_user() RETURNS trigger AS '
+/*CREATE OR REPLACE FUNCTION initialize_user() RETURNS trigger AS '
     BEGIN
-        INSERT INTO iron_user_roles VALUES(NEW.id, 3);
         INSERT INTO point VALUES (nextval(''point_sequence''), 0, NEW.id);
         RETURN NULL;
     END;
@@ -10,7 +9,7 @@ DROP TRIGGER IF EXISTS initialize_user_trigger ON iron_user;
 CREATE TRIGGER initialize_user_trigger
     AFTER INSERT ON iron_user
     FOR EACH ROW
-    EXECUTE PROCEDURE initialize_user();
+    EXECUTE PROCEDURE initialize_user();*/
 
 CREATE OR REPLACE FUNCTION add_badge() RETURNS trigger AS '
 DECLARE
@@ -150,7 +149,102 @@ INSERT INTO iron_user VALUES(nextval('user_sequence'),'Mayleen_Gavin5973@elnee.t
 INSERT INTO iron_user_roles VALUES (1, 1);
 INSERT INTO iron_user_roles VALUES (2, 2);
 INSERT INTO iron_user_roles VALUES (3, 3);
-
+INSERT INTO iron_user_roles VALUES (4, 3);
+INSERT INTO iron_user_roles VALUES (5, 3);
+INSERT INTO iron_user_roles VALUES (6, 3);
+INSERT INTO iron_user_roles VALUES (7, 3);
+INSERT INTO iron_user_roles VALUES (8, 3);
+INSERT INTO iron_user_roles VALUES (9, 3);
+INSERT INTO iron_user_roles VALUES (10, 3);
+INSERT INTO iron_user_roles VALUES (11, 3);
+INSERT INTO iron_user_roles VALUES (12, 3);
+INSERT INTO iron_user_roles VALUES (13, 3);
+INSERT INTO iron_user_roles VALUES (14, 3);
+INSERT INTO iron_user_roles VALUES (15, 3);
+INSERT INTO iron_user_roles VALUES (16, 3);
+INSERT INTO iron_user_roles VALUES (17, 3);
+INSERT INTO iron_user_roles VALUES (18, 3);
+INSERT INTO iron_user_roles VALUES (19, 3);
+INSERT INTO iron_user_roles VALUES (20, 3);
+INSERT INTO iron_user_roles VALUES (21, 3);
+INSERT INTO iron_user_roles VALUES (22, 3);
+INSERT INTO iron_user_roles VALUES (23, 3);
+INSERT INTO iron_user_roles VALUES (24, 3);
+INSERT INTO iron_user_roles VALUES (25, 3);
+INSERT INTO iron_user_roles VALUES (26, 3);
+INSERT INTO iron_user_roles VALUES (27, 3);
+INSERT INTO iron_user_roles VALUES (28, 3);
+INSERT INTO iron_user_roles VALUES (29, 3);
+INSERT INTO iron_user_roles VALUES (30, 3);
+INSERT INTO iron_user_roles VALUES (31, 3);
+INSERT INTO iron_user_roles VALUES (32, 3);
+INSERT INTO iron_user_roles VALUES (33, 3);
+INSERT INTO iron_user_roles VALUES (34, 3);
+INSERT INTO iron_user_roles VALUES (35, 3);
+INSERT INTO iron_user_roles VALUES (36, 3);
+INSERT INTO iron_user_roles VALUES (37, 3);
+INSERT INTO iron_user_roles VALUES (38, 3);
+INSERT INTO iron_user_roles VALUES (39, 3);
+INSERT INTO iron_user_roles VALUES (40, 3);
+INSERT INTO iron_user_roles VALUES (41, 3);
+INSERT INTO iron_user_roles VALUES (42, 3);
+INSERT INTO iron_user_roles VALUES (43, 3);
+INSERT INTO iron_user_roles VALUES (44, 3);
+INSERT INTO iron_user_roles VALUES (45, 3);
+INSERT INTO iron_user_roles VALUES (46, 3);
+INSERT INTO iron_user_roles VALUES (47, 3);
+INSERT INTO iron_user_roles VALUES (48, 3);
+INSERT INTO iron_user_roles VALUES (49, 3);
+INSERT INTO iron_user_roles VALUES (50, 3);
+INSERT INTO iron_user_roles VALUES (51, 3);
+INSERT INTO iron_user_roles VALUES (52, 3);
+INSERT INTO iron_user_roles VALUES (53, 3);
+INSERT INTO iron_user_roles VALUES (54, 3);
+INSERT INTO iron_user_roles VALUES (55, 3);
+INSERT INTO iron_user_roles VALUES (56, 3);
+INSERT INTO iron_user_roles VALUES (57, 3);
+INSERT INTO iron_user_roles VALUES (58, 3);
+INSERT INTO iron_user_roles VALUES (59, 3);
+INSERT INTO iron_user_roles VALUES (60, 2);
+INSERT INTO iron_user_roles VALUES (61, 2);
+INSERT INTO iron_user_roles VALUES (62, 2);
+INSERT INTO iron_user_roles VALUES (63, 2);
+INSERT INTO iron_user_roles VALUES (64, 2);
+INSERT INTO iron_user_roles VALUES (65, 2);
+INSERT INTO iron_user_roles VALUES (66, 2);
+INSERT INTO iron_user_roles VALUES (67, 2);
+INSERT INTO iron_user_roles VALUES (68, 2);
+INSERT INTO iron_user_roles VALUES (69, 2);
+INSERT INTO iron_user_roles VALUES (70, 2);
+INSERT INTO iron_user_roles VALUES (71, 2);
+INSERT INTO iron_user_roles VALUES (72, 2);
+INSERT INTO iron_user_roles VALUES (73, 2);
+INSERT INTO iron_user_roles VALUES (74, 2);
+INSERT INTO iron_user_roles VALUES (75, 2);
+INSERT INTO iron_user_roles VALUES (76, 2);
+INSERT INTO iron_user_roles VALUES (77, 2);
+INSERT INTO iron_user_roles VALUES (78, 2);
+INSERT INTO iron_user_roles VALUES (79, 2);
+INSERT INTO iron_user_roles VALUES (80, 1);
+INSERT INTO iron_user_roles VALUES (81, 1);
+INSERT INTO iron_user_roles VALUES (82, 1);
+INSERT INTO iron_user_roles VALUES (83, 1);
+INSERT INTO iron_user_roles VALUES (84, 1);
+INSERT INTO iron_user_roles VALUES (85, 1);
+INSERT INTO iron_user_roles VALUES (86, 1);
+INSERT INTO iron_user_roles VALUES (87, 1);
+INSERT INTO iron_user_roles VALUES (88, 1);
+INSERT INTO iron_user_roles VALUES (89, 1);
+INSERT INTO iron_user_roles VALUES (90, 1);
+INSERT INTO iron_user_roles VALUES (91, 1);
+INSERT INTO iron_user_roles VALUES (92, 1);
+INSERT INTO iron_user_roles VALUES (93, 1);
+INSERT INTO iron_user_roles VALUES (94, 1);
+INSERT INTO iron_user_roles VALUES (95, 1);
+INSERT INTO iron_user_roles VALUES (96, 1);
+INSERT INTO iron_user_roles VALUES (97, 1);
+INSERT INTO iron_user_roles VALUES (98, 1);
+INSERT INTO iron_user_roles VALUES (99, 1);
 
 --TRAINING REQUESTS
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 10);
@@ -217,27 +311,27 @@ INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms'
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 45);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 45);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 45);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 67);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 67);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 67);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 67);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 59);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 59);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 59);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 59);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 55);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 55);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 55);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 55);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 72);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 72);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 72);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 72);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 87);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 87);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 87);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 87);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 3);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 3);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 3);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 3);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 45);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 45);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 45);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 45);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 6);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 6);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 6);
 INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 6);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 90);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 90);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 90);
-INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 90);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 19);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 19);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 19);
+INSERT INTO training_request VALUES(nextval('training_request_sequence'), 'Arms', NOW()::TIMESTAMP, 'Description', 'Mediocre', null, 'NEW', 'Title', null, 19);
