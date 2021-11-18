@@ -1,10 +1,7 @@
 package com.muscle.trainings.service;
 
-import com.muscle.trainings.dto.ExerciseDto;
 import com.muscle.trainings.dto.TrainingDto;
-import com.muscle.trainings.entity.Exercise;
 import com.muscle.trainings.entity.Training;
-import com.muscle.trainings.entity.TrainingRequest;
 import com.muscle.trainings.mapper.TrainingMapper;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.responses.TrainingResponse;
@@ -44,8 +41,8 @@ public class TrainingsService {
         return trainingsRepository.findAll().stream().map(Training::response).collect(Collectors.toList());
     }
 
-    public Page<Training> getPaginatedTrainings(Pageable pageable) {
-        return trainingsRepository.findAll(pageable);
+    public Page<Training> getPaginatedTrainings(Pageable pageable, String query) {
+        return trainingsRepository.findByNameContainsOrDifficultyContains(query, query, pageable);
     }
 
     public TrainingResponse saveTraining(TrainingDto trainingDto) {

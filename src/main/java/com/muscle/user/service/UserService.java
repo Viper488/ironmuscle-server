@@ -118,8 +118,8 @@ public class UserService implements UserDetailsService {
         return userRepository.findByRole(roleName).stream().map(IronUser::dto).collect(Collectors.toList());
     }
 
-    public Page<IronUser> getPaginatedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<IronUser> getPaginatedUsers(Pageable pageable, String query) {
+        return userRepository.findByUsernameContainsOrderByUsernameAsc(pageable, query);
     }
 
     public void requestPasswordChange(String email) {

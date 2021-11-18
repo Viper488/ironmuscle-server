@@ -116,9 +116,11 @@ public class TrainingRequestController {
      */
     @GetMapping("/all")
     Map<String, Object> getRequests(@RequestParam(defaultValue = "0") Integer page,
-                                   @RequestParam(defaultValue = "100") Integer size) {
+                                   @RequestParam(defaultValue = "100") Integer size,
+                                    @RequestParam(defaultValue = "NEW") String status,
+                                    @RequestParam(defaultValue = "") String query) {
         Pageable paging = PageRequest.of(page, size);
-        Page<TrainingRequest> requestPage = trainingRequestService.getPaginatedRequests(paging);
+        Page<TrainingRequest> requestPage = trainingRequestService.getPaginatedRequests(paging, status, query);
 
         List<TrainingRequestResponse> requestsList = requestPage.getContent()
                 .stream().map(TrainingRequest::detailedResponse).collect(Collectors.toList());

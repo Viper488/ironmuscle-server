@@ -1,6 +1,8 @@
 package com.muscle.user.repository;
 
 import com.muscle.user.entity.IronUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,4 +19,7 @@ public interface UserRepository extends JpaRepository<IronUser, Long> {
 
     @Query(value = "SELECT DISTINCT * FROM iron_user iu INNER JOIN iron_user_roles iur ON iur.iron_user_id = iu.id INNER JOIN role r ON r.id = iur.roles_id WHERE r.name = ?1", nativeQuery = true)
     List<IronUser> findByRole(String roleName);
+
+    Page<IronUser> findByUsernameContainsOrderByUsernameAsc(Pageable pageable, String username);
+
 }

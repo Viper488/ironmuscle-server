@@ -83,8 +83,8 @@ public class TrainingRequestService {
         return trainingRequestRepository.save(trainingRequest).detailedResponse();
     }
 
-    public Page<TrainingRequest> getPaginatedRequests(Pageable pageable) {
-        return trainingRequestRepository.findByStatus("NEW", pageable);
+    public Page<TrainingRequest> getPaginatedRequests(Pageable pageable, String status, String query) {
+        return trainingRequestRepository.findByStatusTitleDescription(status, query, pageable);
     }
 
     @Transactional

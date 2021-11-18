@@ -152,10 +152,11 @@ public class UserController {
      * @return
      */
     @GetMapping("/users")
-    Map<String, Object> getTrainings(@RequestParam(defaultValue = "0") Integer page,
-                                     @RequestParam(defaultValue = "100") Integer size) {
+    Map<String, Object> getUsers(@RequestParam(defaultValue = "0") Integer page,
+                                     @RequestParam(defaultValue = "100") Integer size,
+                                 @RequestParam(defaultValue = "") String query) {
         Pageable paging = PageRequest.of(page, size);
-        Page<IronUser> userPage = userService.getPaginatedUsers(paging);
+        Page<IronUser> userPage = userService.getPaginatedUsers(paging, query);
 
         List<IronUserDto> usersList = userPage.getContent()
                 .stream().map(IronUser::dtoResponse).collect(Collectors.toList());

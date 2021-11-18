@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -44,9 +45,10 @@ public class TrainingsController {
      */
     @GetMapping("/all")
     Map<String, Object> getTrainings(@RequestParam(defaultValue = "0") Integer page,
-                                    @RequestParam(defaultValue = "100") Integer size) {
+                                    @RequestParam(defaultValue = "100") Integer size,
+                                    @RequestParam(defaultValue = "") String query) {
         Pageable paging = PageRequest.of(page, size);
-        Page<Training> trainingPage = trainingsService.getPaginatedTrainings(paging);
+        Page<Training> trainingPage = trainingsService.getPaginatedTrainings(paging, query);
 
         List<TrainingResponse> trainingsList = trainingPage.getContent()
                 .stream().map(Training::response).collect(Collectors.toList());

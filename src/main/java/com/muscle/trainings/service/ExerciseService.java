@@ -25,8 +25,8 @@ public class ExerciseService {
         return exerciseRepository.findAll().stream().map(Exercise::dto).collect(Collectors.toList());
     }
 
-    public Page<Exercise> getPaginatedExercises(Pageable pageable) {
-        return exerciseRepository.findAll(pageable);
+    public Page<Exercise> getPaginatedExercises(Pageable pageable, String query) {
+        return exerciseRepository.findByNameContainsOrderByNameAsc(pageable, query);
     }
 
     public ExerciseDto saveExercise(ExerciseDto exerciseDto) {

@@ -52,9 +52,10 @@ public class ExerciseController {
      */
     @GetMapping("/all")
     Map<String, Object> getExercises(@RequestParam(defaultValue = "0") Integer page,
-                                     @RequestParam(defaultValue = "100") Integer size) {
+                                     @RequestParam(defaultValue = "100") Integer size,
+                                     @RequestParam(defaultValue = "") String query) {
         Pageable paging = PageRequest.of(page, size);
-        Page<Exercise> exercisesPage = exerciseService.getPaginatedExercises(paging);
+        Page<Exercise> exercisesPage = exerciseService.getPaginatedExercises(paging, query);
 
         List<ExerciseDto> exercisesList = exercisesPage.getContent()
                 .stream().map(Exercise::dto).collect(Collectors.toList());
