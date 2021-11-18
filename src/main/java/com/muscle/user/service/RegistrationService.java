@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +74,8 @@ public class RegistrationService {
         confirmationTokenService.setConfirmedAt(token);
 
         userService.enableUser(confirmationToken.getIronUser().getEmail());
-        pointService.initializePoints(confirmationToken.getIronUser());
+        if(confirmationToken.getIronUser().getRoles().stream().filter(role -> role.getName().equals("USER")).collect(Collectors.toList()).size() > 0)
+            pointService.initializePoints(confirmationToken.getIronUser());
 
         return "Confirmed";
 
