@@ -8,6 +8,7 @@ import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.Role;
 import com.muscle.user.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RegistrationService {
 
+    @Value("${email.confirm.link}")
+    private String confirmEmailBaseLink;
     private final RoleRepository roleRepository;
     private final UserService userService;
     private final EmailValidator emailValidator;
@@ -52,7 +55,7 @@ public class RegistrationService {
 
         );
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        String link = confirmEmailBaseLink + token;
         emailSender.send(request.getEmail(), buildUserEmail(request.getUsername(), link));
         return token;
     }
@@ -77,7 +80,7 @@ public class RegistrationService {
         if(confirmationToken.getIronUser().getRoles().stream().filter(role -> role.getName().equals("USER")).collect(Collectors.toList()).size() > 0)
             pointService.initializePoints(confirmationToken.getIronUser());
 
-        return "Confirmed";
+        return "Confirmed!";
 
     }
 

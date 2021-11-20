@@ -1,5 +1,6 @@
 package com.muscle.trainings.service;
 
+import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.UserTrainings;
 import com.muscle.trainings.repository.TrainingExerciseRepository;
 import com.muscle.trainings.repository.TrainingsRepository;
@@ -8,9 +9,12 @@ import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.responses.UserTrainingResponse;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.repository.UserRepository;
+import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserTrainingsService {
 
+    private final UserService userService;
     private final TrainingExerciseRepository trainingExerciseRepository;
     private final UserTrainingsRepository userTrainingsRepository;
     private final UserRepository userRepository;
@@ -38,19 +43,15 @@ public class UserTrainingsService {
                 .build()).response();
     }
 
-    public List<TrainingResponse> getUserTrainings(String header) {
+    public Page<Training> getPaginatedUserTrainings(Pageable pageable, String header, String type, String query) {
+        IronUser user = userService.getUserFromHeader(header);
 
-        String username = jwtUtil.extractUsername(header);
-        List<UserTrainings> userTrainingsList = userTrainingsRepository
-                .findAllByUserId(userRepository.findByUsername(username)
-                        .orElseThrow(() -> new IllegalStateException("User not found"))
-                        .getId());
-
-        if(userTrainingsList.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        return userTrainingsList.stream().map(userTrainings -> userTrainings.getTraining().response()).collect(Collectors.toList());
+        if(type.equals("standard"))
+            return trainingsRepository.findStandard(query, pageable);
+        if(type.equals("custom"))
+            return trainingsRepository.findCustom(user.getId(), query, pageable);
+        else
+            return trainingsRepository.findStandardAndCustom(user.getId(), query, pageable);
     }
 
     @Transactional

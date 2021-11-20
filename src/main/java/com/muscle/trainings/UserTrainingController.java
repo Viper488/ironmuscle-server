@@ -1,5 +1,6 @@
 package com.muscle.trainings;
 
+import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.other.TrainingHistory;
 import com.muscle.trainings.responses.*;
 import com.muscle.trainings.service.PointService;
@@ -11,12 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.Tuple;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +43,30 @@ public class UserTrainingController {
     }
 
     /**
-     * Show all user trainings
-     * @param header
+     * Get all user trainings
+     * @param page
+     * @param size
      * @return
      */
     @GetMapping("/trainings")
-    List<TrainingResponse> getUserTrainings(@RequestHeader("Authorization") String header) {
-        return userTrainingsService.getUserTrainings(header);
+    Map<String, Object> getUserTrainings(@RequestHeader("Authorization") String header,
+                                     @RequestParam(defaultValue = "0") Integer page,
+                                     @RequestParam(defaultValue = "100") Integer size,
+                                     @RequestParam(defaultValue = "") String type,
+                                     @RequestParam(defaultValue = "") String query) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<Training> trainingPage = userTrainingsService.getPaginatedUserTrainings(paging, header, type, query);
+
+        List<TrainingResponse> trainingsList = trainingPage.getContent()
+                .stream().map(Training::response).collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("trainings", trainingsList);
+        response.put("currentPage", trainingPage.getNumber());
+        response.put("totalItems", trainingPage.getTotalElements());
+        response.put("totalPages", trainingPage.getTotalPages());
+
+        return response;
     }
 
     /**
