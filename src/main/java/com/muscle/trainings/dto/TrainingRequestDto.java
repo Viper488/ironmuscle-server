@@ -1,6 +1,8 @@
 package com.muscle.trainings.dto;
 
+import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.user.dto.IronUserDto;
+import com.muscle.user.response.IronUserResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -26,5 +28,5 @@ public class TrainingRequestDto {
     private LocalDateTime resolved_at;
     private IronUserDto user;
     private IronUserDto trainer;
-    private List<CommentDto> comments;
+    private TrainingDto training;
 }

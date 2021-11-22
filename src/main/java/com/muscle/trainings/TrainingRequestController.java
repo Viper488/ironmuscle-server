@@ -1,8 +1,10 @@
 package com.muscle.trainings;
 
 import com.muscle.trainings.dto.TrainingRequestDto;
+import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.TrainingRequest;
 import com.muscle.trainings.responses.TrainingRequestResponse;
+import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.service.TrainingRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -45,7 +47,7 @@ public class TrainingRequestController {
     }
 
     /**
-     * Get request by id
+     * Delete request by id
      * @param id
      * @return
      */
@@ -55,7 +57,7 @@ public class TrainingRequestController {
     }
 
     /**
-     * Get request by id
+     * Delete done requests
      * @param header
      * @return
      */
@@ -82,8 +84,24 @@ public class TrainingRequestController {
      * @return
      */
     @GetMapping("/user")
-    List<TrainingRequestResponse> getUserRequests(@RequestHeader("Authorization") String header) {
-        return trainingRequestService.getUserRequests(header);
+    Map<String, Object> getUserRequests(@RequestHeader("Authorization") String header,
+                                         @RequestParam(defaultValue = "0") Integer page,
+                                         @RequestParam(defaultValue = "100") Integer size,
+                                         @RequestParam(defaultValue = "") String status,
+                                         @RequestParam(defaultValue = "") String query) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<TrainingRequest> requestPage = trainingRequestService.getPaginatedUserRequests(paging, header, status, query);
+
+        List<TrainingRequestResponse> requestsList = requestPage.getContent()
+                .stream().map(TrainingRequest::detailedResponse).collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("requests", requestsList);
+        response.put("currentPage", requestPage.getNumber());
+        response.put("totalItems", requestPage.getTotalElements());
+        response.put("totalPages", requestPage.getTotalPages());
+
+        return response;
     }
 
     /**
@@ -117,7 +135,7 @@ public class TrainingRequestController {
     @GetMapping("/all")
     Map<String, Object> getRequests(@RequestParam(defaultValue = "0") Integer page,
                                    @RequestParam(defaultValue = "100") Integer size,
-                                    @RequestParam(defaultValue = "NEW") String status,
+                                    @RequestParam(defaultValue = "new") String status,
                                     @RequestParam(defaultValue = "") String query) {
         Pageable paging = PageRequest.of(page, size);
         Page<TrainingRequest> requestPage = trainingRequestService.getPaginatedRequests(paging, status, query);

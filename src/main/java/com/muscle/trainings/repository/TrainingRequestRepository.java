@@ -12,15 +12,22 @@ import java.util.List;
 
 @Repository
 public interface TrainingRequestRepository extends JpaRepository<TrainingRequest, Long> {
-    List<TrainingRequest> findByUserId(Long id);
     List<TrainingRequest> findByTrainerUsernameAndStatus(String username, String status);
-    Page<TrainingRequest> findByStatus(String status, Pageable pageable);
 
-    @Query(value = "SELECT * FROM training_request tr WHERE tr.status = ?1 AND (tr.title LIKE %?2% OR tr.description LIKE %?2%)",
-            countQuery = "WITH request_count AS (SELECT * FROM training_request tr WHERE tr.status = ?1 AND (tr.title LIKE %?2% OR tr.description LIKE %?2%) SELECT COUNT(*) FROM request_count)",
+    @Query(value = "SELECT * FROM training_request tr WHERE tr.status = ?1 AND (tr.title LIKE %?2% OR tr.description LIKE %?2%) ORDER BY tr.created_at ASC",
+            countQuery = "WITH request_count AS (SELECT * FROM training_request tr WHERE tr.status = ?1 AND (tr.title LIKE %?2% OR tr.description LIKE %?2%) ORDER BY tr.created_at ASC) SELECT COUNT(*) FROM request_count",
             nativeQuery = true)
-    Page<TrainingRequest> findByStatusTitleDescription(String status, String query, Pageable pageable);
+    Page<TrainingRequest> findByStatusAndQuery(String status, String query, Pageable pageable);
 
+    @Query(value = "SELECT * FROM training_request tr WHERE tr.user_id = ?1 AND tr.status LIKE %?2% AND (tr.title LIKE %?3% OR tr.description LIKE %?3%) ORDER BY tr.created_at DESC",
+            countQuery = "WITH user_requests AS (SELECT * FROM training_request tr WHERE tr.user_id = ?1 AND tr.status LIKE %?2% AND (tr.title LIKE %?3% OR tr.description LIKE %?3%) ORDER BY tr.created_at DESC) SELECT COUNT(*) FROM user_requests)",
+            nativeQuery = true)
+    Page<TrainingRequest> findByUserIdAndStatusAndQuery(Long userId, String status, String query, Pageable pageable);
+
+    @Query(value = "SELECT * FROM training_request tr WHERE tr.trainer_id = ?1 AND tr.status LIKE %?2% AND (tr.title LIKE %?3% OR tr.description LIKE %?3%) ORDER BY tr.created_at DESC",
+            countQuery = "WITH trainer_requests AS (SELECT * FROM training_request tr WHERE tr.trainer_id = ?1 AND tr.status LIKE %?2% AND (tr.title LIKE %?3% OR tr.description LIKE %?3%) ORDER BY tr.created_at DESC) SELECT COUNT(*) FROM trainer_requests)",
+            nativeQuery = true)
+    Page<TrainingRequest> findByTrainerIdAndStatusAndQuery(Long userId, String status, String query, Pageable pageable);
 
     void deleteById(@Param("id") Long requestId);
     void deleteByUserUsernameAndStatus(String username, String status);

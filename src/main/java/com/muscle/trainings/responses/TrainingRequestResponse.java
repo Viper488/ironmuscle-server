@@ -25,4 +25,5 @@ public class TrainingRequestResponse {
     private LocalDateTime resolved_at;
     private IronUserResponse user;
     private IronUserResponse trainer;
+    private TrainingResponse training;
 }
