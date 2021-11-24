@@ -83,11 +83,15 @@ public class UserService implements UserDetailsService {
     }
 
     public String signUpUser(IronUser ironUser){
-        boolean userExists = userRepository
+        boolean usernameTaken = userRepository
+                .findByUsername(ironUser.getUsername())
+                .isPresent();
+
+        boolean emailTaken = userRepository
                 .findByEmail(ironUser.getEmail())
                 .isPresent();
 
-        if(userExists) {
+        if(usernameTaken || emailTaken) {
             throw new IllegalStateException("User already exists");
         }
 
