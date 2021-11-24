@@ -22,23 +22,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.muscle.email.service.impl.EmailService.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
+    @Value("${email.confirm.link}")
+    public String confirmEmailBaseLink;
     @Value("${password.reset.link}")
-    private String resetPasswordBaseLink;
+    public String resetPasswordBaseLink;
+    @Value("${user.create.link}")
+    public String createUserBaseLink;
     private final static String  USER_NOT_FOUND_MSG = "User %s not found in database";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
     private final PasswordTokenService passwordTokenService;
     private final EmailSender emailSender;
+    private final EmailValidator emailValidator;
     private final JwtUtil jwtUtil;
 
     public IronUser getUserFromHeader(String header) {
@@ -137,41 +143,6 @@ public class UserService implements UserDetailsService {
         emailSender.send(user.getEmail(), buildPasswordEmail(user.getUsername(), link));
     }
 
-    private String buildPasswordEmail(String name, String link) {
-        return "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\"  style=\"border-collapse:collapse;width:100%;min-width:100%;height:auto\">\n"+
-                "<tbody>\n"+
-                "<tr>\n"+
-                "<td width=\"100%\" valign=\"top\" bgcolor=\"#ffffff\" style=\"padding-top:20px\">\n"+
-                "<table width=\"580\" class=\"m_-5530667538910658334deviceWidth\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" bgcolor=\"#ffffff\" style=\"border-collapse:collapse;margin:0 auto\">\n"+
-                "<tbody>\n"+
-                "<tr>\n"+
-                "<td style=\"font-size:13px;color:#282828;font-weight:normal;text-align:left;font-family:'Open Sans',sans-serif;line-height:24px;vertical-align:top;padding:15px 8px 10px 8px\" bgcolor=\"#ffffff\">\n"+
-                "<h1 style=\"text-align:center;font-weight:600;margin:30px 0 50px 0\"><span class=\"il\">PASSWORD</span> RESET REQUEST</h1>\n"+
-                "<p>Dear "+ name +",</p>\n"+
-                "<p>We have received your request to reset your <span class=\"il\">password</span>. Please click the link below to complete the reset. <b>This password reset is only valid for the next 24 hours.</b></p>\n"+
-                "</td>\n"+
-                "</tr>\n"+
-                "<tr>\n"+
-                "<td style=\"padding-bottom:30px\">\n"+
-                "<a href=\"" + link +"\" style=\"padding:10px;width:300px;display:block;text-decoration:none;border:1px solid #ff6c37;text-align:center;font-weight:bold;font-size:14px;font-family:'Open Sans',sans-serif;color:#ffffff;background:#ff6c37;border-radius:5px; line-height:17px;margin:0 auto\" target=\"_blank\">\n"+
-                "Reset My <span class=\"il\">Password</span>\n"+
-                "</a>\n"+
-                "</td>\n"+
-                "</tr>\n"+
-                "<tr>\n"+
-                "<td style=\"font-family:'Open Sans',sans-serif;font-size:13px;padding:0px 10px 0px 10px;text-align:left\">\n"+
-                "<p>If you need additional assistance, or you did not make this <span class=\"il\">change</span>, please contact \n"+
-                "<a href=\"mailto:help@ironmuscle.com\" style=\"color:#ff6c37;text-decoration:underline;font-weight:bold\" target=\"_blank\">help@ironmuscle.com</a>.</p>\n"+
-                "<p>Cheers,<br>The IronMuscle Team</p>\n"+
-                "</td>\n"+
-                "</tr>\n"+
-                "</tbody></table>\n"+
-                "</td>\n"+
-                "</tr>\n"+
-                "</tbody>\n"+
-                "</table>";
-    }
-
     @Transactional
     public void resetPassword(ResetPasswordDto resetPasswordDto) {
         PasswordToken passwordToken = passwordTokenService.getToken(resetPasswordDto.getToken())
@@ -224,12 +195,29 @@ public class UserService implements UserDetailsService {
     public void changeMyDetails(String header, ChangeUserDetailsDto changed) {
         IronUser user = getUserFromHeader(header);
 
-        if(!userRepository.findByEmail(changed.getEmail()).isPresent()) {
-            user.setEmail(changed.getEmail());
-            userRepository.save(user);
-        }
-        else
+        if(userRepository.findByEmail(changed.getEmail()).isPresent())
             throw new IllegalStateException("Email already taken");
+
+        if(!emailValidator.test(changed.getEmail()))
+            throw new IllegalArgumentException("New email is not valid");
+
+        user.setEnabled(false);
+        user.setEmail(changed.getEmail());
+        userRepository.save(user);
+
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = ConfirmationToken.builder()
+                .token(token)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusHours(24))
+                .ironUser(user)
+                .build();
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        String link = confirmEmailBaseLink + token;
+        emailSender.send(user.getEmail(), buildUserEmail(user.getUsername(), link));
     }
 
     public void changeUserDetails(Long id, ChangeUserDetailsDto changed) {

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -98,18 +99,33 @@ public class UserController {
         return userService.getMyself(header);
     }
 
+/*    *//**
+     * Change my details
+     * @param header
+     * @param changeUserDetailsDto
+     *//*
+    @PutMapping("/myself")
+    public void changeMyDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
+        userService.changeMyDetails(header, changeUserDetailsDto);
+    }*/
+
     /**
      * Change my details
      * @param header
      * @param changeUserDetailsDto
      */
     @PutMapping("/myself")
-    public void changeMyDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
-        userService.changeMyDetails(header, changeUserDetailsDto);
+    public ResponseEntity changeMyDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
+        try {
+            userService.changeMyDetails(header, changeUserDetailsDto);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     /**
-     * Change user details
+     * Lock user
      * @param id
      * @param changeUserDetailsDto
      */
