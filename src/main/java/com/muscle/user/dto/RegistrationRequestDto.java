@@ -13,8 +13,6 @@ import java.util.Optional;
 @EqualsAndHashCode
 @ToString
 public class RegistrationRequestDto {
-    private final Optional<String> name;
-    private final Optional<String> lastName;
     private final String username;
     private final String email;
     private final String password;

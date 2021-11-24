@@ -3,7 +3,6 @@ package com.muscle.user;
 import com.muscle.user.dto.RegistrationRequestDto;
 import com.muscle.user.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -21,12 +20,8 @@ public class RegistrationController {
      */
 
     @PostMapping()
-    ResponseEntity<String> register(@RequestBody RegistrationRequestDto request){
-        try {
-            return ResponseEntity.ok().body(registrationService.register(request));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    void register(@RequestBody RegistrationRequestDto request){
+        registrationService.register(request);
     }
 
     /**
@@ -35,11 +30,18 @@ public class RegistrationController {
      * @return
      */
     @GetMapping("/confirm")
-    ResponseEntity<String> confirm(@RequestParam("token") String token){
-        try {
-            return ResponseEntity.ok().body(registrationService.confirmToken(token));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    void confirm(@RequestParam("token") String token){
+        registrationService.confirmToken(token);
+    }
+
+    /**
+     * Initialize user by admin
+     * @param request
+     * @return
+     */
+
+    @PostMapping("/user")
+    void initializeUser(@RequestBody RegistrationRequestDto request){
+        registrationService.initializeUser(request);
     }
 }

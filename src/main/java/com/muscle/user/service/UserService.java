@@ -114,10 +114,6 @@ public class UserService implements UserDetailsService {
         userRepository.save(ironUser);
     }
 
-    public List<IronUserDto> getUsersByRole(String roleName) {
-        return userRepository.findByRole(roleName).stream().map(IronUser::dto).collect(Collectors.toList());
-    }
-
     public Page<IronUser> getPaginatedUsers(Pageable pageable, String query) {
         return userRepository.findByUsernameContainsOrderByUsernameAsc(pageable, query);
     }
