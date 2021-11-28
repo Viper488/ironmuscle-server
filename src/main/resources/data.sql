@@ -1,16 +1,3 @@
-/*CREATE OR REPLACE FUNCTION initialize_user() RETURNS trigger AS '
-    BEGIN
-        INSERT INTO point VALUES (nextval(''point_sequence''), 0, NEW.id);
-        RETURN NULL;
-    END;
-' LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS initialize_user_trigger ON iron_user;
-CREATE TRIGGER initialize_user_trigger
-    AFTER INSERT ON iron_user
-    FOR EACH ROW
-    EXECUTE PROCEDURE initialize_user();*/
-
 CREATE OR REPLACE FUNCTION add_badge() RETURNS trigger AS '
 DECLARE
 d_badge_id BIGINT;

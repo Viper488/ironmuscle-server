@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.muscle.user.util.JwtUtil.generateErrorBody;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -50,7 +51,7 @@ public class UserController {
                     String username = jwtUtil.extractUsername(authorizationHeader);
 
                     UserDetails userDetails = userService.loadUserByUsername(username);
-                    String access_token = jwtUtil.createToken(request, userDetails, 1000 * 60 * 60 * 24);
+                    String access_token = jwtUtil.createToken(request, userDetails, 1000 * 10);//60 * 60 * 24);
 
                     Map<String, String> tokens = new HashMap<>();
                     tokens.put("access_token", access_token);
@@ -59,24 +60,13 @@ public class UserController {
                     new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
                 } catch (Exception e) {
-
                     response.setStatus(UNAUTHORIZED.value());
                     response.setContentType(APPLICATION_JSON_VALUE);
-                    new ObjectMapper().writeValue(response.getOutputStream(), jwtUtil.generateErrorResponse(UNAUTHORIZED, request.getServletPath(), e.getMessage()));
+                    new ObjectMapper().writeValue(response.getOutputStream(), jwtUtil.generateErrorResponse(UNAUTHORIZED, e.getMessage()));
                 }
             } else {
                 throw new RuntimeException("Refresh token is missing");
             }
-    }
-
-    /** Welcome message for logged user
-     *
-     * @param header
-     * @return
-     */
-    @GetMapping("/welcome")
-    public String getWelcome(@RequestHeader("Authorization") String header) {
-        return userService.getWelcomeMsg(header);
     }
 
     /**
@@ -110,28 +100,28 @@ public class UserController {
     }*/
 
     /**
-     * Change my details
+     * Change email
      * @param header
-     * @param changeUserDetailsDto
+     * @param changeUserDetails
      */
     @PutMapping("/myself")
-    public ResponseEntity changeMyDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
+    public ResponseEntity changeEmail(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetails changeUserDetails) {
         try {
-            userService.changeMyDetails(header, changeUserDetailsDto);
+            userService.changeEmail(header, changeUserDetails);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
         }
     }
 
     /**
      * Lock user
      * @param id
-     * @param changeUserDetailsDto
+     * @param changeUserDetails
      */
     @PutMapping("/user/lock")
-    public void changeUserDetails(@RequestParam Long id, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
-        userService.changeUserDetails(id, changeUserDetailsDto);
+    public void lockUser(@RequestParam Long id, @RequestBody ChangeUserDetails changeUserDetails) {
+        userService.lockUser(id, changeUserDetails);
     }
 
     /**

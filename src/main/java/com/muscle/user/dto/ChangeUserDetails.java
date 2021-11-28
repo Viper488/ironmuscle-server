@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class ChangeUserDetailsDto {
+public class ChangeUserDetails {
     private final String email;
     private final boolean lock;
 }

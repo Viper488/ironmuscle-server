@@ -56,10 +56,6 @@ public class UserService implements UserDetailsService {
         return getUserFromHeader(header).response();
     }
 
-    public String getWelcomeMsg(String header) {
-        return "Welcome " + getUserFromHeader(header).getUsername();
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<IronUser> user = userRepository.findByUsername(username);
@@ -196,7 +192,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void changeMyDetails(String header, ChangeUserDetailsDto changed) {
+    public void changeEmail(String header, ChangeUserDetails changed) {
         IronUser user = getUserFromHeader(header);
 
         if(userRepository.findByEmail(changed.getEmail()).isPresent())
@@ -214,7 +210,6 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = ConfirmationToken.builder()
                 .token(token)
                 .createdAt(LocalDateTime.now())
-                .expiresAt(LocalDateTime.now().plusHours(24))
                 .ironUser(user)
                 .build();
 
@@ -224,7 +219,7 @@ public class UserService implements UserDetailsService {
         emailSender.send(user.getEmail(), buildUserEmail(user.getUsername(), link));
     }
 
-    public void changeUserDetails(Long id, ChangeUserDetailsDto changed) {
+    public void lockUser(Long id, ChangeUserDetails changed) {
         IronUser user = userRepository.findById(id)
                 .orElseThrow(()-> new IllegalStateException("User not found"));
 

@@ -1,6 +1,6 @@
 package com.muscle.user.mapper;
 
-import com.muscle.user.dto.ChangeUserDetailsDto;
+import com.muscle.user.dto.ChangeUserDetails;
 import com.muscle.user.entity.IronUser;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -11,5 +11,5 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface IronUserMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateUserFromDto(ChangeUserDetailsDto dto, @MappingTarget IronUser entity);
+    void updateUserFromDto(ChangeUserDetails dto, @MappingTarget IronUser entity);
 }

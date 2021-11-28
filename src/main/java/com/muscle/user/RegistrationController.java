@@ -6,6 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.muscle.user.util.JwtUtil.generateErrorBody;
+
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
@@ -47,7 +53,7 @@ public class RegistrationController {
             registrationService.initializeUser(request);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
         }
     }
 }

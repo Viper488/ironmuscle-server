@@ -1,12 +1,8 @@
 package com.muscle.user.filters;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muscle.user.util.JwtUtil;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -58,7 +54,7 @@ public class UserAuthorizationFilter extends OncePerRequestFilter {
 
                     response.setStatus(status.value());
                     response.setContentType(APPLICATION_JSON_VALUE);
-                    new ObjectMapper().writeValue(response.getOutputStream(), jwtUtil.generateErrorResponse(status, request.getServletPath(), e.getMessage()));
+                    new ObjectMapper().writeValue(response.getOutputStream(), jwtUtil.generateErrorResponse(status, e.getMessage()));
                 }
             } else {
                 filterChain.doFilter(request, response);
