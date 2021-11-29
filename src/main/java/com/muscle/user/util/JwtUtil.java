@@ -42,8 +42,8 @@ public class JwtUtil {
 
     public Map<String, String> generateTokens(HttpServletRequest request, Authentication authResult) {
         UserDetails userDetails = (UserDetails) authResult.getPrincipal();
-        String access_token = createToken(request, userDetails, 1000 * 10);//60 * //60 * 24);
-        String refresh_token = createToken(request, userDetails, 1000 * 20);// * 60 * 24 * 7);
+        String access_token = createToken(request, userDetails, 1000 * 60 * 60 * 24);
+        String refresh_token = createToken(request, userDetails, 1000 * 60 * 60 * 24 * 7);
         Map<String, String> tokens = new HashMap<>();
 
         tokens.put("access_token", access_token);
@@ -79,7 +79,7 @@ public class JwtUtil {
 
         errors.put("timestamp", new Date(System.currentTimeMillis()).toString());
         errors.put("status", status);
-        errors.put("error", e.getStackTrace());
+        errors.put("error", e.getCause());
         errors.put("message", e.getMessage());
 
         return errors;

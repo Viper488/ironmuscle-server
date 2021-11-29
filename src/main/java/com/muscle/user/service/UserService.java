@@ -20,8 +20,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -47,15 +50,18 @@ public class UserService implements UserDetailsService {
     private final EmailValidator emailValidator;
     private final JwtUtil jwtUtil;
 
+    @Transactional
     public IronUser getUserFromHeader(String header) {
         return userRepository.findByUsername(jwtUtil.extractUsername(header))
                 .orElseThrow(() -> new IllegalStateException("User not found"));
     }
 
+    @Transactional
     public IronUserResponse getMyself(String header) {
         return getUserFromHeader(header).response();
     }
 
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<IronUser> user = userRepository.findByUsername(username);
@@ -120,6 +126,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(ironUser);
     }
 
+    @Transactional
     public Page<IronUser> getPaginatedUsers(Pageable pageable, String query) {
         return userRepository.findByUsernameContainsOrderByUsernameAsc(pageable, query);
     }
@@ -238,6 +245,18 @@ public class UserService implements UserDetailsService {
     public void validatePassword(String password) {
         if(!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")){
             throw new IllegalStateException("Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character");
+        }
+    }
+
+    @Transactional
+    public void changeUserIcon(String header, MultipartFile file) throws IOException {
+        IronUser user = getUserFromHeader(header);
+        if(Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
+            user.setIcon(file.getBytes());
+            userRepository.save(user);
+            log.info("FILE: "+ file.getOriginalFilename() + ", " + file.getContentType());
+        } else {
+            throw new IllegalArgumentException("Wrong file format");
         }
     }
 }

@@ -17,6 +17,7 @@ public class IronUserDto {
     private String username;
     private String email;
     private String password;
+    private byte[] icon;
     private Boolean locked;
     private Boolean enabled;
     private List<RoleDto> roles;

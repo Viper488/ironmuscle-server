@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ).permitAll();
 
         http.authorizeRequests().antMatchers("/api/v*/password/reset?token=*&password=*").permitAll();
-        http.authorizeRequests().antMatchers("/api/v*/welcome").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/user/icon").hasAnyAuthority(USER, TRAINER, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/myself").hasAnyAuthority(USER, TRAINER, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/token/refresh/**").hasAnyAuthority(USER, TRAINER, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/password/change").hasAnyAuthority(USER, TRAINER, ADMIN);

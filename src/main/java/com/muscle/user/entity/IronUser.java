@@ -38,6 +38,10 @@ public class IronUser {
     @Column(unique = true)
     private String email;
     private String password;
+
+    @Lob
+    private byte[] icon;
+
     private Boolean locked = false;
     private Boolean enabled = false;
 
@@ -50,6 +54,7 @@ public class IronUser {
                 .username(this.username)
                 .email(this.email)
                 .password(this.password)
+                .icon(this.icon)
                 .locked(this.locked)
                 .enabled(this.enabled)
                 .roles(this.roles.stream().map(Role::dto).collect(Collectors.toList()))
@@ -61,6 +66,7 @@ public class IronUser {
                 .id(this.id)
                 .username(this.username)
                 .email(this.email)
+                .icon(this.icon)
                 .locked(this.locked)
                 .enabled(this.enabled)
                 .roles(this.roles.stream().map(Role::dto).collect(Collectors.toList()))
@@ -72,6 +78,7 @@ public class IronUser {
                 .id(this.id)
                 .username(this.username)
                 .email(this.email)
+                .icon(this.icon)
                 .build();
     }
 }

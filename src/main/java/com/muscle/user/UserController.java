@@ -13,12 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,7 +55,7 @@ public class UserController {
                     String username = jwtUtil.extractUsername(authorizationHeader);
 
                     UserDetails userDetails = userService.loadUserByUsername(username);
-                    String access_token = jwtUtil.createToken(request, userDetails, 1000 * 10);//60 * 60 * 24);
+                    String access_token = jwtUtil.createToken(request, userDetails, 1000 * 60 * 60 * 24);
 
                     Map<String, String> tokens = new HashMap<>();
                     tokens.put("access_token", access_token);
@@ -174,5 +178,15 @@ public class UserController {
         response.put("totalPages", userPage.getTotalPages());
 
         return response;
+    }
+
+    @PostMapping("/user/icon")
+    public ResponseEntity changeUserImage(@RequestHeader("Authorization") String header, @RequestBody MultipartFile file) {
+        try {
+            userService.changeUserIcon(header, file);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(generateErrorBody(500, e));
+        }
     }
 }
