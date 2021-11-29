@@ -6,6 +6,7 @@ import com.muscle.trainings.responses.*;
 import com.muscle.trainings.service.PointService;
 import com.muscle.trainings.service.UserTrainingHistoryService;
 import com.muscle.trainings.service.UserTrainingsService;
+import javassist.bytecode.ByteArray;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Tuple;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +117,8 @@ public class UserTrainingController {
                 .map(tuple -> RankingResponse.builder()
                         .rank(tuple.get(0, BigInteger.class).longValue())
                         .username(tuple.get(1, String.class))
-                        .points(tuple.get(2, Integer.class))
+                        .icon(tuple.get(2, byte[].class))
+                        .points(tuple.get(3, Integer.class))
                         .build()).collect(Collectors.toList());;
 
         Map<String, Object> response = new HashMap<>();

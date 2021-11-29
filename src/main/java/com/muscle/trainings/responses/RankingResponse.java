@@ -12,5 +12,6 @@ import lombok.*;
 public class RankingResponse {
     Long rank;
     String username;
+    byte[] icon;
     Integer points;
 }
