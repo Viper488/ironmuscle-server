@@ -7,6 +7,7 @@ import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.PasswordToken;
 import com.muscle.user.repository.ConfirmationTokenRepository;
 import com.muscle.user.repository.PasswordTokenRepository;
+import com.muscle.user.repository.UserBadgesRepository;
 import com.muscle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class Scheduler {
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final PasswordTokenRepository passwordTokenRepository;
     private final PointRepository pointRepository;
+    private final UserBadgesRepository userBadgesRepository;
 
     @Transactional
     //@Scheduled(cron = "0/20 * * ? * *") //Every 20 seconds
@@ -51,6 +53,16 @@ public class Scheduler {
     @Scheduled(cron = "0 0 0 1 * ?")//At 00:00:00am, on the 1st day, every month
     public void schedulePointsReset() {
         pointRepository.resetPoints();
+
         log.info("Scheduled: reset points to 0");
+    }
+
+    @Transactional
+    //@Scheduled(cron = "0/20 * * ? * *") //Every 20 seconds
+    @Scheduled(cron = "0 0 0 1 * ?")//At 00:00:00am, on the 1st day, every month
+    public void scheduleBadgesReset() {
+        userBadgesRepository.resetBadges();
+
+        log.info("Scheduled: reset badges");
     }
 }
