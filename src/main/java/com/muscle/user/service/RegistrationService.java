@@ -10,9 +10,13 @@ import com.muscle.user.entity.Role;
 import com.muscle.user.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,7 +40,8 @@ public class RegistrationService {
     private final EmailSender emailSender;
     private final PointService pointService;
 
-    public void register(RegistrationRequestDto request) {
+    @Transactional
+    public void register(RegistrationRequestDto request) throws IOException {
         boolean isValidEmail = emailValidator.test(request.getEmail());
 
         if(!isValidEmail){
@@ -54,6 +59,7 @@ public class RegistrationService {
                         .username(request.getUsername())
                         .email(request.getEmail())
                         .password(request.getPassword())
+                        .icon(loadIcon())
                         .locked(false)
                         .enabled(false)
                         .roles(roles)
@@ -63,6 +69,11 @@ public class RegistrationService {
 
         String link = confirmEmailBaseLink + token;
         emailSender.send(request.getEmail(), buildUserEmail(request.getUsername(), link));
+    }
+
+    private byte[] loadIcon() throws IOException {
+        File file = new ClassPathResource("icon.png").getFile();
+        return Files.readAllBytes(file.toPath());
     }
 
     @Transactional
@@ -86,7 +97,8 @@ public class RegistrationService {
             pointService.initializePoints(confirmationToken.getIronUser());
     }
 
-    public void initializeUser(RegistrationRequestDto request) {
+    @Transactional
+    public void initializeUser(RegistrationRequestDto request) throws IOException {
         boolean isValidEmail = emailValidator.test(request.getEmail());
 
         if(!isValidEmail){
@@ -103,6 +115,7 @@ public class RegistrationService {
                             .email(request.getEmail())
                             .locked(false)
                             .enabled(false)
+                            .icon(loadIcon())
                             .password("")
                             .roles(roles)
                             .build();

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,25 +23,10 @@ import java.util.stream.Collectors;
 public class TrainingsService {
 
     private final TrainingMapper mapper;
-    private final JwtUtil jwtUtil;
     private final TrainingsRepository trainingsRepository;
-    private final UserRepository userRepository;
 
-    public List<TrainingResponse> getTrainingsByType(String type) {
-        return trainingsRepository.findByType(type.toLowerCase().replaceAll(" ", "")).stream().map(training -> TrainingResponse.builder()
-                .id(training.getId())
-                .name(training.getName())
-                .type(training.getType())
-                .difficulty(training.getDifficulty())
-                .image(training.getImage())
-                .points(training.getPoints())
-                .build()).collect(Collectors.toList());
-    }
 
-    public List<TrainingResponse> getTrainings() {
-        return trainingsRepository.findAll().stream().map(Training::response).collect(Collectors.toList());
-    }
-
+    @Transactional
     public Page<Training> getPaginatedTrainings(Pageable pageable, String query) {
         return trainingsRepository.findByNameContainsOrDifficultyContains(query, query, pageable);
     }

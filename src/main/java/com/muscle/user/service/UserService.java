@@ -84,6 +84,7 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    @Transactional
     public String signUpUser(IronUser ironUser){
         boolean usernameTaken = userRepository
                 .findByUsername(ironUser.getUsername())
@@ -117,6 +118,7 @@ public class UserService implements UserDetailsService {
         return token;
     }
 
+    @Transactional
     public void enableUser(String email) {
         IronUser ironUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
@@ -180,6 +182,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void changePassword(String header, ChangePasswordDto changePasswordDto) {
         IronUser user = getUserFromHeader(header);
 
@@ -199,6 +202,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void changeEmail(String header, ChangeUserDetails changed) {
         IronUser user = getUserFromHeader(header);
 
@@ -226,6 +230,7 @@ public class UserService implements UserDetailsService {
         emailSender.send(user.getEmail(), buildUserEmail(user.getUsername(), link));
     }
 
+    @Transactional
     public void lockUser(Long id, ChangeUserDetails changed) {
         IronUser user = userRepository.findById(id)
                 .orElseThrow(()-> new IllegalStateException("User not found"));

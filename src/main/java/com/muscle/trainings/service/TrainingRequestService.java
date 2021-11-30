@@ -32,23 +32,17 @@ public class TrainingRequestService {
     private final TrainingsRepository trainingsRepository;
     private final JwtUtil jwtUtil;
 
+    @Transactional
     public TrainingRequestResponse getRequest(Long id){
         return trainingRequestRepository.findById(id).orElseThrow(() -> new IllegalStateException("Request not found")).detailedResponse();
     }
+    @Transactional
     public Page<TrainingRequest> getPaginatedUserRequests(Pageable pageable, String header, String status, String query) {
         IronUser user = userService.getUserFromHeader(header);
         if(user.getRoles().stream().filter(role -> role.getName().equals("TRAINER")).count() >= 1)
             return trainingRequestRepository.findByTrainerIdAndStatusAndQuery(user.getId(), status, query, pageable);
         else
             return trainingRequestRepository.findByUserIdAndStatusAndQuery(user.getId(), status, query, pageable);
-    }
-
-    public List<TrainingRequestResponse> getTrainerRequests(String header, String status) {
-        return trainingRequestRepository.findByTrainerUsernameAndStatus(jwtUtil.extractUsername(header), status)
-                .stream()
-                .map(TrainingRequest::response)
-                .sorted(Comparator.comparing(TrainingRequestResponse::getCreated_at).reversed())
-                .collect(Collectors.toList());
     }
 
     public TrainingRequestResponse createRequest(String header, TrainingRequestDto trainingRequestDto) {
@@ -86,6 +80,7 @@ public class TrainingRequestService {
         return trainingRequestRepository.save(trainingRequest).detailedResponse();
     }
 
+    @Transactional
     public Page<TrainingRequest> getPaginatedRequests(Pageable pageable, String status, String query) {
         return trainingRequestRepository.findByStatusAndQuery(status, query, pageable);
     }

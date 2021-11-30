@@ -34,6 +34,7 @@ public class UserTrainingsService {
     private final TrainingsRepository trainingsRepository;
     private final JwtUtil jwtUtil;
 
+    @Transactional
     public UserTrainingResponse addTrainingToUser(Long user, Long training) {
         return userTrainingsRepository.save(UserTrainings.builder()
                 .ironUser(userRepository.findById(user)
@@ -43,6 +44,7 @@ public class UserTrainingsService {
                 .build()).response();
     }
 
+    @Transactional
     public Page<Training> getPaginatedUserTrainings(Pageable pageable, String header, String type, String query) {
         IronUser user = userService.getUserFromHeader(header);
 

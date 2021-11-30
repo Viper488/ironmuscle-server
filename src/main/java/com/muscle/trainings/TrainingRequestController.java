@@ -115,17 +115,6 @@ public class TrainingRequestController {
         return trainingRequestService.updateRequest(header, id, trainingRequestDto);
     }
 
-
-    /**
-     * Get requests assigned to trainer by status (IN PROGRESS or DONE)
-     * @param header
-     * @return
-     */
-    @GetMapping("/trainer")
-    List<TrainingRequestResponse> getTrainerRequests(@RequestHeader("Authorization") String header, @RequestParam("status") String status) {
-        return trainingRequestService.getTrainerRequests(header, status);
-    }
-
     /**
      * Get all requests
      * @param page

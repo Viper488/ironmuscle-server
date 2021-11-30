@@ -9,6 +9,7 @@ import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ public class BadgeService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
+    @Transactional
     public List<BadgeResponse> getUserBadges(String header) {
         IronUser user = userRepository.findByUsername(jwtUtil.extractUsername(header))
                 .orElseThrow(() -> new IllegalStateException("User not found"));

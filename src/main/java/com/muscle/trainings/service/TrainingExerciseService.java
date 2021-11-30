@@ -48,6 +48,7 @@ public class TrainingExerciseService {
                 .dto();
     }
 
+    @Transactional
     public TrainingDetails getTrainingDetails(Long trainingId) {
         List<TrainingExercise> trainingExerciseList = trainingExerciseRepository.findByTrainingId(trainingId);
 

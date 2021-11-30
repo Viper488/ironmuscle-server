@@ -29,15 +29,6 @@ public class TrainingsController {
     private final TrainingExerciseService trainingExerciseService;
 
     /**
-     * Get trainings by type
-     * @return
-     */
-    @GetMapping("/type/{type}")
-    List<TrainingResponse> getTrainingsByType(@PathVariable String type) {
-        return trainingsService.getTrainingsByType(type);
-    }
-
-    /**
      * Get all trainings
      * @param page
      * @param size

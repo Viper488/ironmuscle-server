@@ -13,6 +13,7 @@ import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -30,6 +31,7 @@ public class UserTrainingHistoryService {
     private final UserTrainingHistoryRepository userTrainingHistoryRepository;
     private final PointService pointService;
 
+    @Transactional
     public UserTrainingHistoryResponse saveUserActivity(String header, Long trainingId, Integer time) {
         IronUser user = userRepository.findByUsername(jwtUtil.extractUsername(header))
                 .orElseThrow(() -> new IllegalStateException("User not found"));
@@ -48,6 +50,7 @@ public class UserTrainingHistoryService {
                 .response();
     }
 
+    @Transactional
     public List<TrainingHistory> getUserTrainingHistory(String header, int year, int month) {
         IronUserResponse user = userRepository.findByUsername(jwtUtil.extractUsername(header)).orElseThrow(() -> new IllegalStateException("User not found")).response();
         List<UserTrainingHistory> userTrainingHistory = userTrainingHistoryRepository.findUserHistory(user.getId(), year, month);

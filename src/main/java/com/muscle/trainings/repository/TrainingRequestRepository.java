@@ -12,8 +12,6 @@ import java.util.List;
 
 @Repository
 public interface TrainingRequestRepository extends JpaRepository<TrainingRequest, Long> {
-    List<TrainingRequest> findByTrainerUsernameAndStatus(String username, String status);
-
     @Query(value = "SELECT * FROM training_request tr WHERE tr.status = ?1 AND (tr.title LIKE %?2% OR tr.description LIKE %?2%) ORDER BY tr.created_at ASC",
             countQuery = "WITH request_count AS (SELECT * FROM training_request tr WHERE tr.status = ?1 AND (tr.title LIKE %?2% OR tr.description LIKE %?2%) ORDER BY tr.created_at ASC) SELECT COUNT(*) FROM request_count",
             nativeQuery = true)

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class RegistrationController {
      */
 
     @PostMapping()
-    void register(@RequestBody RegistrationRequestDto request){
+    void register(@RequestBody RegistrationRequestDto request) throws IOException {
         registrationService.register(request);
     }
 

@@ -21,10 +21,6 @@ public class ExerciseService {
     private final ExerciseMapper mapper;
     private final ExerciseRepository exerciseRepository;
 
-    public List<ExerciseDto> getExercises() {
-        return exerciseRepository.findAll().stream().map(Exercise::dto).collect(Collectors.toList());
-    }
-
     public Page<Exercise> getPaginatedExercises(Pageable pageable, String query) {
         return exerciseRepository.findByNameContainsOrderByNameAsc(pageable, query);
     }
