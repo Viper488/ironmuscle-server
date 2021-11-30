@@ -72,7 +72,7 @@ public class RegistrationService {
     }
 
     private byte[] loadIcon() throws IOException {
-        File file = new ClassPathResource("icon.png").getFile();
+        File file = new ClassPathResource("imgs/icon.png").getFile();
         return Files.readAllBytes(file.toPath());
     }
 

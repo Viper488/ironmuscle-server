@@ -28,11 +28,12 @@ public class TrainingExerciseService {
     private final TrainingsRepository trainingsRepository;
     private final ExerciseRepository exerciseRepository;
 
-
+    @Transactional
     public void addExercises(Long trainingId, List<AddExerciseRequest> exercises) {
         exercises.forEach(exercise -> save(trainingId, exercise));
     }
 
+    @Transactional
     public TrainingExerciseDto save(Long trainingId, AddExerciseRequest addExerciseRequest) {
         log.info("Saving new training exercise {} to the database", addExerciseRequest.getExerciseId());
 

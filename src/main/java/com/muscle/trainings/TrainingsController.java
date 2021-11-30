@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,7 @@ public class TrainingsController {
      * @return
      */
     @PostMapping()
-    TrainingResponse createTraining(@RequestBody TrainingDto trainingDto) {
+    TrainingResponse createTraining(@RequestBody TrainingDto trainingDto) throws IOException {
         return trainingsService.saveTraining(trainingDto);
     }
 

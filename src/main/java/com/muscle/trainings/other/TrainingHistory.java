@@ -14,7 +14,7 @@ import java.util.Date;
 public class TrainingHistory {
     private Long id;
     private String name;
-    private String image;
+    private byte[] image;
     private String difficulty;
     private Integer points;
     private LocalDateTime date;

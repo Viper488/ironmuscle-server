@@ -118,23 +118,23 @@ INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://hips.hearstap
 INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://thumbs.gfycat.com/TediousWarlikeBooby-max-1mb.gif','Reverse snow angels',  '0qLP2RNKX4A');--113
 
 --TRAININGS
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'https://www.bodybuilding.com/images/2018/april/the-best-ab-workout-for-a-six-pack-header-960x540.jpg', 'Abdominal' , 10, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'https://presscable.com/files/uploaded_images/00120956f91c447c8988dbcab577a444.jpg', 'Chest'     , 10, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'https://lepszytrener.pl/media/cache/thumb_blog_list3/articles/images/2672-article-1.png', 'Arms'      , 10, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/bring-it-all-the-way-up-here-royalty-free-image-1625750638.jpg?crop=0.601xw:0.946xh;0.397xw,0.0103xh&resize=640:*', 'Legs'      , 10, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'https://www.aleanlife.com/wp-content/uploads/2014/03/back-workout-1200x720.jpg', 'Back '     , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/abdominal_beginner.jpg'),    'Abdominal' , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/chest_beginner.jpg'),        'Chest'     , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/arms_beginner.png'),         'Arms'      , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/legs_beginner.jpg'),         'Legs'      , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/back_beginner.jpg'),         'Back '     , 10, 'standard');
 
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'https://cdn1.coachmag.co.uk/sites/coachmag/files/2016/06/obliques-core-workout-1-decline-plank-foot-touch.jpg', 'Abdominal' , 20, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'https://www.bodybuilding.com/images/2016/december/brandan-fokkens-best-chest-workout-header-v2-DYMATIZE-960x540.jpg', 'Chest'     , 20, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'https://passionsport.pl/wp-content/uploads/2016/04/Fotolia_1000x77-min.jpg', 'Arms'      , 20, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'https://www.muscleandfitness.com/wp-content/uploads/2019/06/2-walking-lunge-1109.jpg?w=1109&h=614&crop=1&quality=86&strip=all', 'Legs'      , 20, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'http://upl.stack.com/wp-content/uploads/2017/07/17010920/Strong-Back-STACK-654x368.jpg', 'Back '     , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/abdominal_mediocre.jpg'),     'Abdominal' , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/chest_mediocre.jpg'),         'Chest'     , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/arms_mediocre.jpg'),          'Arms'      , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/legs_mediocre.jpg'),          'Legs'      , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/back_mediocre.jpg'),          'Back '     , 20, 'standard');
 
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'https://ifbb-academy.com/wp-content/uploads/2020/04/abdominales-img-3.jpg', 'Abdominal' , 30, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'https://cdn.shopify.com/s/files/1/1901/6815/articles/image_41.png?v=1538465967', 'Chest'     , 30, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'https://www.bestbody.com.pl/blog/wp-content/uploads/2019/12/cwiczenia-na-biceps-2.jpg', 'Arms'      , 30, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'https://www.bodybuilding.com/images/2016/june/5-leg-workouts-for-mass-header-v2-960x540.jpg', 'Legs'      , 30, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'https://www.muscleandfitness.com/wp-content/uploads/2017/10/1109-pullup-muscular-back.jpg?w=1109&quality=86&strip=all', 'Back '     , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/abdominal_pro.jpg'),     'Abdominal' , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/chest_pro.png'),         'Chest'     , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/arms_pro.jpg'),          'Arms'      , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/legs_pro.jpg'),          'Legs'      , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/back_pro.jpg'),          'Back '     , 30, 'standard');
 
 --TRAININGS EXERCISES
 

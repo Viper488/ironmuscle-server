@@ -15,7 +15,7 @@ public class TrainingResponse {
     private Long id;
     private String name;
     private String type;
-    private String image;
+    private byte[] image;
     private String difficulty;
     private Integer points;
 }

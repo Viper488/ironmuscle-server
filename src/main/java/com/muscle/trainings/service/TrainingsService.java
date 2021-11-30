@@ -9,11 +9,15 @@ import com.muscle.user.repository.UserRepository;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,13 +35,18 @@ public class TrainingsService {
         return trainingsRepository.findByNameContainsOrDifficultyContains(query, query, pageable);
     }
 
-    public TrainingResponse saveTraining(TrainingDto trainingDto) {
+    private byte[] loadImage() throws IOException {
+        File file = new ClassPathResource("imgs/arms_beginner.png").getFile();
+        return Files.readAllBytes(file.toPath());
+    }
+
+    public TrainingResponse saveTraining(TrainingDto trainingDto) throws IOException {
         log.info("Saving new training {} to the database", trainingDto.getName());
 
         return trainingsRepository.save(Training.builder()
                 .name(trainingDto.getName())
                 .type(trainingDto.getType())
-                .image(trainingDto.getImage())
+                .image(loadImage())
                 .difficulty(trainingDto.getDifficulty())
                 .points(trainingDto.getPoints())
                 .build())
