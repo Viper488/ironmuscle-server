@@ -31,7 +31,8 @@ public class Badge {
     Long id;
     String name;
     Integer goal;
-    String icon;
+    @Lob
+    private byte[] icon;
 
     public BadgeResponse response() {
         return BadgeResponse.builder()

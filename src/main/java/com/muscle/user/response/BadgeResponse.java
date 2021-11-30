@@ -12,5 +12,5 @@ public class BadgeResponse {
     Long id;
     String name;
     Integer goal;
-    String icon;
+    byte[] icon;
 }
