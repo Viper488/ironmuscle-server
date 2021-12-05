@@ -3,6 +3,7 @@ package com.muscle.trainings;
 import com.muscle.trainings.dto.*;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.TrainingRequest;
+import com.muscle.trainings.other.CreateTrainingDto;
 import com.muscle.trainings.other.TrainingDetails;
 import com.muscle.trainings.responses.TrainingRequestResponse;
 import com.muscle.trainings.responses.TrainingResponse;
@@ -70,7 +71,7 @@ public class TrainingsController {
      * @return
      */
     @PostMapping()
-    TrainingResponse createTraining(@RequestBody TrainingDto trainingDto) throws IOException {
+    TrainingResponse createTraining(@RequestBody CreateTrainingDto trainingDto) {
         return trainingsService.saveTraining(trainingDto);
     }
 

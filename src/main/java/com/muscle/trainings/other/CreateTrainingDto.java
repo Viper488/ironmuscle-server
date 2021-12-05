@@ -1,4 +1,4 @@
-package com.muscle.trainings.dto;
+package com.muscle.trainings.other;
 
 import lombok.*;
 
@@ -9,11 +9,10 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainingDto {
-    private Long id;
+public class CreateTrainingDto {
     private String name;
     private String type;
-    private byte[] image;
+    private String image;
     private String difficulty;
     private Integer points;
 }
