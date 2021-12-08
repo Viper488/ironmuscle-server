@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/v*/user/points/**").hasAnyAuthority(USER, TRAINER, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/user/ranking/**").hasAnyAuthority(USER, TRAINER, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/user/ranking/list/**").hasAnyAuthority(USER, TRAINER, ADMIN);
-        http.authorizeRequests().antMatchers("/api/v*/user/badges/**").hasAnyAuthority(USER, TRAINER, ADMIN);
+        http.authorizeRequests().antMatchers("/api/v*/badges/**", "/api/v*/user/badges/**").hasAnyAuthority(USER, TRAINER, ADMIN);
         http.authorizeRequests().antMatchers("/api/v*/user/lock/**", "/api/v*/registration/user").hasAnyAuthority(ADMIN);
 
         http.authorizeRequests().anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

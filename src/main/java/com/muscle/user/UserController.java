@@ -75,6 +75,15 @@ public class UserController {
 
     /**
      * Show user badges
+     * @return
+     */
+    @GetMapping("/badges")
+    public List<BadgeResponse> getBadges() {
+        return badgeService.getBadges();
+    }
+
+    /**
+     * Show user badges
      * @param header
      * @return
      */

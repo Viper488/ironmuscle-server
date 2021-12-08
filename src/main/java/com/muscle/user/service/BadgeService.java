@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,11 @@ public class BadgeService {
     private final BadgeRepository badgeRepository;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+
+    @Transactional
+    public List<BadgeResponse> getBadges() {
+        return badgeRepository.findAll().stream().sorted(Comparator.comparing(Badge::getGoal)).map(Badge::response).collect(Collectors.toList());
+    }
 
     @Transactional
     public List<BadgeResponse> getUserBadges(String header) {

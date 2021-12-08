@@ -24,13 +24,15 @@ INSERT INTO role VALUES(nextval('role_sequence'), 'ADMIN');
 INSERT INTO role VALUES(nextval('role_sequence'), 'TRAINER');
 INSERT INTO role VALUES(nextval('role_sequence'), 'USER');
 
-INSERT INTO badge VALUES (nextval('badge_sequence'),  50, 'Silver'      );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 100, 'Gold'        );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 150, 'Platinum'    );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 200, 'Diamond'     );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 250, 'Master'      );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 300, 'Grandmaster' );
-INSERT INTO badge VALUES (nextval('badge_sequence'), 350, 'Champion'    );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 50,   'Iron'       );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 100,  'Bronze'     );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 200,  'Silver'     );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 500,  'Gold'       );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 1000, 'Platinum'   );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 2000, 'Diamond'    );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 3000, 'Master'     );
+INSERT INTO badge VALUES (nextval('badge_sequence'), 4000, 'Grandmaster');
+INSERT INTO badge VALUES (nextval('badge_sequence'), 5000, 'Champion'   );
 
 INSERT INTO iron_user VALUES(nextval('user_sequence'),  'admin@admin.com',                 true, lo_import('C://imgs/icon.png'), false, '$2a$10$tpA0.LhVCAzZzN9jP90AAuokZOghqi3Pd3.hzTec8mCZKC8MdCaBy', 'admin'      );
 INSERT INTO iron_user VALUES(nextval('user_sequence'),  'trainer@trainer.com',             true, lo_import('C://imgs/icon.png'), false, '$2a$12$NHsUnreBsx3/XUEK/sV0L.F8j8ojfWPVF7aJbFeUPwQUFjyGTjB7i', 'trainer'    );
