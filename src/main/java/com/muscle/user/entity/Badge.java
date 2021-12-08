@@ -31,15 +31,12 @@ public class Badge {
     Long id;
     String name;
     Integer goal;
-    @Lob
-    private byte[] icon;
 
     public BadgeResponse response() {
         return BadgeResponse.builder()
                 .id(this.id)
                 .name(this.name)
                 .goal(this.goal)
-                .icon(this.icon)
                 .build();
     }
 }
