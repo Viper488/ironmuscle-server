@@ -13,16 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +27,7 @@ import static com.muscle.user.util.JwtUtil.generateErrorBody;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @Slf4j
 @CrossOrigin
 @RestController
@@ -74,7 +72,7 @@ public class UserController {
     }
 
     /**
-     * Show user badges
+     * Get all badges
      * @return
      */
     @GetMapping("/badges")
@@ -101,16 +99,6 @@ public class UserController {
     public IronUserResponse getMyself(@RequestHeader("Authorization") String header) {
         return userService.getMyself(header);
     }
-
-/*    *//**
-     * Change my details
-     * @param header
-     * @param changeUserDetailsDto
-     *//*
-    @PutMapping("/myself")
-    public void changeMyDetails(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetailsDto changeUserDetailsDto) {
-        userService.changeMyDetails(header, changeUserDetailsDto);
-    }*/
 
     /**
      * Change email
@@ -145,6 +133,7 @@ public class UserController {
     public void requestPasswordReset(@RequestParam("email") String email) {
         userService.requestPasswordChange(email);
     }
+
     /**
      * Change password
      * @param resetPasswordDto
@@ -155,13 +144,29 @@ public class UserController {
     }
 
     /**
-     * Change password
+     * Change password when logged
      * @param header
      * @param changePasswordDto
      */
     @PostMapping("/password/change")
     public void changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangePasswordDto changePasswordDto) {
         userService.changePassword(header, changePasswordDto);
+    }
+
+    /**
+     * Change user icon
+     * @param header
+     * @param file
+     * @return
+     */
+    @PostMapping("/user/icon")
+    public ResponseEntity changeUserImage(@RequestHeader("Authorization") String header, @RequestBody MultipartFile file) {
+        try {
+            userService.changeUserIcon(header, file);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(generateErrorBody(500, e));
+        }
     }
 
     /**
@@ -187,15 +192,5 @@ public class UserController {
         response.put("totalPages", userPage.getTotalPages());
 
         return response;
-    }
-
-    @PostMapping("/user/icon")
-    public ResponseEntity changeUserImage(@RequestHeader("Authorization") String header, @RequestBody MultipartFile file) {
-        try {
-            userService.changeUserIcon(header, file);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(generateErrorBody(500, e));
-        }
     }
 }

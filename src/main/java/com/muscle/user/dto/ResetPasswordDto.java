@@ -10,6 +10,6 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class ResetPasswordDto {
-    private String token;
-    private String password;
+    private final String token;
+    private final String password;
 }

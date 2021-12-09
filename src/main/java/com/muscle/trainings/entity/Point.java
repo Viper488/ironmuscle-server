@@ -1,6 +1,5 @@
 package com.muscle.trainings.entity;
 
-import com.muscle.trainings.responses.PointResponse;
 import com.muscle.user.entity.IronUser;
 import lombok.*;
 
@@ -35,12 +34,4 @@ public class Point {
     )
     private IronUser user;
     private Integer points;
-
-    public PointResponse response() {
-        return PointResponse.builder()
-                .id(this.id)
-                .points(this.points)
-                .user(this.user.response())
-                .build();
-    }
 }

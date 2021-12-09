@@ -5,7 +5,6 @@ import com.muscle.trainings.entity.UserTrainings;
 import com.muscle.trainings.repository.TrainingExerciseRepository;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingsRepository;
-import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.responses.UserTrainingResponse;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.repository.UserRepository;
@@ -17,10 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor

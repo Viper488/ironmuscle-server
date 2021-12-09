@@ -2,7 +2,6 @@ package com.muscle.trainings.entity;
 
 import com.muscle.trainings.dto.TrainingDto;
 import com.muscle.trainings.responses.TrainingResponse;
-import com.muscle.user.entity.IronUser;
 import lombok.*;
 
 import javax.persistence.*;

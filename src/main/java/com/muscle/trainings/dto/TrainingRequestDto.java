@@ -1,14 +1,9 @@
 package com.muscle.trainings.dto;
 
-import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.user.dto.IronUserDto;
-import com.muscle.user.response.IronUserResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Builder(toBuilder = true)
 @Getter

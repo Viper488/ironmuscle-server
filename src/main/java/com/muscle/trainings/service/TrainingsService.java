@@ -6,22 +6,17 @@ import com.muscle.trainings.mapper.TrainingMapper;
 import com.muscle.trainings.other.CreateTrainingDto;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.responses.TrainingResponse;
-import com.muscle.user.repository.UserRepository;
-import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

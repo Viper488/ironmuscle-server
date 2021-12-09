@@ -4,8 +4,6 @@ import com.muscle.user.response.BadgeResponse;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor

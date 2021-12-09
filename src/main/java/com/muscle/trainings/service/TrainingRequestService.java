@@ -1,6 +1,5 @@
 package com.muscle.trainings.service;
 
-import com.muscle.trainings.dto.TrainingDto;
 import com.muscle.trainings.dto.TrainingRequestDto;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.TrainingRequest;
@@ -13,15 +12,11 @@ import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor

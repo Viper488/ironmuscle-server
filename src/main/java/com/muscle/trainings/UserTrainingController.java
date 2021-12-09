@@ -119,7 +119,7 @@ public class UserTrainingController {
                         .username(tuple.get(1, String.class))
                         .icon(tuple.get(2, byte[].class))
                         .points(tuple.get(3, Integer.class))
-                        .build()).collect(Collectors.toList());;
+                        .build()).collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
         response.put("ranking", rankingList);

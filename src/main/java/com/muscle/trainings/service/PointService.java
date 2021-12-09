@@ -2,7 +2,6 @@ package com.muscle.trainings.service;
 
 import com.muscle.trainings.entity.Point;
 import com.muscle.trainings.repository.PointRepository;
-import com.muscle.trainings.responses.PointResponse;
 import com.muscle.trainings.responses.RankingResponse;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.util.JwtUtil;
@@ -15,9 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Tuple;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor

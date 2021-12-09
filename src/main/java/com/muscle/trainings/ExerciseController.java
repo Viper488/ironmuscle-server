@@ -2,8 +2,6 @@ package com.muscle.trainings;
 
 import com.muscle.trainings.dto.ExerciseDto;
 import com.muscle.trainings.entity.Exercise;
-import com.muscle.trainings.entity.Training;
-import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface TrainingRequestRepository extends JpaRepository<TrainingRequest, Long> {
     @Query(value = "SELECT * FROM training_request tr WHERE tr.status = ?1 AND (tr.title LIKE %?2% OR tr.description LIKE %?2%) ORDER BY tr.created_at ASC",

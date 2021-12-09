@@ -2,20 +2,16 @@ package com.muscle.trainings;
 
 import com.muscle.trainings.dto.*;
 import com.muscle.trainings.entity.Training;
-import com.muscle.trainings.entity.TrainingRequest;
 import com.muscle.trainings.other.CreateTrainingDto;
 import com.muscle.trainings.other.TrainingDetails;
-import com.muscle.trainings.responses.TrainingRequestResponse;
 import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

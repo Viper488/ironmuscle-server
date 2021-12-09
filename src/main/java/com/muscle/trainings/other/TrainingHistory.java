@@ -3,7 +3,6 @@ package com.muscle.trainings.other;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Builder(toBuilder = true)
 @Getter

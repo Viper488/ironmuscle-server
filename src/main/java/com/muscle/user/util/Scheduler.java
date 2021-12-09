@@ -1,6 +1,5 @@
 package com.muscle.user.util;
 
-import com.muscle.trainings.entity.Point;
 import com.muscle.trainings.repository.PointRepository;
 import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.entity.IronUser;

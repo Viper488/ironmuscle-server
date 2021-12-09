@@ -1,7 +1,5 @@
 package com.muscle.trainings.responses;
 
-import com.muscle.user.dto.IronUserDto;
-import com.muscle.user.response.IronUserResponse;
 import lombok.*;
 
 @Builder(toBuilder = true)

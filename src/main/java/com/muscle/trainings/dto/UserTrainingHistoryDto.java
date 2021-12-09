@@ -4,7 +4,6 @@ import com.muscle.user.dto.IronUserDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Builder(toBuilder = true)
 @Getter
