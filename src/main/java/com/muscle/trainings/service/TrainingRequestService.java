@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -28,7 +29,7 @@ public class TrainingRequestService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public TrainingRequestResponse getRequest(Long id){
+    public TrainingRequestResponse getRequest(Long id) {
         return trainingRequestRepository.findById(id).orElseThrow(() -> new IllegalStateException("Request not found")).detailedResponse();
     }
     @Transactional
@@ -53,7 +54,7 @@ public class TrainingRequestService {
                 .build()).response();
     }
 
-    public TrainingRequestResponse updateRequest(String header, Long id, TrainingRequestDto trainingRequestDto){
+    public TrainingRequestResponse updateRequest(String header, Long id, TrainingRequestDto trainingRequestDto) {
         TrainingRequest trainingRequest = trainingRequestRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Request not found"));
 

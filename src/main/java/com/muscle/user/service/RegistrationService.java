@@ -59,7 +59,7 @@ public class RegistrationService {
                         .username(request.getUsername())
                         .email(request.getEmail())
                         .password(request.getPassword())
-                        .icon(loadIcon())
+                        .icon("src/main/resources/images/profile-picture/default/icon.png")
                         .locked(false)
                         .enabled(false)
                         .roles(roles)
@@ -72,7 +72,7 @@ public class RegistrationService {
     }
 
     private byte[] loadIcon() throws IOException {
-        File file = new ClassPathResource("imgs/icon.png").getFile();
+        File file = new ClassPathResource("images/profile-picture/default/icon.png").getFile();
         return Files.readAllBytes(file.toPath());
     }
 
@@ -115,7 +115,7 @@ public class RegistrationService {
                             .email(request.getEmail())
                             .locked(false)
                             .enabled(false)
-                            .icon(loadIcon())
+                            .icon("profile-picture/default/icon.png")
                             .password("")
                             .roles(roles)
                             .build();

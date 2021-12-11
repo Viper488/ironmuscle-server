@@ -47,21 +47,10 @@ public class UserTrainingHistory {
     private LocalDateTime trainingDate;
     private Integer trainingTime;
 
-    public UserTrainingHistoryDto dto(){
-        return UserTrainingHistoryDto.builder()
-                .id(this.id)
-                .user(this.user.dto())
-                .training(this.training.dto())
-                .trainingDate(this.trainingDate)
-                .trainingTime(this.trainingTime)
-                .build();
-
-    }
-
     public UserTrainingHistoryResponse response(){
         return UserTrainingHistoryResponse.builder()
                 .id(this.id)
-                .user(this.user.response())
+                .user(this.user.safeDto())
                 .training(this.training.response())
                 .trainingDate(this.trainingDate)
                 .trainingTime(this.trainingTime)

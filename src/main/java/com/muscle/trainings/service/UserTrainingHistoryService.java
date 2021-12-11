@@ -6,15 +6,17 @@ import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingHistoryRepository;
 import com.muscle.trainings.other.TrainingHistory;
 import com.muscle.trainings.responses.UserTrainingHistoryResponse;
+import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.repository.UserRepository;
-import com.muscle.user.response.IronUserResponse;
+import com.muscle.user.response.UserResponse;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -52,7 +54,7 @@ public class UserTrainingHistoryService {
 
     @Transactional
     public List<TrainingHistory> getUserTrainingHistory(String header, int year, int month) {
-        IronUserResponse user = userRepository.findByUsername(jwtUtil.extractUsername(header)).orElseThrow(() -> new IllegalStateException("User not found")).response();
+        IronUserDto user = userRepository.findByUsername(jwtUtil.extractUsername(header)).orElseThrow(() -> new IllegalStateException("User not found")).dto();
         List<UserTrainingHistory> userTrainingHistory = userTrainingHistoryRepository.findUserHistory(user.getId(), year, month);
 
         return userTrainingHistory.stream()

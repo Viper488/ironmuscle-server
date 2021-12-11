@@ -1,6 +1,7 @@
 package com.muscle.trainings.responses;
 
-import com.muscle.user.response.IronUserResponse;
+import com.muscle.user.response.UserResponse;
+import com.muscle.user.response.UserSafeDto;
 import lombok.*;
 
 @Builder(toBuilder = true)
@@ -11,6 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 public class UserTrainingResponse {
     Long id;
-    IronUserResponse user;
+    UserSafeDto user;
     TrainingResponse training;
 }

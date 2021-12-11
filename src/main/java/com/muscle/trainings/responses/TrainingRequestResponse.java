@@ -1,6 +1,7 @@
 package com.muscle.trainings.responses;
 
-import com.muscle.user.response.IronUserResponse;
+import com.muscle.user.response.UserResponse;
+import com.muscle.user.response.UserSafeDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public class TrainingRequestResponse {
     private String bodyPart;
     private LocalDateTime created_at;
     private LocalDateTime resolved_at;
-    private IronUserResponse user;
-    private IronUserResponse trainer;
+    private UserSafeDto user;
+    private UserSafeDto trainer;
     private TrainingResponse training;
 }

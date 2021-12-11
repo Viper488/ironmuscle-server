@@ -6,6 +6,7 @@ import com.muscle.user.entity.IronUser;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.IOException;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -44,18 +45,10 @@ public class UserTrainings {
     )
     private Training training;
 
-    public UserTrainingDto dto() {
-        return UserTrainingDto.builder()
-                .id(this.id)
-                .user(this.ironUser.dto())
-                .training(this.training.dto())
-                .build();
-    }
-
     public UserTrainingResponse response() {
         return UserTrainingResponse.builder()
                 .id(this.id)
-                .user(this.ironUser.response())
+                .user(this.ironUser.safeDto())
                 .training(this.training.response())
                 .build();
     }

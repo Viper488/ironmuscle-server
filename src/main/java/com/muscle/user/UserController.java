@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muscle.user.dto.*;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.response.BadgeResponse;
-import com.muscle.user.response.IronUserResponse;
+import com.muscle.user.response.UserResponse;
 import com.muscle.user.service.BadgeService;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -96,7 +97,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/myself")
-    public IronUserResponse getMyself(@RequestHeader("Authorization") String header) {
+    public UserResponse getMyself(@RequestHeader("Authorization") String header) throws IOException {
         return userService.getMyself(header);
     }
 
@@ -182,8 +183,8 @@ public class UserController {
         Pageable paging = PageRequest.of(page, size);
         Page<IronUser> userPage = userService.getPaginatedUsers(paging, query);
 
-        List<IronUserDto> usersList = userPage.getContent()
-                .stream().map(IronUser::dtoResponse).collect(Collectors.toList());
+        List<IronUserImageDto> usersList = userPage.getContent()
+                .stream().map(IronUser::dtoImage).collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
         response.put("users", usersList);

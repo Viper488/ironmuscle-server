@@ -6,7 +6,8 @@ import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.PasswordToken;
 import com.muscle.user.repository.UserRepository;
-import com.muscle.user.response.IronUserResponse;
+import com.muscle.user.response.UserResponse;
+import com.muscle.user.response.UserSafeDto;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,6 +45,9 @@ public class UserService implements UserDetailsService {
     public String resetPasswordBaseLink;
     @Value("${user.create.link}")
     public String createUserBaseLink;
+    @Value("${images.main.dir}")
+    public String MAIN_DIR;
+
     private final static String  USER_NOT_FOUND_MSG = "User %s not found in database";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -57,8 +64,15 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public IronUserResponse getMyself(String header) {
-        return getUserFromHeader(header).response();
+    public UserResponse getMyself(String header) throws IOException {
+        IronUser user = getUserFromHeader(header);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .icon(getImage(user.getIcon()))
+                .build();
     }
 
     @Transactional
@@ -255,13 +269,39 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void changeUserIcon(String header, MultipartFile file) throws IOException {
-        IronUser user = getUserFromHeader(header);
         if(Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
-            user.setIcon(file.getBytes());
-            userRepository.save(user);
+            IronUser user = getUserFromHeader(header);
+            saveImage(user, file.getBytes());
             log.info("FILE: "+ file.getOriginalFilename() + ", " + file.getContentType());
         } else {
             throw new IllegalArgumentException("Wrong file format");
         }
+    }
+
+    public void saveImage(IronUser user, byte[] fileBytes) throws IOException {
+        String SUB_DIR = "/profile-picture/" + user.getId().toString() + "/";
+
+        String FILE_LOCATION = SUB_DIR + user.getId().toString() + ".png";
+        Path newFile = Paths.get(MAIN_DIR + FILE_LOCATION);
+        Files.createDirectories(newFile.getParent());
+
+        Files.deleteIfExists(newFile);
+        Files.write(newFile, fileBytes);
+
+        user.setIcon(FILE_LOCATION);
+        userRepository.save(user);
+    }
+
+    public byte[] getIconByUsername(String username) throws IOException {
+        IronUser user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalStateException("User not found"));
+        String SUB_DIR = "/profile-picture/" + user.getId().toString() + "/";
+
+        String FILE_LOCATION = SUB_DIR + user.getId().toString() + ".png";
+
+        return Files.readAllBytes(Paths.get(MAIN_DIR + FILE_LOCATION));
+    }
+
+    public byte[] getImage(String path) throws IOException {
+        return Files.readAllBytes(Paths.get(MAIN_DIR + path));
     }
 }

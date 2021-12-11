@@ -5,16 +5,20 @@ import com.muscle.trainings.entity.TrainingRequest;
 import com.muscle.trainings.responses.TrainingRequestResponse;
 import com.muscle.trainings.service.TrainingRequestService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
@@ -109,7 +113,7 @@ public class TrainingRequestController {
      * @return
      */
     @PutMapping("/{id}")
-    TrainingRequestResponse updateRequestTrainer(@RequestHeader("Authorization") String header, @PathVariable Long id, @RequestBody TrainingRequestDto trainingRequestDto) {
+    TrainingRequestResponse updateRequestTrainer(@RequestHeader("Authorization") String header, @PathVariable Long id, @RequestBody TrainingRequestDto trainingRequestDto) throws IOException {
         return trainingRequestService.updateRequest(header, id, trainingRequestDto);
     }
 
@@ -138,26 +142,4 @@ public class TrainingRequestController {
 
         return response;
     }
-
-
-/*    *//**
-     * Comment on request
-     * @param header
-     * @param id
-     * @param commentDto
-     *//*
-    @PutMapping("/{id}/comment")
-    CommentResponse addCommentToRequest(@RequestHeader("Authorization") String header, @PathVariable() Long id, @RequestBody CommentDto commentDto) {
-        return trainingRequestService.addCommentToRequest(header, id, commentDto);
-    }
-
-    *//**
-     * Get request comments
-     * @param id
-     * @return
-     *//*
-    @GetMapping("/{id}/comments")
-    List<CommentResponse> showComments(@PathVariable() Long id) {
-        return trainingRequestService.getRequestComments(id);
-    }*/
 }

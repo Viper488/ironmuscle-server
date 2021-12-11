@@ -6,10 +6,12 @@ import com.muscle.trainings.responses.TrainingRequestResponse;
 import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.entity.IronUser;
-import com.muscle.user.response.IronUserResponse;
+import com.muscle.user.response.UserResponse;
+import com.muscle.user.response.UserSafeDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Builder(toBuilder = true)
@@ -62,40 +64,17 @@ public class TrainingRequest {
     )
     private Training training;
 
-    public TrainingRequestDto dto(){
-        IronUserDto trainer = null;
+    public TrainingRequestResponse detailedResponse() {
+        UserSafeDto trainer = null;
         if(this.trainer != null) {
-            trainer = this.trainer.dto();
-        }
-        TrainingDto training = null;
-        if(this.training != null) {
-            training = this.training.dto();
-        }
-        return TrainingRequestDto.builder()
-                .id(this.id)
-                .title(this.title)
-                .description(this.description)
-                .status(this.status)
-                .difficulty(this.difficulty)
-                .bodyPart(this.bodyPart)
-                .created_at(this.created_at)
-                .resolved_at(this.resolved_at)
-                .user(this.user.dto())
-                .trainer(trainer)
-                .training(training)
-                .build();
-
-    }
-
-    public TrainingRequestResponse detailedResponse(){
-        IronUserResponse trainer = null;
-        if(this.trainer != null) {
-            trainer = this.trainer.response();
+            trainer = this.trainer.safeDto();
         }
         TrainingResponse training = null;
         if(this.training != null) {
             training = this.training.response();
         }
+
+
         return TrainingRequestResponse.builder()
                 .id(this.id)
                 .title(this.title)
@@ -105,7 +84,7 @@ public class TrainingRequest {
                 .bodyPart(this.bodyPart)
                 .created_at(this.created_at)
                 .resolved_at(this.resolved_at)
-                .user(this.user.response())
+                .user(this.user.safeDto())
                 .trainer(trainer)
                 .training(training)
                 .build();

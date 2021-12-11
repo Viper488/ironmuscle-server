@@ -1,10 +1,15 @@
 package com.muscle.user.entity;
 
 import com.muscle.user.dto.IronUserDto;
-import com.muscle.user.response.IronUserResponse;
+import com.muscle.user.dto.IronUserImageDto;
+import com.muscle.user.response.UserResponse;
+import com.muscle.user.response.UserSafeDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +24,6 @@ import java.util.stream.Collectors;
 @Entity
 @Data
 public class IronUser {
-
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -38,9 +42,7 @@ public class IronUser {
     @Column(unique = true)
     private String email;
     private String password;
-
-    @Lob
-    private byte[] icon;
+    private String icon;
 
     private Boolean locked = false;
     private Boolean enabled = false;
@@ -61,24 +63,41 @@ public class IronUser {
                 .build();
     }
 
-    public IronUserDto dtoResponse() {
-        return IronUserDto.builder()
+    public IronUserImageDto dtoImage() {
+        byte[] image = null;
+
+        try {
+            image = Files.readAllBytes(Paths.get("src/main/resources/images/" + this.icon));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return IronUserImageDto.builder()
                 .id(this.id)
                 .username(this.username)
                 .email(this.email)
-                .icon(this.icon)
+                .icon(image)
                 .locked(this.locked)
                 .enabled(this.enabled)
                 .roles(this.roles.stream().map(Role::dto).collect(Collectors.toList()))
                 .build();
     }
 
-    public IronUserResponse response() {
-        return IronUserResponse.builder()
+    public UserSafeDto safeDto() {
+        return UserSafeDto.builder()
                 .id(this.id)
                 .username(this.username)
                 .email(this.email)
-                .icon(this.icon)
+                .build();
+    }
+
+
+    public UserResponse response() throws IOException {
+        return UserResponse.builder()
+                .id(this.id)
+                .username(this.username)
+                .email(this.email)
+                .icon(Files.readAllBytes(Paths.get("src/main/resources/images/" + this.icon)))
                 .build();
     }
 }

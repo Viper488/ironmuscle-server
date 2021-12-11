@@ -4,6 +4,7 @@ import com.muscle.trainings.entity.Point;
 import com.muscle.trainings.repository.PointRepository;
 import com.muscle.trainings.responses.RankingResponse;
 import com.muscle.user.entity.IronUser;
+import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Tuple;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,6 +27,7 @@ import java.math.BigInteger;
 public class PointService {
     private final JwtUtil jwtUtil;
     private final PointRepository pointRepository;
+    private final UserService userService;
 
     public void initializePoints(IronUser ironUser) {
         pointRepository.save(Point.builder().user(ironUser).points(0).build());
@@ -35,18 +42,41 @@ public class PointService {
     }
 
     @Transactional
-    public Page<Tuple> getPaginatedRanking(Pageable pageable) {
-        return pointRepository.getRanking(pageable);
+    public Map<String, Object> getPaginatedRanking(Pageable pageable) {
+        Page<Tuple> rankingPage = pointRepository.getRanking(pageable);
+
+        List<RankingResponse> rankingList = rankingPage.getContent().stream()
+                .map(tuple -> {
+                    try {
+                        return RankingResponse.builder()
+                                .rank(tuple.get(0, BigInteger.class).longValue())
+                                .username(tuple.get(1, String.class))
+                                .icon(userService.getImage(tuple.get(2, String.class)))
+                                .points(tuple.get(3, Integer.class))
+                                .build();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }).collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("ranking", rankingList);
+        response.put("currentPage", rankingPage.getNumber());
+        response.put("totalItems", rankingPage.getTotalElements());
+        response.put("totalPages", rankingPage.getTotalPages());
+
+        return response;
     }
 
     @Transactional
-    public RankingResponse getUserRank(String header) {
+    public RankingResponse getUserRank(String header) throws IOException {
         Tuple userRank = pointRepository.getRankByUsername(jwtUtil.extractUsername(header)).orElseThrow(()->new IllegalStateException("Ranking entry not found"));
 
         return RankingResponse.builder()
                 .rank(userRank.get(0, BigInteger.class).longValue())
                 .username(userRank.get(1, String.class))
-                .icon(userRank.get(2, byte[].class))
+                .icon(userService.getImage(userRank.get(2, String.class)))
                 .points(userRank.get(3, Integer.class))
                 .build();
     }

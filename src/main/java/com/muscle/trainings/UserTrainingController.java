@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Tuple;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -111,23 +112,7 @@ public class UserTrainingController {
     Map<String, Object> getRanking(@RequestParam(defaultValue = "0") Integer page,
                                    @RequestParam(defaultValue = "100") Integer size) {
         Pageable paging = PageRequest.of(page, size);
-        Page<Tuple> rankingPage = pointService.getPaginatedRanking(paging);
-
-        List<RankingResponse> rankingList = rankingPage.getContent().stream()
-                .map(tuple -> RankingResponse.builder()
-                        .rank(tuple.get(0, BigInteger.class).longValue())
-                        .username(tuple.get(1, String.class))
-                        .icon(tuple.get(2, byte[].class))
-                        .points(tuple.get(3, Integer.class))
-                        .build()).collect(Collectors.toList());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("ranking", rankingList);
-        response.put("currentPage", rankingPage.getNumber());
-        response.put("totalItems", rankingPage.getTotalElements());
-        response.put("totalPages", rankingPage.getTotalPages());
-
-        return response;
+        return pointService.getPaginatedRanking(paging);
     }
 
     /**
@@ -135,7 +120,7 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/ranking")
-    RankingResponse getUserRank(@RequestHeader("Authorization") String header) {
+    RankingResponse getUserRank(@RequestHeader("Authorization") String header) throws IOException {
         return pointService.getUserRank(header);
     }
 }

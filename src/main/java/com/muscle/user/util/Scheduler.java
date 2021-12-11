@@ -46,22 +46,4 @@ public class Scheduler {
             log.info("Scheduled: Deleted user " + user.getUsername() + " with unconfirmed token!");
         }
     }
-
-    @Transactional
-    //@Scheduled(cron = "0/20 * * ? * *") //Every 20 seconds
-    @Scheduled(cron = "0 0 0 1 * ?")//At 00:00:00am, on the 1st day, every month
-    public void schedulePointsReset() {
-        pointRepository.resetPoints();
-
-        log.info("Scheduled: reset points to 0");
-    }
-
-    @Transactional
-    //@Scheduled(cron = "0/20 * * ? * *") //Every 20 seconds
-    @Scheduled(cron = "0 0 0 1 * ?")//At 00:00:00am, on the 1st day, every month
-    public void scheduleBadgesReset() {
-        userBadgesRepository.resetBadges();
-
-        log.info("Scheduled: reset badges");
-    }
 }

@@ -10,14 +10,14 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class IronUserDto {
+public class IronUserImageDto {
     private Long id;
     private String name;
     private String lastName;
     private String username;
     private String email;
     private String password;
-    private String icon;
+    private byte[] icon;
     private Boolean locked;
     private Boolean enabled;
     private List<RoleDto> roles;

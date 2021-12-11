@@ -1,5 +1,6 @@
 package com.muscle.user.response;
 
+
 import lombok.*;
 
 @Builder(toBuilder = true)
@@ -8,9 +9,8 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class IronUserResponse {
+public class UserSafeDto {
     private Long id;
     private String username;
     private String email;
-    private byte[] icon;
 }
