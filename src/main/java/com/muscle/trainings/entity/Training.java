@@ -5,6 +5,9 @@ import com.muscle.trainings.responses.TrainingResponse;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -30,9 +33,7 @@ public class Training {
     private Long id;
     private String name;
     private String type;
-
-    @Lob
-    private byte[] image;
+    private String image;
     private String difficulty;
     private Integer points;
 
@@ -48,22 +49,19 @@ public class Training {
     }
 
     public TrainingResponse response() {
-        return TrainingResponse.builder()
-                .id(this.id)
-                .name(this.name)
-                .type(this.type)
-                .image(this.image)
-                .difficulty(this.difficulty)
-                .points(this.points)
-                .build();
-    }
+        byte[] image = null;
 
-    public TrainingResponse detailedResponse() {
+        try {
+            image = Files.readAllBytes(Paths.get("src/main/resources/images/" + this.image));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return TrainingResponse.builder()
                 .id(this.id)
                 .name(this.name)
                 .type(this.type)
-                .image(this.image)
+                .image(image)
                 .difficulty(this.difficulty)
                 .points(this.points)
                 .build();

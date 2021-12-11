@@ -1,22 +1,21 @@
 package com.muscle.trainings.service;
 
+import com.muscle.trainings.dto.UserTrainingHistoryDto;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.entity.UserTrainingHistory;
 import com.muscle.trainings.repository.TrainingsRepository;
 import com.muscle.trainings.repository.UserTrainingHistoryRepository;
 import com.muscle.trainings.other.TrainingHistory;
-import com.muscle.trainings.responses.UserTrainingHistoryResponse;
 import com.muscle.user.dto.IronUserDto;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.repository.UserRepository;
-import com.muscle.user.response.UserResponse;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -27,6 +26,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserTrainingHistoryService {
 
+    @Value("${images.main.dir}")
+    public String MAIN_DIR;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final TrainingsRepository trainingsRepository;
@@ -34,7 +35,7 @@ public class UserTrainingHistoryService {
     private final PointService pointService;
 
     @Transactional
-    public UserTrainingHistoryResponse saveUserActivity(String header, Long trainingId, Integer time) {
+    public UserTrainingHistoryDto saveUserActivity(String header, Long trainingId, Integer time) {
         IronUser user = userRepository.findByUsername(jwtUtil.extractUsername(header))
                 .orElseThrow(() -> new IllegalStateException("User not found"));
         Training training = trainingsRepository.findTrainingById(trainingId)
@@ -49,7 +50,7 @@ public class UserTrainingHistoryService {
                         .trainingDate(LocalDateTime.now())
                         .trainingTime(time)
                         .build())
-                .response();
+                .dto();
     }
 
     @Transactional
@@ -58,15 +59,7 @@ public class UserTrainingHistoryService {
         List<UserTrainingHistory> userTrainingHistory = userTrainingHistoryRepository.findUserHistory(user.getId(), year, month);
 
         return userTrainingHistory.stream()
-                        .map(userTrainingHistoryItem -> TrainingHistory.builder()
-                                .id(userTrainingHistoryItem.getId())
-                                .name(userTrainingHistoryItem.getTraining().getName())
-                                .image(userTrainingHistoryItem.getTraining().getImage())
-                                .difficulty(userTrainingHistoryItem.getTraining().getDifficulty())
-                                .points(userTrainingHistoryItem.getTraining().getPoints())
-                                .date(userTrainingHistoryItem.getTrainingDate())
-                                .time(userTrainingHistoryItem.getTrainingTime())
-                                .build())
+                        .map(UserTrainingHistory::response)
                         .sorted(Comparator.comparing(TrainingHistory::getDate).reversed())
                         .collect(Collectors.toList());
     }

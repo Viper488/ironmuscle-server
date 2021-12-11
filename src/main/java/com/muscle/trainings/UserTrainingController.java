@@ -1,5 +1,6 @@
 package com.muscle.trainings;
 
+import com.muscle.trainings.dto.UserTrainingHistoryDto;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.other.TrainingHistory;
 import com.muscle.trainings.responses.*;
@@ -89,7 +90,7 @@ public class UserTrainingController {
      * @return
      */
     @PostMapping("/history")
-    UserTrainingHistoryResponse saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId, @RequestParam("time") Integer time) {
+    UserTrainingHistoryDto saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId, @RequestParam("time") Integer time) {
         return userTrainingHistoryService.saveUserActivity(header, trainingId, time);
     }
 

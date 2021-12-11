@@ -32,36 +32,16 @@ public class TrainingsService {
         return trainingsRepository.findByNameContainsOrDifficultyContains(query, query, pageable);
     }
 
-    private byte[] loadImage(String image, String difficulty) throws IOException {
-        String imagePath = "imgs/" + image + "_" + difficulty;
-        File file;
-        if(new ClassPathResource(imagePath + ".jpg").exists()) {
-            file = new ClassPathResource(imagePath + ".jpg").getFile();
-        } else {
-            file = new ClassPathResource(imagePath + ".png").getFile();
-        }
-        return Files.readAllBytes(file.toPath());
-    }
-
     public TrainingResponse saveTraining(CreateTrainingDto trainingDto) {
         log.info("Saving new training {} to the database", trainingDto.getName());
-
-        byte [] image = null;
-
-        try {
-            image = loadImage(trainingDto.getImage(), trainingDto.getDifficulty());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-
         return trainingsRepository.save(Training.builder()
                 .name(trainingDto.getName())
                 .type(trainingDto.getType())
-                .image(image)
+                .image("/training/" + trainingDto.getImage().toLowerCase() + "_" + trainingDto.getDifficulty().toLowerCase() + ".png")
                 .difficulty(trainingDto.getDifficulty())
                 .points(trainingDto.getPoints())
                 .build())
-                .detailedResponse();
+                .response();
     }
 
     public TrainingResponse editTraining(TrainingDto trainingDto) {

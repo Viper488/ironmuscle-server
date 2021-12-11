@@ -118,23 +118,23 @@ INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://hips.hearstap
 INSERT INTO exercise VALUES(nextval('exercise_sequence'), 'https://thumbs.gfycat.com/TediousWarlikeBooby-max-1mb.gif','Reverse snow angels',  '0qLP2RNKX4A');--113
 
 --TRAININGS
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/abdominal_beginner.jpg'),    'Abdominal' , 10, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/chest_beginner.jpg'),        'Chest'     , 10, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/arms_beginner.png'),         'Arms'      , 10, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/legs_beginner.jpg'),         'Legs'      , 10, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', lo_import('C://imgs/back_beginner.jpg'),         'Back '     , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'training/abdominal_beginner.png',    'Abdominal' , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'training/chest_beginner.png',        'Chest'     , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'training/arms_beginner.png',         'Arms'      , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'training/legs_beginner.png',         'Legs'      , 10, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'beginner', 'training/back_beginner.png',         'Back '     , 10, 'standard');
 
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/abdominal_mediocre.jpg'),     'Abdominal' , 20, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/chest_mediocre.jpg'),         'Chest'     , 20, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/arms_mediocre.jpg'),          'Arms'      , 20, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/legs_mediocre.jpg'),          'Legs'      , 20, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', lo_import('C://imgs/back_mediocre.jpg'),          'Back '     , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'training/abdominal_mediocre.png',     'Abdominal' , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'training/chest_mediocre.png',         'Chest'     , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'training/arms_mediocre.png',          'Arms'      , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'training/legs_mediocre.png',          'Legs'      , 20, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'mediocre', 'training/back_mediocre.png',          'Back '     , 20, 'standard');
 
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/abdominal_pro.jpg'),     'Abdominal' , 30, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/chest_pro.png'),         'Chest'     , 30, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/arms_pro.jpg'),          'Arms'      , 30, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/legs_pro.jpg'),          'Legs'      , 30, 'standard');
-INSERT INTO training VALUES (nextval('training_sequence'), 'pro', lo_import('C://imgs/back_pro.jpg'),          'Back '     , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'training/abdominal_pro.png',     'Abdominal' , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'training/chest_pro.png',         'Chest'     , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'training/arms_pro.png',          'Arms'      , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'training/legs_pro.png',          'Legs'      , 30, 'standard');
+INSERT INTO training VALUES (nextval('training_sequence'), 'pro', 'training/back_pro.png',          'Back '     , 30, 'standard');
 
 --TRAININGS EXERCISES
 

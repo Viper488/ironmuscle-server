@@ -58,7 +58,7 @@ public class TrainingExerciseService {
         }
 
         return TrainingDetails.builder()
-                .training(trainingExerciseList.get(1).getTraining().detailedResponse())
+                .training(trainingExerciseList.get(1).getTraining().response())
                 .exercises(trainingExerciseList.stream().map(trainingExercise -> ExerciseResponse.builder()
                         .id(trainingExercise.getExercise().getId())
                         .name(trainingExercise.getExercise().getName())

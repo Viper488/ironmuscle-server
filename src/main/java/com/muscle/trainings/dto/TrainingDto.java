@@ -13,7 +13,7 @@ public class TrainingDto {
     private Long id;
     private String name;
     private String type;
-    private byte[] image;
+    private String image;
     private String difficulty;
     private Integer points;
 }
