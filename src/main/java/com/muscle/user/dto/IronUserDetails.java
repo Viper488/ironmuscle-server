@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 public class IronUserDetails implements UserDetails {
 
     private Long id;
-    private String name;
-    private String lastName;
     private String username;
     private String email;
     private String password;
@@ -28,8 +26,6 @@ public class IronUserDetails implements UserDetails {
 
     public IronUserDetails(IronUserDto ironUserDto) {
         this.id = ironUserDto.getId();
-        this.name = ironUserDto.getName();
-        this.lastName = ironUserDto.getLastName();
         this.username = ironUserDto.getUsername();
         this.email = ironUserDto.getEmail();
         this.password = ironUserDto.getPassword();

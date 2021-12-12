@@ -87,8 +87,6 @@ public class UserService implements UserDetailsService {
         IronUserDto ironUserDto = user.orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username))).dto();
         return IronUserDetails.builder()
                 .id(ironUserDto.getId())
-                .name(ironUserDto.getName())
-                .lastName(ironUserDto.getLastName())
                 .username(ironUserDto.getUsername())
                 .email(ironUserDto.getEmail())
                 .password(ironUserDto.getPassword())
