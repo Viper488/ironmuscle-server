@@ -59,7 +59,7 @@ public class RegistrationService {
                         .username(request.getUsername())
                         .email(request.getEmail())
                         .password(request.getPassword())
-                        .icon("src/main/resources/images/profile-picture/default/icon.png")
+                        .icon("profile-picture/default/icon.png")
                         .locked(false)
                         .enabled(false)
                         .roles(roles)
