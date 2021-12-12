@@ -1,12 +1,10 @@
 package com.muscle.user.util;
 
-import com.muscle.trainings.repository.PointRepository;
 import com.muscle.user.entity.ConfirmationToken;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.PasswordToken;
 import com.muscle.user.repository.ConfirmationTokenRepository;
 import com.muscle.user.repository.PasswordTokenRepository;
-import com.muscle.user.repository.UserBadgesRepository;
 import com.muscle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +24,6 @@ public class Scheduler {
     private final UserRepository userRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final PasswordTokenRepository passwordTokenRepository;
-    private final PointRepository pointRepository;
-    private final UserBadgesRepository userBadgesRepository;
 
     @Transactional
     //@Scheduled(cron = "0/20 * * ? * *") //Every 20 seconds

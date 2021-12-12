@@ -25,7 +25,7 @@ public class BadgeService {
 
     @Transactional
     public List<BadgeResponse> getBadges() {
-        return badgeRepository.findAll().stream().sorted(Comparator.comparing(Badge::getGoal)).map(Badge::response).collect(Collectors.toList());
+        return badgeRepository.findAll().stream().sorted(Comparator.comparing(Badge::getGoal)).map(Badge::responseImage).collect(Collectors.toList());
     }
 
     @Transactional

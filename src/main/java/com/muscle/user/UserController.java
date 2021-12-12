@@ -161,7 +161,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/user/icon")
-    public ResponseEntity changeUserImage(@RequestHeader("Authorization") String header, @RequestBody MultipartFile file) {
+    public ResponseEntity<?> changeUserImage(@RequestHeader("Authorization") String header, @RequestBody MultipartFile file) {
         try {
             userService.changeUserIcon(header, file);
             return ResponseEntity.ok().build();

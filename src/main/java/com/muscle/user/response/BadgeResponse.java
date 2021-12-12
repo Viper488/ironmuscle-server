@@ -12,4 +12,5 @@ public class BadgeResponse {
     Long id;
     String name;
     Integer goal;
+    byte[] image;
 }
