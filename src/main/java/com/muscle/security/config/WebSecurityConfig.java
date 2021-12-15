@@ -38,7 +38,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/v*/registration",
                 "/api/v*/registration/confirm*",
                 "/api/v*/password/reset*",
-                "/api/v*/login/**"
+                "/api/v*/login/**",
+                "/swagger-ui.html**",
+                "/swagger-ui/**",
+                "/v2/api-docs/**",
+                "/swagger-resources/**",
+                "/webjars/**"
         ).permitAll();
 
         http.authorizeRequests().antMatchers("/api/v*/password/reset?token=*&password=*").permitAll();

@@ -90,14 +90,4 @@ public class IronUser {
                 .email(this.email)
                 .build();
     }
-
-
-    public UserResponse response() throws IOException {
-        return UserResponse.builder()
-                .id(this.id)
-                .username(this.username)
-                .email(this.email)
-                .icon(Files.readAllBytes(Paths.get("src/main/resources/images/" + this.icon)))
-                .build();
-    }
 }
