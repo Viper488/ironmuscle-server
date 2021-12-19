@@ -32,13 +32,13 @@ public class RegistrationService {
     public String resetPasswordBaseLink;
     @Value("${user.create.link}")
     public String createUserBaseLink;
-    private final RoleRepository roleRepository;
-    private final UserService userService;
-    private final EmailValidator emailValidator;
-    private final ConfirmationTokenService confirmationTokenService;
-    private final PasswordTokenService passwordTokenService;
     private final EmailSender emailSender;
+    private final UserService userService;
     private final PointService pointService;
+    private final RoleRepository roleRepository;
+    private final EmailValidator emailValidator;
+    private final PasswordTokenService passwordTokenService;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Transactional
     public void register(RegistrationRequestDto request) throws IOException {
@@ -71,11 +71,6 @@ public class RegistrationService {
         emailSender.send(request.getEmail(), buildUserEmail(request.getUsername(), link));
     }
 
-    private byte[] loadIcon() throws IOException {
-        File file = new ClassPathResource("images/profile-picture/default/icon.png").getFile();
-        return Files.readAllBytes(file.toPath());
-    }
-
     @Transactional
     public void confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
@@ -93,7 +88,7 @@ public class RegistrationService {
         confirmationTokenService.setConfirmedAt(token);
 
         userService.enableUser(confirmationToken.getIronUser().getEmail());
-        if(confirmationToken.getIronUser().getRoles().stream().filter(role -> role.getName().equals("USER")).collect(Collectors.toList()).size() > 0)
+        if(confirmationToken.getIronUser().getRoles().stream().filter(role -> role.getName().equals("USER")).count() > 0)
             pointService.initializePoints(confirmationToken.getIronUser());
     }
 
