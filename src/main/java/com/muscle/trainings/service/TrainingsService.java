@@ -37,7 +37,7 @@ public class TrainingsService {
         return trainingsRepository.save(Training.builder()
                 .name(trainingDto.getName())
                 .type(trainingDto.getType())
-                .image("/training/" + trainingDto.getImage().toLowerCase() + "_" + trainingDto.getDifficulty().toLowerCase() + ".png")
+                .image("training/" + trainingDto.getImage().toLowerCase() + "_" + trainingDto.getDifficulty().toLowerCase() + ".png")
                 .difficulty(trainingDto.getDifficulty())
                 .points(trainingDto.getPoints())
                 .build())

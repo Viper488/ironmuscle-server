@@ -1,13 +1,10 @@
 package com.muscle.trainings;
 
-import com.muscle.trainings.dto.UserTrainingHistoryDto;
 import com.muscle.trainings.entity.Training;
-import com.muscle.trainings.other.TrainingHistory;
 import com.muscle.trainings.responses.*;
 import com.muscle.trainings.service.PointService;
 import com.muscle.trainings.service.UserTrainingHistoryService;
 import com.muscle.trainings.service.UserTrainingsService;
-import javassist.bytecode.ByteArray;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,10 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Tuple;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +40,7 @@ public class UserTrainingController {
     @PostMapping("/trainings/add")
     ResponseEntity<?> addTrainingToUser(@RequestParam Long user, @RequestParam Long training) {
         try {
+            log.info("Adding training to user");
             return ResponseEntity.ok(userTrainingsService.addTrainingToUser(user, training));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(generateErrorBody(400, e));

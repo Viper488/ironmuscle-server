@@ -1,12 +1,11 @@
 package com.muscle.trainings.entity;
 
-import com.muscle.trainings.dto.UserTrainingDto;
 import com.muscle.trainings.responses.UserTrainingResponse;
 import com.muscle.user.entity.IronUser;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.IOException;
+import java.io.Serializable;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -17,20 +16,10 @@ import java.io.IOException;
 
 @Entity
 @Data
-public class UserTrainings {
+@IdClass(UserTrainingId.class)
+public class UserTrainings implements Serializable {
 
     @Id
-    @SequenceGenerator(
-            name = "user_trainings_sequence",
-            sequenceName = "user_trainings_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_trainings_sequence"
-    )
-    private Long id;
-
     @ManyToOne
     @JoinColumn(
             nullable = false,
@@ -38,6 +27,7 @@ public class UserTrainings {
     )
     private IronUser ironUser;
 
+    @Id
     @ManyToOne
     @JoinColumn(
             nullable = false,
@@ -47,7 +37,6 @@ public class UserTrainings {
 
     public UserTrainingResponse response() {
         return UserTrainingResponse.builder()
-                .id(this.id)
                 .user(this.ironUser.safeDto())
                 .training(this.training.response())
                 .build();
