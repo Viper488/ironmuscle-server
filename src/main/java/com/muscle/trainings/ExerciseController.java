@@ -7,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.muscle.user.util.JwtUtil.generateErrorBody;
 
 @CrossOrigin
 @RestController
@@ -28,8 +31,8 @@ public class ExerciseController {
      * @return
      */
     @PostMapping()
-    ExerciseDto createExercise(@RequestBody ExerciseDto exerciseDto) {
-        return exerciseService.saveExercise(exerciseDto);
+    ResponseEntity<ExerciseDto> createExercise(@RequestBody ExerciseDto exerciseDto) {
+        return ResponseEntity.ok(exerciseService.saveExercise(exerciseDto));
     }
 
     /**
@@ -38,8 +41,12 @@ public class ExerciseController {
      * @return
      */
     @PutMapping()
-    ExerciseDto editExercise(@RequestBody ExerciseDto exerciseDto) {
-        return exerciseService.editExercise(exerciseDto);
+    ResponseEntity<?> editExercise(@RequestBody ExerciseDto exerciseDto) {
+        try {
+            return ResponseEntity.ok(exerciseService.editExercise(exerciseDto));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -49,7 +56,7 @@ public class ExerciseController {
      * @return
      */
     @GetMapping("/all")
-    Map<String, Object> getExercises(@RequestParam(defaultValue = "0") Integer page,
+    ResponseEntity<Map<String, Object>> getExercises(@RequestParam(defaultValue = "0") Integer page,
                                      @RequestParam(defaultValue = "100") Integer size,
                                      @RequestParam(defaultValue = "") String query) {
         Pageable paging = PageRequest.of(page, size);
@@ -64,7 +71,7 @@ public class ExerciseController {
         response.put("totalItems", exercisesPage.getTotalElements());
         response.put("totalPages", exercisesPage.getTotalPages());
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
 }

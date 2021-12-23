@@ -53,7 +53,7 @@ public class UserTrainingsService {
 
     @Transactional
     public void deleteUserTraining(String header, Long trainingId) {
-        IronUser user = userRepository.findByUsername(jwtUtil.extractUsername(header)).orElseThrow(() -> new IllegalStateException("user not found"));
+        IronUser user = userRepository.findByUsername(jwtUtil.extractUsername(header)).orElseThrow(() -> new IllegalStateException("User not found"));
 
         trainingExerciseRepository.deleteByTrainingId(trainingId);
         userTrainingsRepository.deleteByIronUserIdAndTrainingId(user.getId(), trainingId);

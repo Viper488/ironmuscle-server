@@ -10,12 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.muscle.user.util.JwtUtil.generateErrorBody;
 
 @CrossOrigin
 @RestController
@@ -33,9 +36,9 @@ public class TrainingsController {
      * @return
      */
     @GetMapping("/all")
-    Map<String, Object> getTrainings(@RequestParam(defaultValue = "0") Integer page,
-                                    @RequestParam(defaultValue = "100") Integer size,
-                                    @RequestParam(defaultValue = "") String query) {
+    ResponseEntity<Map<String, Object>> getTrainings(@RequestParam(defaultValue = "0") Integer page,
+                                                    @RequestParam(defaultValue = "100") Integer size,
+                                                    @RequestParam(defaultValue = "") String query) {
         Pageable paging = PageRequest.of(page, size);
         Page<Training> trainingPage = trainingsService.getPaginatedTrainings(paging, query);
 
@@ -48,7 +51,7 @@ public class TrainingsController {
         response.put("totalItems", trainingPage.getTotalElements());
         response.put("totalPages", trainingPage.getTotalPages());
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -57,8 +60,8 @@ public class TrainingsController {
      * @return
      */
     @GetMapping("/{id}")
-    TrainingDetails getTrainingDetails(@PathVariable Long id) {
-        return trainingExerciseService.getTrainingDetails(id);
+    ResponseEntity<TrainingDetails> getTrainingDetails(@PathVariable Long id) {
+        return ResponseEntity.ok(trainingExerciseService.getTrainingDetails(id));
     }
 
     /**
@@ -67,8 +70,8 @@ public class TrainingsController {
      * @return
      */
     @PostMapping()
-    TrainingResponse createTraining(@RequestBody CreateTrainingDto trainingDto) {
-        return trainingsService.saveTraining(trainingDto);
+    ResponseEntity<TrainingResponse> createTraining(@RequestBody CreateTrainingDto trainingDto) {
+        return ResponseEntity.ok(trainingsService.saveTraining(trainingDto));
     }
 
     /**
@@ -77,8 +80,12 @@ public class TrainingsController {
      * @return
      */
     @PutMapping()
-    TrainingResponse editTraining(@RequestBody TrainingDto trainingDto) {
-        return trainingsService.editTraining(trainingDto);
+    ResponseEntity<?> editTraining(@RequestBody TrainingDto trainingDto) {
+        try {
+            return ResponseEntity.ok(trainingsService.editTraining(trainingDto));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -88,8 +95,13 @@ public class TrainingsController {
      * @return
      */
     @PostMapping("/{id}/exercises")
-    void addTrainingExercises(@PathVariable Long id, @RequestBody List<AddExerciseRequest> exercises) {
-        trainingExerciseService.addExercises(id, exercises);
+    ResponseEntity<?> addTrainingExercises(@PathVariable Long id, @RequestBody List<AddExerciseRequest> exercises) {
+        try {
+            trainingExerciseService.addExercises(id, exercises);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -98,7 +110,12 @@ public class TrainingsController {
      * @param exercises
      */
     @PutMapping("/{id}/exercises")
-    void editTrainingExercises(@PathVariable Long id, @RequestBody List<AddExerciseRequest> exercises) {
-        trainingExerciseService.editExercises(id, exercises);
+    ResponseEntity<?> editTrainingExercises(@PathVariable Long id, @RequestBody List<AddExerciseRequest> exercises) {
+        try {
+            trainingExerciseService.editExercises(id, exercises);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 }

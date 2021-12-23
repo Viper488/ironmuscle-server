@@ -41,7 +41,7 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
 
     @Transactional
-    public void register(RegistrationRequestDto request) throws IOException {
+    public void register(RegistrationRequestDto request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
 
         if(!isValidEmail){

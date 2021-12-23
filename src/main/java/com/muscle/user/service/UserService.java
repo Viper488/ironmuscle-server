@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserResponse getMyself(String header) throws IOException {
+    public UserResponse getMyself(String header) {
         IronUser user = getUserFromHeader(header);
 
         return UserResponse.builder()
@@ -299,7 +299,12 @@ public class UserService implements UserDetailsService {
         return Files.readAllBytes(Paths.get(MAIN_DIR + FILE_LOCATION));
     }
 
-    public byte[] getImage(String path) throws IOException {
-        return Files.readAllBytes(Paths.get(MAIN_DIR + path));
+    public byte[] getImage(String path) {
+        try {
+            return Files.readAllBytes(Paths.get(MAIN_DIR + path));
+        } catch (IOException e) {
+            log.info(e.getMessage());
+            return null;
+        }
     }
 }

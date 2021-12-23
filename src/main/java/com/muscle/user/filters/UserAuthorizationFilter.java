@@ -47,7 +47,7 @@ public class UserAuthorizationFilter extends OncePerRequestFilter {
 
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
-                    HttpStatus status = INTERNAL_SERVER_ERROR;
+                    HttpStatus status = BAD_REQUEST;
                     if(e.getMessage().startsWith("The Token has expired")) {
                         status = UNAUTHORIZED;
                     }

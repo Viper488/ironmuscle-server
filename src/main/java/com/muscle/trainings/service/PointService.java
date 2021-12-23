@@ -46,19 +46,12 @@ public class PointService {
         Page<Tuple> rankingPage = pointRepository.getRanking(pageable);
 
         List<RankingResponse> rankingList = rankingPage.getContent().stream()
-                .map(tuple -> {
-                    try {
-                        return RankingResponse.builder()
-                                .rank(tuple.get(0, BigInteger.class).longValue())
-                                .username(tuple.get(1, String.class))
-                                .icon(userService.getImage(tuple.get(2, String.class)))
-                                .points(tuple.get(3, Integer.class))
-                                .build();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }).collect(Collectors.toList());
+                .map(tuple -> RankingResponse.builder()
+                       .rank(tuple.get(0, BigInteger.class).longValue())
+                       .username(tuple.get(1, String.class))
+                       .icon(userService.getImage(tuple.get(2, String.class)))
+                       .points(tuple.get(3, Integer.class))
+                       .build()).collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
         response.put("ranking", rankingList);
@@ -70,7 +63,7 @@ public class PointService {
     }
 
     @Transactional
-    public RankingResponse getUserRank(String header) throws IOException {
+    public RankingResponse getUserRank(String header) {
         Tuple userRank = pointRepository.getRankByUsername(jwtUtil.extractUsername(header)).orElseThrow(()->new IllegalStateException("Ranking entry not found"));
 
         return RankingResponse.builder()

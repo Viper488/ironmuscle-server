@@ -77,8 +77,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/badges")
-    public List<BadgeResponse> getBadges() {
-        return badgeService.getBadges();
+    ResponseEntity<List<BadgeResponse>> getBadges() {
+        return ResponseEntity.ok(badgeService.getBadges());
     }
 
     /**
@@ -87,8 +87,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/user/badges")
-    public List<BadgeResponse> getUserBadges(@RequestHeader("Authorization") String header) {
-        return badgeService.getUserBadges(header);
+    ResponseEntity<List<BadgeResponse>> getUserBadges(@RequestHeader("Authorization") String header) {
+        return ResponseEntity.ok(badgeService.getUserBadges(header));
     }
 
     /**
@@ -97,8 +97,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/myself")
-    public UserResponse getMyself(@RequestHeader("Authorization") String header) throws IOException {
-        return userService.getMyself(header);
+    ResponseEntity<UserResponse> getMyself(@RequestHeader("Authorization") String header) {
+        return ResponseEntity.ok(userService.getMyself(header));
     }
 
     /**
@@ -107,7 +107,7 @@ public class UserController {
      * @param changeUserDetails
      */
     @PutMapping("/myself")
-    public ResponseEntity changeEmail(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetails changeUserDetails) {
+    ResponseEntity<?> changeEmail(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetails changeUserDetails) {
         try {
             userService.changeEmail(header, changeUserDetails);
             return ResponseEntity.ok().build();
@@ -122,8 +122,13 @@ public class UserController {
      * @param changeUserDetails
      */
     @PutMapping("/user/lock")
-    public void lockUser(@RequestParam Long id, @RequestBody ChangeUserDetails changeUserDetails) {
-        userService.lockUser(id, changeUserDetails);
+    ResponseEntity<?> lockUser(@RequestParam Long id, @RequestBody ChangeUserDetails changeUserDetails) {
+        try {
+            userService.lockUser(id, changeUserDetails);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -131,8 +136,13 @@ public class UserController {
      * @param email
      */
     @PostMapping("/password/reset")
-    public void requestPasswordReset(@RequestParam("email") String email) {
-        userService.requestPasswordChange(email);
+    ResponseEntity<?> requestPasswordReset(@RequestParam("email") String email) {
+        try {
+            userService.requestPasswordChange(email);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -140,8 +150,13 @@ public class UserController {
      * @param resetPasswordDto
      */
     @PutMapping("/password/reset")
-    public void resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
-        userService.resetPassword(resetPasswordDto);
+    ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+        try {
+            userService.resetPassword(resetPasswordDto);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(UNAUTHORIZED).body(generateErrorBody(401, e));
+        }
     }
 
     /**
@@ -150,8 +165,13 @@ public class UserController {
      * @param changePasswordDto
      */
     @PostMapping("/password/change")
-    public void changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangePasswordDto changePasswordDto) {
-        userService.changePassword(header, changePasswordDto);
+    ResponseEntity<?> changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangePasswordDto changePasswordDto) {
+        try {
+            userService.changePassword(header, changePasswordDto);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -161,12 +181,12 @@ public class UserController {
      * @return
      */
     @PostMapping("/user/icon")
-    public ResponseEntity<?> changeUserImage(@RequestHeader("Authorization") String header, @RequestBody MultipartFile file) {
+    ResponseEntity<?> changeUserImage(@RequestHeader("Authorization") String header, @RequestBody MultipartFile file) {
         try {
             userService.changeUserIcon(header, file);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(generateErrorBody(500, e));
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
         }
     }
 
@@ -177,7 +197,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/users")
-    Map<String, Object> getUsers(@RequestParam(defaultValue = "0") Integer page,
+    ResponseEntity<Map<String, Object>> getUsers(@RequestParam(defaultValue = "0") Integer page,
                                      @RequestParam(defaultValue = "100") Integer size,
                                  @RequestParam(defaultValue = "") String query) {
         Pageable paging = PageRequest.of(page, size);
@@ -192,6 +212,6 @@ public class UserController {
         response.put("totalItems", userPage.getTotalElements());
         response.put("totalPages", userPage.getTotalPages());
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 }

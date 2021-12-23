@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Tuple;
@@ -23,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.muscle.user.util.JwtUtil.generateErrorBody;
 
 @Slf4j
 @CrossOrigin
@@ -42,8 +45,12 @@ public class UserTrainingController {
      * @return
      */
     @PostMapping("/trainings/add")
-    UserTrainingResponse addTrainingToUser(@RequestParam Long user, @RequestParam Long training) {
-        return userTrainingsService.addTrainingToUser(user, training);
+    ResponseEntity<?> addTrainingToUser(@RequestParam Long user, @RequestParam Long training) {
+        try {
+            return ResponseEntity.ok(userTrainingsService.addTrainingToUser(user, training));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -53,7 +60,7 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/trainings")
-    Map<String, Object> getUserTrainings(@RequestHeader("Authorization") String header,
+    ResponseEntity<Map<String, Object>> getUserTrainings(@RequestHeader("Authorization") String header,
                                      @RequestParam(defaultValue = "0") Integer page,
                                      @RequestParam(defaultValue = "100") Integer size,
                                      @RequestParam(defaultValue = "") String type,
@@ -70,7 +77,7 @@ public class UserTrainingController {
         response.put("totalItems", trainingPage.getTotalElements());
         response.put("totalPages", trainingPage.getTotalPages());
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -79,8 +86,13 @@ public class UserTrainingController {
      * @return
      */
     @DeleteMapping("/training/{id}")
-    void deleteUserTraining(@RequestHeader("Authorization") String header, @PathVariable Long id) {
-        userTrainingsService.deleteUserTraining(header, id);
+    ResponseEntity<?> deleteUserTraining(@RequestHeader("Authorization") String header, @PathVariable Long id) {
+        try {
+            userTrainingsService.deleteUserTraining(header, id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -90,8 +102,12 @@ public class UserTrainingController {
      * @return
      */
     @PostMapping("/history")
-    UserTrainingHistoryDto saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId, @RequestParam("time") Integer time) {
-        return userTrainingHistoryService.saveUserActivity(header, trainingId, time);
+    ResponseEntity<?> saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId, @RequestParam("time") Integer time) {
+        try {
+            return ResponseEntity.ok(userTrainingHistoryService.saveUserActivity(header, trainingId, time));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
 
@@ -101,8 +117,12 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/history")
-    List<TrainingHistory> getUserHistory(@RequestHeader("Authorization") String header, @RequestParam("y") int year, @RequestParam("m") int month) {
-        return userTrainingHistoryService.getUserTrainingHistory(header, year, month);
+    ResponseEntity<?> getUserHistory(@RequestHeader("Authorization") String header, @RequestParam("y") int year, @RequestParam("m") int month) {
+        try {
+            return ResponseEntity.ok(userTrainingHistoryService.getUserTrainingHistory(header, year, month));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -110,10 +130,10 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/ranking/list")
-    Map<String, Object> getRanking(@RequestParam(defaultValue = "0") Integer page,
+    ResponseEntity<Map<String, Object>> getRanking(@RequestParam(defaultValue = "0") Integer page,
                                    @RequestParam(defaultValue = "100") Integer size) {
         Pageable paging = PageRequest.of(page, size);
-        return pointService.getPaginatedRanking(paging);
+        return ResponseEntity.ok(pointService.getPaginatedRanking(paging));
     }
 
     /**
@@ -121,7 +141,11 @@ public class UserTrainingController {
      * @return
      */
     @GetMapping("/ranking")
-    RankingResponse getUserRank(@RequestHeader("Authorization") String header) throws IOException {
-        return pointService.getUserRank(header);
+    ResponseEntity<?> getUserRank(@RequestHeader("Authorization") String header) {
+        try {
+            return ResponseEntity.ok(pointService.getUserRank(header));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 }

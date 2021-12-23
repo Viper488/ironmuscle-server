@@ -9,14 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.muscle.user.util.JwtUtil.generateErrorBody;
 
 @Slf4j
 @CrossOrigin
@@ -34,8 +36,12 @@ public class TrainingRequestController {
      * @return
      */
     @PostMapping()
-    TrainingRequestResponse createRequest(@RequestHeader("Authorization") String header, @RequestBody TrainingRequestDto trainingRequestDto) {
-        return trainingRequestService.createRequest(header, trainingRequestDto);
+    ResponseEntity<?> createRequest(@RequestHeader("Authorization") String header, @RequestBody TrainingRequestDto trainingRequestDto) {
+        try {
+            return ResponseEntity.ok(trainingRequestService.createRequest(header, trainingRequestDto));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -44,8 +50,12 @@ public class TrainingRequestController {
      * @return
      */
     @GetMapping("/{id}")
-    TrainingRequestResponse getRequest(@PathVariable Long id) {
-        return trainingRequestService.getRequest(id);
+    ResponseEntity<?> getRequest(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(trainingRequestService.getRequest(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -54,8 +64,9 @@ public class TrainingRequestController {
      * @return
      */
     @DeleteMapping("/{id}")
-    void deleteRequest(@PathVariable Long id) {
+    ResponseEntity<?> deleteRequest(@PathVariable Long id) {
         trainingRequestService.deleteRequest(id);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -64,21 +75,10 @@ public class TrainingRequestController {
      * @return
      */
     @DeleteMapping()
-    void deleteDoneRequests(@RequestHeader("Authorization") String header) {
+    ResponseEntity<?> deleteDoneRequests(@RequestHeader("Authorization") String header) {
         trainingRequestService.deleteUserDoneRequests(header);
+        return ResponseEntity.ok().build();
     }
-
-
-//    /**
-//     * Edit request
-//     * @param id
-//     * @param trainingRequestDto
-//     * @return
-//     */
-//    @PutMapping("/{id}")
-//    TrainingRequestResponse updateRequest(@PathVariable Long id, @RequestBody TrainingRequestDto trainingRequestDto) {
-//        return trainingRequestService.updateRequest(id, trainingRequestDto);
-//    }
 
     /**
      * Get requests made by user
@@ -86,7 +86,7 @@ public class TrainingRequestController {
      * @return
      */
     @GetMapping("/user")
-    Map<String, Object> getUserRequests(@RequestHeader("Authorization") String header,
+    ResponseEntity<Map<String, Object>> getUserRequests(@RequestHeader("Authorization") String header,
                                          @RequestParam(defaultValue = "0") Integer page,
                                          @RequestParam(defaultValue = "100") Integer size,
                                          @RequestParam(defaultValue = "") String status,
@@ -103,7 +103,7 @@ public class TrainingRequestController {
         response.put("totalItems", requestPage.getTotalElements());
         response.put("totalPages", requestPage.getTotalPages());
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -113,8 +113,13 @@ public class TrainingRequestController {
      * @return
      */
     @PutMapping("/{id}")
-    TrainingRequestResponse updateRequestTrainer(@RequestHeader("Authorization") String header, @PathVariable Long id, @RequestBody TrainingRequestDto trainingRequestDto) throws IOException {
-        return trainingRequestService.updateRequest(header, id, trainingRequestDto);
+    ResponseEntity<?> updateRequestTrainer(@RequestHeader("Authorization") String header, @PathVariable Long id, @RequestBody TrainingRequestDto trainingRequestDto) throws IOException {
+        try {
+            return ResponseEntity.ok(trainingRequestService.updateRequest(header, id, trainingRequestDto));
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
@@ -124,7 +129,7 @@ public class TrainingRequestController {
      * @return
      */
     @GetMapping("/all")
-    Map<String, Object> getRequests(@RequestParam(defaultValue = "0") Integer page,
+    ResponseEntity<Map<String, Object>> getRequests(@RequestParam(defaultValue = "0") Integer page,
                                    @RequestParam(defaultValue = "100") Integer size,
                                     @RequestParam(defaultValue = "new") String status,
                                     @RequestParam(defaultValue = "") String query) {
@@ -140,6 +145,6 @@ public class TrainingRequestController {
         response.put("totalItems", requestPage.getTotalElements());
         response.put("totalPages", requestPage.getTotalPages());
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 }
