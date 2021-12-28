@@ -37,7 +37,7 @@ public class UserTrainingHistory {
     @ManyToOne
     @JoinColumn(
             nullable = false,
-            name = "user_id"
+            name = "iron_user_id"
     )
     private IronUser user;
 

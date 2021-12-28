@@ -15,8 +15,8 @@ public interface TrainingRequestRepository extends JpaRepository<TrainingRequest
             nativeQuery = true)
     Page<TrainingRequest> findByStatusAndQuery(String status, String query, Pageable pageable);
 
-    @Query(value = "SELECT * FROM training_request tr WHERE tr.user_id = ?1 AND tr.status LIKE %?2% AND (tr.title LIKE %?3% OR tr.description LIKE %?3%) ORDER BY tr.created_at DESC",
-            countQuery = "WITH user_requests AS (SELECT * FROM training_request tr WHERE tr.user_id = ?1 AND tr.status LIKE %?2% AND (tr.title LIKE %?3% OR tr.description LIKE %?3%) ORDER BY tr.created_at DESC) SELECT COUNT(*) FROM user_requests)",
+    @Query(value = "SELECT * FROM training_request tr WHERE tr.iron_user_id = ?1 AND tr.status LIKE %?2% AND (tr.title LIKE %?3% OR tr.description LIKE %?3%) ORDER BY tr.created_at DESC",
+            countQuery = "WITH user_requests AS (SELECT * FROM training_request tr WHERE tr.iron_user_id = ?1 AND tr.status LIKE %?2% AND (tr.title LIKE %?3% OR tr.description LIKE %?3%) ORDER BY tr.created_at DESC) SELECT COUNT(*) FROM user_requests)",
             nativeQuery = true)
     Page<TrainingRequest> findByUserIdAndStatusAndQuery(Long userId, String status, String query, Pageable pageable);
 

@@ -48,7 +48,7 @@ public class TrainingRequest {
     @ManyToOne
     @JoinColumn(
             nullable = false,
-            name = "user_id"
+            name = "iron_user_id"
     )
     private IronUser user;
 

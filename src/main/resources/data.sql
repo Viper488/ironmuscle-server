@@ -5,9 +5,9 @@ d_badge_id BIGINT;
 BEGIN
 SELECT id INTO d_badge_id FROM badge WHERE goal <= NEW.points ORDER BY goal DESC LIMIT 1;
 IF d_badge_id IS NOT NULL THEN
-SELECT COUNT(*) INTO d_user_badge FROM user_badges AS ub WHERE ub.badge_id = d_badge_id AND ub.user_id = NEW.user_id;
+SELECT COUNT(*) INTO d_user_badge FROM user_badges AS ub WHERE ub.badge_id = d_badge_id AND ub.iron_user_id = NEW.iron_user_id;
 IF d_user_badge = 0 THEN
-            INSERT INTO user_badges(badge_id, user_id) VALUES(d_badge_id, NEW.user_id);
+            INSERT INTO user_badges(badge_id, iron_user_id) VALUES(d_badge_id, NEW.iron_user_id);
 END IF;
 END IF;
 RETURN NULL;

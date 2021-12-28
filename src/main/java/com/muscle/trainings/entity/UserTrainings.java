@@ -23,7 +23,7 @@ public class UserTrainings implements Serializable {
     @ManyToOne
     @JoinColumn(
             nullable = false,
-            name = "user_id"
+            name = "iron_user_id"
     )
     private IronUser ironUser;
 

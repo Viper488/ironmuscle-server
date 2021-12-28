@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface UserTrainingHistoryRepository extends JpaRepository<UserTrainingHistory, Long> {
 
-    @Query(value = "SELECT * FROM USER_TRAINING_HISTORY Uth WHERE user_id = ?1 AND EXTRACT(YEAR FROM Uth.training_date) = ?2 AND EXTRACT(MONTH FROM Uth.training_date) = ?3", nativeQuery = true)
-    List<UserTrainingHistory> findUserHistory(Long user_id, int year, int month);
+    @Query(value = "SELECT * FROM USER_TRAINING_HISTORY Uth WHERE iron_user_id = ?1 AND EXTRACT(YEAR FROM Uth.training_date) = ?2 AND EXTRACT(MONTH FROM Uth.training_date) = ?3", nativeQuery = true)
+    List<UserTrainingHistory> findUserHistory(Long ironUserId, int year, int month);
 }

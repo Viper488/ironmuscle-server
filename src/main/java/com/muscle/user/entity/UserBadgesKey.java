@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Setter
 @Embeddable
 public class UserBadgesKey implements Serializable {
-    @Column(name = "user_id")
+    @Column(name = "iron_user_id")
     Long userId;
 
     @Column(name = "badge_id")

@@ -20,7 +20,7 @@ public class UserBadges {
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "iron_user_id")
     IronUser user;
 
     @ManyToOne

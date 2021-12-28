@@ -30,7 +30,7 @@ public class Point {
     @OneToOne
     @JoinColumn(
             nullable = false,
-            name = "user_id"
+            name = "iron_user_id"
     )
     private IronUser user;
     private Integer points;
