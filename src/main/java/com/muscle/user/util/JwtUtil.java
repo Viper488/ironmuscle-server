@@ -79,7 +79,6 @@ public class JwtUtil {
 
         errors.put("timestamp", new Date(System.currentTimeMillis()).toString());
         errors.put("status", status);
-        errors.put("error", e.getCause().getCause());
         errors.put("message", e.getMessage());
 
         return errors;

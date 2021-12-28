@@ -186,7 +186,7 @@ public class UserService implements UserDetailsService {
 
         String encodedPassword = passwordEncoder.encode(resetPasswordDto.getPassword());
         if(encodedPassword.equals(user.getPassword())) {
-            throw new IllegalStateException("Your new password can not be the same as your old password");
+            throw new IllegalArgumentException("Your new password can not be the same as your old password");
         }
         user.setPassword(encodedPassword);
         passwordTokenService.setConfirmedAt(resetPasswordDto.getToken());

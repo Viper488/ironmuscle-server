@@ -163,6 +163,8 @@ public class UserController {
         try {
             userService.resetPassword(resetPasswordDto);
             return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
         } catch (Exception e) {
             return ResponseEntity.status(UNAUTHORIZED).body(generateErrorBody(401, e));
         }
