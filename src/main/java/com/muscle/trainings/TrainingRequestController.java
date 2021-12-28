@@ -4,6 +4,7 @@ import com.muscle.trainings.dto.TrainingRequestDto;
 import com.muscle.trainings.entity.TrainingRequest;
 import com.muscle.trainings.responses.TrainingRequestResponse;
 import com.muscle.trainings.service.TrainingRequestService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ public class TrainingRequestController {
      * @param trainingRequestDto
      * @return
      */
+    @ApiOperation("Tworzy zgłoszenie")
     @PostMapping()
     ResponseEntity<?> createRequest(@RequestHeader("Authorization") String header, @RequestBody TrainingRequestDto trainingRequestDto) {
         try {
@@ -49,6 +51,7 @@ public class TrainingRequestController {
      * @param id
      * @return
      */
+    @ApiOperation("Pobiera informacje o zgłoszeniu")
     @GetMapping("/{id}")
     ResponseEntity<?> getRequest(@PathVariable Long id) {
         try {
@@ -63,6 +66,7 @@ public class TrainingRequestController {
      * @param id
      * @return
      */
+    @ApiOperation("Usuwa zgłoszenie")
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteRequest(@PathVariable Long id) {
         trainingRequestService.deleteRequest(id);
@@ -74,6 +78,7 @@ public class TrainingRequestController {
      * @param header
      * @return
      */
+    @ApiOperation("Usuwa ukończone zgłoszenia")
     @DeleteMapping()
     ResponseEntity<?> deleteDoneRequests(@RequestHeader("Authorization") String header) {
         trainingRequestService.deleteUserDoneRequests(header);
@@ -81,10 +86,11 @@ public class TrainingRequestController {
     }
 
     /**
-     * Get requests made by user
+     * Get requests by user
      * @param header
      * @return
      */
+    @ApiOperation("Pobiera zgłoszenia użytkownika lub trenera")
     @GetMapping("/user")
     ResponseEntity<Map<String, Object>> getUserRequests(@RequestHeader("Authorization") String header,
                                          @RequestParam(defaultValue = "0") Integer page,
@@ -112,6 +118,7 @@ public class TrainingRequestController {
      * @param trainingRequestDto
      * @return
      */
+    @ApiOperation("Edytuje zgłoszenie")
     @PutMapping("/{id}")
     ResponseEntity<?> updateRequestTrainer(@RequestHeader("Authorization") String header, @PathVariable Long id, @RequestBody TrainingRequestDto trainingRequestDto) throws IOException {
         try {
@@ -128,6 +135,7 @@ public class TrainingRequestController {
      * @param size
      * @return
      */
+    @ApiOperation("Pobiera wszystkie zgłoszenia")
     @GetMapping("/all")
     ResponseEntity<Map<String, Object>> getRequests(@RequestParam(defaultValue = "0") Integer page,
                                    @RequestParam(defaultValue = "100") Integer size,

@@ -5,6 +5,7 @@ import com.muscle.trainings.responses.*;
 import com.muscle.trainings.service.PointService;
 import com.muscle.trainings.service.UserTrainingHistoryService;
 import com.muscle.trainings.service.UserTrainingsService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,7 @@ public class UserTrainingController {
      * @param training
      * @return
      */
+    @ApiOperation("Dodaje trening do treningów użytkownika")
     @PostMapping("/trainings/add")
     ResponseEntity<?> addTrainingToUser(@RequestParam Long user, @RequestParam Long training) {
         try {
@@ -53,6 +55,7 @@ public class UserTrainingController {
      * @param size
      * @return
      */
+    @ApiOperation("Pobiera listę treningów uzytkownika")
     @GetMapping("/trainings")
     ResponseEntity<Map<String, Object>> getUserTrainings(@RequestHeader("Authorization") String header,
                                      @RequestParam(defaultValue = "0") Integer page,
@@ -79,6 +82,7 @@ public class UserTrainingController {
      * @param header
      * @return
      */
+    @ApiOperation("Usuwa trening użytkownika")
     @DeleteMapping("/training/{id}")
     ResponseEntity<?> deleteUserTraining(@RequestHeader("Authorization") String header, @PathVariable Long id) {
         try {
@@ -95,6 +99,7 @@ public class UserTrainingController {
      * @param trainingId
      * @return
      */
+    @ApiOperation("Zapisuje treining w historii użytkownika")
     @PostMapping("/history")
     ResponseEntity<?> saveUserActivity(@RequestHeader("Authorization") String header, @RequestParam("training") Long trainingId, @RequestParam("time") Integer time) {
         try {
@@ -110,6 +115,7 @@ public class UserTrainingController {
      * @param header
      * @return
      */
+    @ApiOperation("Pobiera historie treningów uzytkownika")
     @GetMapping("/history")
     ResponseEntity<?> getUserHistory(@RequestHeader("Authorization") String header, @RequestParam("y") int year, @RequestParam("m") int month) {
         try {
@@ -123,6 +129,7 @@ public class UserTrainingController {
      * Get ranking
      * @return
      */
+    @ApiOperation("Pobiera ranking uzytkowników")
     @GetMapping("/ranking/list")
     ResponseEntity<Map<String, Object>> getRanking(@RequestParam(defaultValue = "0") Integer page,
                                    @RequestParam(defaultValue = "100") Integer size) {
@@ -134,6 +141,7 @@ public class UserTrainingController {
      * Get user ranking
      * @return
      */
+    @ApiOperation("Pobiera miejce użytkownika w rankingu")
     @GetMapping("/ranking")
     ResponseEntity<?> getUserRank(@RequestHeader("Authorization") String header) {
         try {

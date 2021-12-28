@@ -6,6 +6,7 @@ import com.muscle.trainings.other.CreateTrainingDto;
 import com.muscle.trainings.other.TrainingDetails;
 import com.muscle.trainings.responses.TrainingResponse;
 import com.muscle.trainings.service.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +36,7 @@ public class TrainingsController {
      * @param size
      * @return
      */
+    @ApiOperation("Pobiera listę treningów")
     @GetMapping("/all")
     ResponseEntity<Map<String, Object>> getTrainings(@RequestParam(defaultValue = "0") Integer page,
                                                     @RequestParam(defaultValue = "100") Integer size,
@@ -59,6 +61,7 @@ public class TrainingsController {
      * @param id
      * @return
      */
+    @ApiOperation("Ppbiera informacje o treningu")
     @GetMapping("/{id}")
     ResponseEntity<TrainingDetails> getTrainingDetails(@PathVariable Long id) {
         return ResponseEntity.ok(trainingExerciseService.getTrainingDetails(id));
@@ -69,6 +72,7 @@ public class TrainingsController {
      * @param trainingDto
      * @return
      */
+    @ApiOperation("Tworzy trening")
     @PostMapping()
     ResponseEntity<TrainingResponse> createTraining(@RequestBody CreateTrainingDto trainingDto) {
         return ResponseEntity.ok(trainingsService.saveTraining(trainingDto));
@@ -79,6 +83,7 @@ public class TrainingsController {
      * @param trainingDto
      * @return
      */
+    @ApiOperation("Edytuje trening")
     @PutMapping()
     ResponseEntity<?> editTraining(@RequestBody TrainingDto trainingDto) {
         try {
@@ -94,6 +99,7 @@ public class TrainingsController {
      * @param exercises
      * @return
      */
+    @ApiOperation("Dodaje ćwiczenia do treningu")
     @PostMapping("/{id}/exercises")
     ResponseEntity<?> addTrainingExercises(@PathVariable Long id, @RequestBody List<AddExerciseRequest> exercises) {
         try {
@@ -109,6 +115,7 @@ public class TrainingsController {
      * @param id
      * @param exercises
      */
+    @ApiOperation("Edytuje ćwiczenia w treningu")
     @PutMapping("/{id}/exercises")
     ResponseEntity<?> editTrainingExercises(@PathVariable Long id, @RequestBody List<AddExerciseRequest> exercises) {
         try {

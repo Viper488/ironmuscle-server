@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION add_badge() RETURNS trigger AS '
 DECLARE
-d_badge_id BIGINT;
+    d_badge_id BIGINT;
     d_user_badge BIGINT;
 BEGIN
 SELECT id INTO d_badge_id FROM badge WHERE goal <= NEW.points ORDER BY goal DESC LIMIT 1;

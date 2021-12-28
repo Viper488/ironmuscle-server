@@ -2,6 +2,9 @@ package com.muscle.user;
 
 import com.muscle.user.dto.RegistrationRequestDto;
 import com.muscle.user.service.RegistrationService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +27,7 @@ public class RegistrationController {
      * @param request
      * @return
      */
-
+    @ApiOperation("Tworzy nowe konto dla użytkownika")
     @PostMapping()
     ResponseEntity<?> register(@RequestBody RegistrationRequestDto request) {
         registrationService.register(request);
@@ -36,6 +39,7 @@ public class RegistrationController {
      * @param token
      * @return
      */
+    @ApiOperation("Potwierdza email użytkownika")
     @GetMapping("/confirm")
     ResponseEntity<?> confirm(@RequestParam("token") String token){
         try {
@@ -51,7 +55,7 @@ public class RegistrationController {
      * @param request
      * @return
      */
-
+    @ApiOperation("Tworzy konto użytkonwika, trenera lub administratora")
     @PostMapping("/user")
     ResponseEntity<?> initializeUser(@RequestBody RegistrationRequestDto request){
         try {

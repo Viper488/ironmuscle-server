@@ -3,6 +3,7 @@ package com.muscle.trainings;
 import com.muscle.trainings.dto.ExerciseDto;
 import com.muscle.trainings.entity.Exercise;
 import com.muscle.trainings.service.ExerciseService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,7 @@ public class ExerciseController {
      * @param exerciseDto
      * @return
      */
+    @ApiOperation("Tworzy ćwiczenie")
     @PostMapping()
     ResponseEntity<ExerciseDto> createExercise(@RequestBody ExerciseDto exerciseDto) {
         return ResponseEntity.ok(exerciseService.saveExercise(exerciseDto));
@@ -40,6 +42,7 @@ public class ExerciseController {
      * @param exerciseDto
      * @return
      */
+    @ApiOperation("Edytuje ćwiczenie")
     @PutMapping()
     ResponseEntity<?> editExercise(@RequestBody ExerciseDto exerciseDto) {
         try {
@@ -55,6 +58,7 @@ public class ExerciseController {
      * @param size
      * @return
      */
+    @ApiOperation("Pobiera ćwiczenia")
     @GetMapping("/all")
     ResponseEntity<Map<String, Object>> getExercises(@RequestParam(defaultValue = "0") Integer page,
                                      @RequestParam(defaultValue = "100") Integer size,

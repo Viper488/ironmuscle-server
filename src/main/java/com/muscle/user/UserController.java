@@ -8,6 +8,8 @@ import com.muscle.user.response.UserResponse;
 import com.muscle.user.service.BadgeService;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,7 @@ public class UserController {
      * @param response
      * @throws Exception
      */
+    @ApiOperation("Pobiera nowy token dostępu")
     @GetMapping("/token/refresh")
     void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception{
         String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -76,6 +78,7 @@ public class UserController {
      * Get all badges
      * @return
      */
+    @ApiOperation("Pobiera wszystkie odznaki")
     @GetMapping("/badges")
     ResponseEntity<List<BadgeResponse>> getBadges() {
         return ResponseEntity.ok(badgeService.getBadges());
@@ -86,6 +89,7 @@ public class UserController {
      * @param header
      * @return
      */
+    @ApiOperation("Pobiera odznaki użytkownika")
     @GetMapping("/user/badges")
     ResponseEntity<List<BadgeResponse>> getUserBadges(@RequestHeader("Authorization") String header) {
         return ResponseEntity.ok(badgeService.getUserBadges(header));
@@ -96,6 +100,7 @@ public class UserController {
      * @param header
      * @return
      */
+    @ApiOperation("Pobiera informacje o zalogowanym użytkowniku")
     @GetMapping("/myself")
     ResponseEntity<UserResponse> getMyself(@RequestHeader("Authorization") String header) {
         return ResponseEntity.ok(userService.getMyself(header));
@@ -106,6 +111,7 @@ public class UserController {
      * @param header
      * @param changeUserDetails
      */
+    @ApiOperation("Zmienia mail użytkownika")
     @PutMapping("/myself")
     ResponseEntity<?> changeEmail(@RequestHeader("Authorization") String header, @RequestBody ChangeUserDetails changeUserDetails) {
         try {
@@ -121,6 +127,7 @@ public class UserController {
      * @param id
      * @param changeUserDetails
      */
+    @ApiOperation("Blokuje dostęp do konta użytkonika")
     @PutMapping("/user/lock")
     ResponseEntity<?> lockUser(@RequestParam Long id, @RequestBody ChangeUserDetails changeUserDetails) {
         try {
@@ -135,6 +142,7 @@ public class UserController {
      * Send reset password email
      * @param email
      */
+    @ApiOperation("Wysyła zapytanie o link do zmiany hasła")
     @PostMapping("/password/reset")
     ResponseEntity<?> requestPasswordReset(@RequestParam("email") String email) {
         try {
@@ -149,6 +157,7 @@ public class UserController {
      * Change password
      * @param resetPasswordDto
      */
+    @ApiOperation("Zmnienia zapomniane hasło na nowe")
     @PutMapping("/password/reset")
     ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
         try {
@@ -164,7 +173,8 @@ public class UserController {
      * @param header
      * @param changePasswordDto
      */
-    @PostMapping("/password/change")
+    @ApiOperation("Zmienia hasło, przy użyciu starego hasła")
+    @PutMapping("/password/change")
     ResponseEntity<?> changePassword(@RequestHeader("Authorization") String header, @RequestBody ChangePasswordDto changePasswordDto) {
         try {
             userService.changePassword(header, changePasswordDto);
@@ -180,7 +190,8 @@ public class UserController {
      * @param file
      * @return
      */
-    @PostMapping("/user/icon")
+    @ApiOperation("Zmienia zdjęcie profilowe uzytkownika")
+    @PutMapping("/user/icon")
     ResponseEntity<?> changeUserImage(@RequestHeader("Authorization") String header, @RequestBody MultipartFile file) {
         try {
             userService.changeUserIcon(header, file);
@@ -196,6 +207,7 @@ public class UserController {
      * @param size
      * @return
      */
+    @ApiOperation("Pobiera listę użytkowników")
     @GetMapping("/users")
     ResponseEntity<Map<String, Object>> getUsers(@RequestParam(defaultValue = "0") Integer page,
                                      @RequestParam(defaultValue = "100") Integer size,
