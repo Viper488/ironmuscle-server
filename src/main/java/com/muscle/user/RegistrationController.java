@@ -30,8 +30,12 @@ public class RegistrationController {
     @ApiOperation("Tworzy nowe konto dla użytkownika")
     @PostMapping()
     ResponseEntity<?> register(@RequestBody RegistrationRequestDto request) {
-        registrationService.register(request);
-        return ResponseEntity.ok().build();
+        try {
+            registrationService.register(request);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(generateErrorBody(400, e));
+        }
     }
 
     /**
