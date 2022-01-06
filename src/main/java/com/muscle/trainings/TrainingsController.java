@@ -41,8 +41,8 @@ public class TrainingsController {
     ResponseEntity<Map<String, Object>> getTrainings(@RequestParam(defaultValue = "0") Integer page,
                                                     @RequestParam(defaultValue = "100") Integer size,
                                                     @RequestParam(defaultValue = "") String query) {
-        Pageable paging = PageRequest.of(page, size);
-        Page<Training> trainingPage = trainingsService.getPaginatedTrainings(paging, query);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Training> trainingPage = trainingsService.getPaginatedTrainings(pageable, query);
 
         List<TrainingResponse> trainingsList = trainingPage.getContent()
                 .stream().map(Training::response).collect(Collectors.toList());

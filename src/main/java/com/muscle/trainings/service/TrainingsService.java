@@ -26,7 +26,6 @@ public class TrainingsService {
     private final TrainingMapper mapper;
     private final TrainingsRepository trainingsRepository;
 
-
     @Transactional
     public Page<Training> getPaginatedTrainings(Pageable pageable, String query) {
         return trainingsRepository.findByNameContainsOrDifficultyContains(query, query, pageable);
