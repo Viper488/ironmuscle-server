@@ -4,6 +4,8 @@ import com.muscle.trainings.entity.Point;
 import com.muscle.trainings.repository.PointRepository;
 import com.muscle.trainings.responses.RankingResponse;
 import com.muscle.user.entity.IronUser;
+import com.muscle.user.service.BadgeService;
+import com.muscle.user.service.UserBadgesService;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class PointService {
     private final JwtUtil jwtUtil;
     private final PointRepository pointRepository;
     private final UserService userService;
+    private final UserBadgesService userBadgesService;
 
     public void initializePoints(IronUser ironUser) {
         pointRepository.save(Point.builder().user(ironUser).points(0).build());
@@ -39,6 +42,7 @@ public class PointService {
         userPoints.setPoints(userPoints.getPoints() + addPoints);
 
         pointRepository.save(userPoints);
+        userBadgesService.addBadge(username, userPoints.getPoints());
     }
 
     @Transactional

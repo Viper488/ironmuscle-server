@@ -9,8 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserBadgesRepository extends JpaRepository<UserBadges, UserBadgesKey> {
-
-    @Modifying
-    @Query(value = "DELETE FROM user_badges;", nativeQuery = true)
-    void resetBadges();
 }

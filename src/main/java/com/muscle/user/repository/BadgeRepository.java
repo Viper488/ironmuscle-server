@@ -12,4 +12,6 @@ public interface BadgeRepository extends JpaRepository<Badge, Long> {
 
     @Query(value = "SELECT * FROM badge b WHERE b.id IN (SELECT badge_id FROM user_badges ub WHERE ub.iron_user_id = ?1)", nativeQuery = true)
     List<Badge> findByUserId(Long id);
+
+    List<Badge> findByGoalLessThanEqual(int goal);
 }
