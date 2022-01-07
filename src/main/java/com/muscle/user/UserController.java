@@ -8,7 +8,6 @@ import com.muscle.user.response.UserResponse;
 import com.muscle.user.service.BadgeService;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

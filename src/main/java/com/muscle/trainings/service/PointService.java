@@ -4,7 +4,6 @@ import com.muscle.trainings.entity.Point;
 import com.muscle.trainings.repository.PointRepository;
 import com.muscle.trainings.responses.RankingResponse;
 import com.muscle.user.entity.IronUser;
-import com.muscle.user.service.BadgeService;
 import com.muscle.user.service.UserBadgesService;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Tuple;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;

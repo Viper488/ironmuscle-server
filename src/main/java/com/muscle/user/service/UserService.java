@@ -7,7 +7,6 @@ import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.PasswordToken;
 import com.muscle.user.repository.UserRepository;
 import com.muscle.user.response.UserResponse;
-import com.muscle.user.response.UserSafeDto;
 import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -7,7 +7,6 @@ import com.muscle.user.entity.UserBadgesKey;
 import com.muscle.user.repository.BadgeRepository;
 import com.muscle.user.repository.UserBadgesRepository;
 import com.muscle.user.repository.UserRepository;
-import com.muscle.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
