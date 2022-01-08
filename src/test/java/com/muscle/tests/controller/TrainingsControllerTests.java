@@ -1,8 +1,5 @@
-package com.muscle.user;
+package com.muscle.tests.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.muscle.trainings.TrainingsController;
 import com.muscle.trainings.entity.Training;
 import com.muscle.trainings.other.CreateTrainingDto;
@@ -29,8 +26,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.muscle.tests.controller.RegistrationControllerTests.asJsonString;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -63,15 +62,11 @@ public class TrainingsControllerTests {
 
         when(trainingsService.saveTraining(createTrainingDto)).thenReturn(training.response());
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson = ow.writeValueAsString(createTrainingDto);
-
         mvc.perform(post("/api/v1/training")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
+                .content(asJsonString(createTrainingDto)))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(jsonPath("$.name", is(training.getName())))
                 .andExpect(jsonPath("$.type", is(training.getType())))
                 .andExpect(jsonPath("$.difficulty", is(training.getDifficulty())));
@@ -95,6 +90,7 @@ public class TrainingsControllerTests {
                 .param("size", "100")
                 .param("query", ""))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(jsonPath("$.currentPage", is(0)))
                 .andExpect(jsonPath("$.totalPages", is(1)))
                 .andExpect(jsonPath("$.trainings[0].name", is(training.getName())));

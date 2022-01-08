@@ -1,7 +1,7 @@
 package com.muscle.trainings.service;
 
 import com.muscle.trainings.dto.AddExerciseRequest;
-import com.muscle.trainings.other.ExerciseResponse;
+import com.muscle.trainings.responses.ExerciseResponse;
 import com.muscle.trainings.dto.TrainingExerciseDto;
 import com.muscle.trainings.other.TrainingDetails;
 import com.muscle.trainings.entity.Exercise;

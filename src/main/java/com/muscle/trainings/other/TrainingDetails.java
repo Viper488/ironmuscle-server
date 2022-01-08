@@ -1,5 +1,6 @@
 package com.muscle.trainings.other;
 
+import com.muscle.trainings.responses.ExerciseResponse;
 import com.muscle.trainings.responses.TrainingResponse;
 import lombok.*;
 

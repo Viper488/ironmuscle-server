@@ -63,6 +63,12 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public IronUser getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+    }
+
+    @Transactional
     public UserResponse getMyself(String header) {
         IronUser user = getUserFromHeader(header);
 
@@ -287,15 +293,6 @@ public class UserService implements UserDetailsService {
 
         user.setIcon(FILE_LOCATION);
         userRepository.save(user);
-    }
-
-    public byte[] getIconByUsername(String username) throws IOException {
-        IronUser user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalStateException("User not found"));
-        String SUB_DIR = "/profile-picture/" + user.getId().toString() + "/";
-
-        String FILE_LOCATION = SUB_DIR + user.getId().toString() + ".png";
-
-        return Files.readAllBytes(Paths.get(MAIN_DIR + FILE_LOCATION));
     }
 
     public byte[] getImage(String path) {

@@ -1,8 +1,10 @@
-package com.muscle.user;
+package com.muscle.tests.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.muscle.user.RegistrationController;
 import com.muscle.user.dto.RegistrationRequestDto;
 import com.muscle.user.service.RegistrationService;
 import com.muscle.user.service.UserService;
@@ -44,37 +46,34 @@ public class RegistrationControllerTests {
     @MockBean
     RegistrationService registrationService;
 
-    @Test
-    public void registerUser_Successfully() throws Exception {
-        String role = "USER";
-        RegistrationRequestDto registrationRequestDto = new RegistrationRequestDto("Bot7477", "Bot7477@mail.com", "StrongP#33", Collections.singletonList(role));
-        doNothing().when(registrationService).register(registrationRequestDto);
-
+    public static String asJsonString(Object anyObject) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson = ow.writeValueAsString(registrationRequestDto);
+        return ow.writeValueAsString(anyObject);
+    }
+
+    @Test
+    public void registerUser_Successfully() throws Exception {
+        String role = "USER";
+        RegistrationRequestDto registrationRequestDto = new RegistrationRequestDto("alex", "alex@mail.com", "Alex#123", Collections.singletonList(role));
+        doNothing().when(registrationService).register(registrationRequestDto);
 
         mvc.perform(post("/api/v1/registration")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
+                .content(asJsonString(registrationRequestDto)))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void registerUser_Unsuccessfully_BadEmail() throws Exception {
         String role = "USER";
-        RegistrationRequestDto registrationRequestDto = new RegistrationRequestDto("Bot7477", "Bot7477@mailcom", "StrongP#33", Collections.singletonList(role));
+        RegistrationRequestDto registrationRequestDto = new RegistrationRequestDto("alex", "alexmail.com", "Alex#123", Collections.singletonList(role));
         doThrow(new IllegalStateException("Email is not valid")).when(registrationService).register(registrationRequestDto);
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson = ow.writeValueAsString(registrationRequestDto);
 
         mvc.perform(post("/api/v1/registration")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
+                .content(asJsonString(registrationRequestDto)))
                 .andExpect(status().is4xxClientError());
     }
 }
