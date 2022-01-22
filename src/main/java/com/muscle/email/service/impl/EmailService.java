@@ -48,7 +48,7 @@ public class EmailService implements EmailSender {
                 "<tbody>\n"+
                 "<tr>\n"+
                 "<td style=\"font-size:13px;color:#282828;font-weight:normal;text-align:left;font-family:'Open Sans',sans-serif;line-height:24px;vertical-align:top;padding:15px 8px 10px 8px\" bgcolor=\"#ffffff\">\n"+
-                "<h1 style=\"text-align:center;font-weight:600;margin:30px 0 50px 0\"><span class=\"il\">PASSWORD</span> RESET REQUEST</h1>\n"+
+                "<h1 style=\"text-align:center;font-weight:600;margin:30px 0 50px 0\"><span class=\"il\">CONFIRM</span> YOUR EMAIL ADDRESS</h1>\n"+
                 "<p>Dear "+ name +",</p>\n"+
                 "<p>Complete signing up by clicking <span class=\"il\">\"Verify My account\"</span><b>. This link is only valid for the next 24 hours.</b></p>\n"+
                 "</td>\n"+
@@ -118,7 +118,7 @@ public class EmailService implements EmailSender {
                 "<tbody>\n"+
                 "<tr>\n"+
                 "<td style=\"font-size:13px;color:#282828;font-weight:normal;text-align:left;font-family:'Open Sans',sans-serif;line-height:24px;vertical-align:top;padding:15px 8px 10px 8px\" bgcolor=\"#ffffff\">\n"+
-                "<h1 style=\"text-align:center;font-weight:600;margin:30px 0 50px 0\"><span class=\"il\">PASSWORD</span> CREATE ACCOUNT REQUEST</h1>\n"+
+                "<h1 style=\"text-align:center;font-weight:600;margin:30px 0 50px 0\"><span class=\"il\">WELCOME</span></h1>\n"+
                 "<p>Dear "+ name +",</p>\n"+
                 "<p>We are happy to welcome you in <span class=\"il\">Iron Muscle</span> family. Please click the link below to complete the creation of your account. <b>This link is only valid for the next 24 hours.</b></p>\n"+
                 "</td>\n"+

@@ -10,6 +10,7 @@ import com.muscle.user.service.RegistrationService;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import java.util.Collections;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
@@ -33,9 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(RegistrationController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class RegistrationControllerTests {
-
-    @Autowired
-    private MockMvc mvc;
 
     @MockBean
     UserService userService;
@@ -45,6 +43,10 @@ public class RegistrationControllerTests {
     JwtUtil jwtUtil;
     @MockBean
     RegistrationService registrationService;
+    RegistrationRequestDto validRequest;
+    RegistrationRequestDto wrongRequest;
+    @Autowired
+    private MockMvc mvc;
 
     public static String asJsonString(Object anyObject) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -53,27 +55,37 @@ public class RegistrationControllerTests {
         return ow.writeValueAsString(anyObject);
     }
 
+    @Before
+    public void setupValidRequestAndWrongRequest() {
+        validRequest = new RegistrationRequestDto(
+                "alex",
+                "alex@mail.com",
+                "Alex#123",
+                Collections.singletonList("USER"));
+        wrongRequest = new RegistrationRequestDto(
+                "alex",
+                "alexmail.com",
+                "Alex#123",
+                Collections.singletonList("USER"));
+    }
+
     @Test
     public void registerUser_Successfully() throws Exception {
-        String role = "USER";
-        RegistrationRequestDto registrationRequestDto = new RegistrationRequestDto("alex", "alex@mail.com", "Alex#123", Collections.singletonList(role));
-        doNothing().when(registrationService).register(registrationRequestDto);
+        doNothing().when(registrationService).register(validRequest);
 
         mvc.perform(post("/api/v1/registration")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(registrationRequestDto)))
+                .content(asJsonString(validRequest)))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void registerUser_Unsuccessfully_BadEmail() throws Exception {
-        String role = "USER";
-        RegistrationRequestDto registrationRequestDto = new RegistrationRequestDto("alex", "alexmail.com", "Alex#123", Collections.singletonList(role));
-        doThrow(new IllegalStateException("Email is not valid")).when(registrationService).register(registrationRequestDto);
+        doThrow(new IllegalStateException("Email is not valid")).when(registrationService).register(wrongRequest);
 
         mvc.perform(post("/api/v1/registration")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(registrationRequestDto)))
+                .content(asJsonString(wrongRequest)))
                 .andExpect(status().is4xxClientError());
     }
 }

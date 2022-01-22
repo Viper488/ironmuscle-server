@@ -3,6 +3,7 @@ package com.muscle.tests.repository;
 import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.Role;
 import com.muscle.user.repository.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,12 @@ public class UserRepositoryTests {
     @Autowired
     UserRepository userRepository;
 
-    @Test
-    public void whenFindByUsername_thenReturnUser() {
+    IronUser user;
+
+    @Before
+    public void setupUser() {
         Role role = new Role(1L, "USER");
-        IronUser user = IronUser.builder()
+        user = IronUser.builder()
                 .username("alex")
                 .email("alex@gmail.com")
                 .password("Alex#123")
@@ -41,7 +44,10 @@ public class UserRepositoryTests {
                 .enabled(true)
                 .roles(Collections.singletonList(role))
                 .build();
+    }
 
+    @Test
+    public void whenFindByUsername_thenReturnUser() {
         entityManager.persist(user);
         entityManager.flush();
 
@@ -53,17 +59,6 @@ public class UserRepositoryTests {
 
     @Test
     public void whenFindUsernameContains_thenReturnList_withOneElement() {
-        Role role = new Role(1L, "USER");
-        IronUser user = IronUser.builder()
-                .username("alex")
-                .email("alex@gmail.com")
-                .password("Alex#123")
-                .icon("profile-picture/default/icon.png")
-                .locked(false)
-                .enabled(true)
-                .roles(Collections.singletonList(role))
-                .build();
-
         entityManager.persist(user);
         entityManager.flush();
 

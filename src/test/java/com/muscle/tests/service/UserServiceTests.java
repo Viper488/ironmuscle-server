@@ -6,6 +6,7 @@ import com.muscle.user.entity.IronUser;
 import com.muscle.user.entity.Role;
 import com.muscle.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,12 @@ public class UserServiceTests {
     @Autowired
     UserService userService;
 
-    @Test
-    public void whenUploadedIconSaved_thenCheckIfExists_thenCheckIfEqualsPathInUser() throws IOException {
-        Role role = new Role(1L, "USER");
-        IronUser user = IronUser.builder()
+    IronUser user;
+    MockMultipartFile file;
+
+    @Before
+    public void setupUserAndFile() {
+        user = IronUser.builder()
                 .id(1L)
                 .username("alex")
                 .email("alex@gmail.com")
@@ -44,10 +47,18 @@ public class UserServiceTests {
                 .icon("profile-picture/default/icon.png")
                 .locked(false)
                 .enabled(true)
-                .roles(Collections.singletonList(role))
+                .roles(Collections.singletonList(new Role(1L, "USER")))
                 .build();
 
-        MockMultipartFile file = new MockMultipartFile("file", "filename.png", "image/png", "example".getBytes());
+        file = new MockMultipartFile(
+                "file",
+                "filename.png",
+                "image/png",
+                "example".getBytes());
+    }
+
+    @Test
+    public void whenUploadedIconSaved_thenCheckIfExists_thenCheckIfEqualsPathInUser() throws IOException {
 
         userService.saveImage(user, file.getBytes());
 

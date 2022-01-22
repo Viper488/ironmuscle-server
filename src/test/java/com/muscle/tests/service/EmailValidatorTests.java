@@ -23,38 +23,33 @@ public class EmailValidatorTests {
     public void correctMail_1() {
         assertTrue(emailValidator.test("example@mail.com"));
     }
-
     @Test
     public void correctMail_2() {
-        assertTrue(emailValidator.test("example@mail.something.com"));
-    }
-
+        assertTrue(emailValidator.test("example@mail.something.com"));}
     @Test
     public void correctMail_3() {
+
         assertTrue(emailValidator.test("example.something@mail.com"));
     }
-
-
     @Test
     public void correctMail_4() {
         assertTrue(emailValidator.test("example@mail.pl"));
     }
-
     @Test
     public void incorrectMail_1() {
         assertFalse(emailValidator.test("examplemail.com"));
     }
-
     @Test
     public void incorrectMail_2() {
         assertFalse(emailValidator.test("example@mailcom"));
     }
-
     @Test
     public void incorrectMail_3() {
         assertFalse(emailValidator.test("@mail.com"));
     }
-
+    @Test
+    public void incorrectMail_4() {
+        assertFalse(emailValidator.test("example@mail.com.")); }
     @Test
     public void emptyMail_1() {
         assertFalse(emailValidator.test(""));

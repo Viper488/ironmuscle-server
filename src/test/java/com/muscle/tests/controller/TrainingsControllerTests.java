@@ -8,6 +8,8 @@ import com.muscle.trainings.service.TrainingsService;
 import com.muscle.user.service.UserService;
 import com.muscle.user.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +25,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.muscle.tests.controller.RegistrationControllerTests.asJsonString;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -40,26 +43,39 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc(addFilters = false)
 public class TrainingsControllerTests {
 
-    @Autowired
-    private MockMvc mvc;
-
     @MockBean
     UserService userService;
     @MockBean
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @MockBean
     JwtUtil jwtUtil;
-
     @MockBean
     TrainingsService trainingsService;
     @MockBean
     TrainingExerciseService trainingExerciseService;
+    CreateTrainingDto createTrainingDto;
+    Training training;
+    @Autowired
+    private MockMvc mvc;
+
+    @Before
+    public void setupCreateTrainingAndTraining() {
+        createTrainingDto = new CreateTrainingDto(
+                "name",
+                "standard",
+                "abdominal",
+                "beginner",
+                10);
+        training = new Training(
+                1L,
+                "name",
+                "standard",
+                "training/abdominal_beginner.png",
+                "beginner", 10);
+    }
 
     @Test
     public void saveTraining_Successfully() throws Exception {
-        CreateTrainingDto createTrainingDto = new CreateTrainingDto("name", "standard", "abdominal", "beginner", 10);
-        Training training = new Training(1L, "name", "standard", "training/abdominal_beginner.png", "beginner", 10);
-
         when(trainingsService.saveTraining(createTrainingDto)).thenReturn(training.response());
 
         mvc.perform(post("/api/v1/training")
@@ -74,10 +90,7 @@ public class TrainingsControllerTests {
 
     @Test
     public void getPaginatedTrainings_withoutFiltering() throws Exception {
-        Training training = new Training(1L, "name", "standard", "training/abdominal_beginner.png", "beginner", 10);
-
-        List<Training> trainings = new ArrayList<>();
-        trainings.add(training);
+        List<Training> trainings = Collections.singletonList(training);
 
         Page<Training> trainingPage = new PageImpl<>(trainings);
         Pageable pageable = PageRequest.of(0, 100);

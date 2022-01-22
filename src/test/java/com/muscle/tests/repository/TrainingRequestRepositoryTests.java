@@ -38,9 +38,6 @@ public class TrainingRequestRepositoryTests {
 
     @Before
     public void setupUserAndTrainer() {
-        Role userRole = new Role(1L, "USER");
-        Role trainerRole = new Role(2L, "TRAINER");
-
         IronUser user = IronUser.builder()
                 .username("alex")
                 .email("alex@gmail.com")
@@ -48,7 +45,7 @@ public class TrainingRequestRepositoryTests {
                 .icon("profile-picture/default/icon.png")
                 .locked(false)
                 .enabled(true)
-                .roles(Collections.singletonList(userRole))
+                .roles(Collections.singletonList(new Role(1L, "USER")))
                 .build();
 
         IronUser trainer = IronUser.builder()
@@ -58,7 +55,7 @@ public class TrainingRequestRepositoryTests {
                 .icon("profile-picture/default/icon.png")
                 .locked(false)
                 .enabled(true)
-                .roles(Collections.singletonList(trainerRole))
+                .roles(Collections.singletonList(new Role(2L, "TRAINER")))
                 .build();
 
         entityManager.persist(user);
@@ -100,6 +97,41 @@ public class TrainingRequestRepositoryTests {
 
     @Test
     public void createTrainingRequest_thenUpdate_thenReturnPage() {
-        //trainingRequestRepository.findByTrainerIdAndStatusAndQuery()
+        Optional<IronUser> user = userRepository.findByUsername("alex");
+        Optional<IronUser> trainer = userRepository.findByUsername("james");
+
+        assertTrue(user.isPresent());
+        assertTrue(trainer.isPresent());
+
+        TrainingRequest trainingRequest = TrainingRequest.builder()
+                .title("request")
+                .description("description")
+                .difficulty("beginner")
+                .status("new")
+                .bodyPart("arms")
+                .created_at(LocalDateTime.now())
+                .user(user.get())
+                .build();
+
+        entityManager.persist(trainingRequest);
+        entityManager.flush();
+
+        trainingRequest.setTrainer(trainer.get());
+        trainingRequest.setStatus("in progress");
+
+        trainingRequestRepository.save(trainingRequest);
+
+        Pageable pageable = PageRequest.of(0, 100);
+        Page<TrainingRequest> trainingRequestPage = trainingRequestRepository
+                .findByTrainerIdAndStatusAndQuery(
+                        trainer.get().getId(), "in progress", "request" , pageable);
+
+        assertEquals(0, trainingRequestPage.getNumber());
+        assertEquals(1, trainingRequestPage.getTotalElements());
+        assertEquals(1, trainingRequestPage.getContent().size());
+        assertEquals("request", trainingRequestPage.getContent().get(0).getTitle());
+        assertEquals("in progress", trainingRequestPage.getContent().get(0).getStatus());
+        assertEquals("alex", trainingRequestPage.getContent().get(0).getUser().getUsername());
+        assertEquals("james", trainingRequestPage.getContent().get(0).getTrainer().getUsername());
     }
 }
